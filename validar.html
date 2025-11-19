@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar Certificado - QuietByte Scholar Arcanum</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 2rem 0;
+            border-bottom: 1px solid #2d2d2d;
+            text-align: center; /* Adicionei para centralizar a logo */
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 200px; /* Aumentei para 200px para melhor visualização */
+            height: auto;
+        }
+
+        .nav-bar {
+            background-color: #1a1a1a;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #b8b8b8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background-color: #2d2d2d;
+        }
+
+        .content {
+            width: 60%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .validation-container {
+            background-color: #1a1a1a;
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #d0d0d0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background-color: #0f0f0f;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #5d5d5d;
+        }
+
+        .validation-btn {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .validation-btn:hover {
+            background-color: #3a3a3a;
+        }
+
+        .result-container {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-top: 2rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+        }
+
+        .certificate-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 0.8rem;
+            align-items: flex-start;
+        }
+
+        .info-label {
+            font-weight: 500;
+            width: 180px; /* Aumentei a largura para acomodar o texto */
+            min-width: 180px; /* Garante uma largura mínima */
+            color: #b8b8b8;
+            white-space: nowrap; /* Impede quebra de linha */
+            padding-right: 15px; /* Espaço entre label e valor */
+        }
+
+        .info-value {
+            color: #e0e0e0;
+            flex: 1; /* Ocupa o espaço restante */
+            word-break: break-word; /* Permite quebra de palavras longas */
+        }
+
+        .valid-certificate {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .invalid-certificate {
+            border-left: 4px solid #f44336;
+        }
+
+        .instructions {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-top: 2rem;
+        }
+
+        .instructions h3 {
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            padding-left: 1.5rem;
+            color: #b8b8b8;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #2d2d2d;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .content {
+                width: 90%;
+                padding: 0 1rem;
+            }
+            
+            .validation-container {
+                padding: 1.5rem;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                margin-bottom: 1rem;
+            }
+            
+            .info-label {
+                width: 100%;
+                min-width: 100%;
+                margin-bottom: 0.3rem;
+            }
+        }
+
+        .info-value {
+            color: #e0e0e0;
+        }
+
+        .valid-certificate {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .invalid-certificate {
+            border-left: 4px solid #f44336;
+        }
+
+        .instructions {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-top: 2rem;
+        }
+
+        .instructions h3 {
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            padding-left: 1.5rem;
+            color: #b8b8b8;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #2d2d2d;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .content {
+                padding: 0 1rem;
+            }
+            
+            .validation-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="assets\logo.png" alt="QuietByte Schola Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1 class="page-title">Validar Certificado</h1>
+        <p class="page-description">Verifique a autenticidade do seu certificado QuietByte Scholar Arcanum</p>
+        
+        <div class="validation-container">
+            <div class="form-group">
+                <label for="certificate-code">Código do Certificado</label>
+                <input type="text" id="certificate-code" placeholder="Ex: QBSA-2024-ABCD-1234">
+            </div>
+            <button class="validation-btn" onclick="validateCertificate()">Validar Certificado</button>
+        </div>
+        
+        <div id="result-container" class="result-container">
+            <h2 id="result-title" class="result-title"></h2>
+            <div id="certificate-info" class="certificate-info">
+                <!--- Quem disera que eu disse?, tu dissestes com eu dizia? --->
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Como encontrar seu código de certificado</h3>
+            <ul>
+                <li>O código está localizado no canto inferior direito do seu certificado</li>
+                <li>Formato: 05d92cde1d3f168f6b33a3434c47a804</li>
+                <li>Certifique-se de digitar todos os caracteres</li>
+                <li>Entre em contato conosco se não conseguir encontrar seu código</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <ano id="ano">2024</ano> - Todos os direitos reservados</p>
+    </footer>
+    <script src="certificados.js"></script>
+<script>
+    const anoAtual = new Date().getFullYear();
+    document.getElementById("ano").textContent = anoAtual;
+    function validateCertificate() {
+        const codeInput = document.getElementById('certificate-code');
+        const code = codeInput.value.trim();
+        const resultContainer = document.getElementById('result-container');
+        const resultTitle = document.getElementById('result-title');
+        const certificateInfo = document.getElementById('certificate-info');
+        
+        // Limpar resultados anteriores
+        resultContainer.className = 'result-container';
+        certificateInfo.innerHTML = '';
+        
+        if (!code) {
+            showResult('Por favor, insira um código de certificado', false);
+            return;
+        }
+        
+        // Verifica se o certificado existe no objeto window.certificados
+        if (window.certificados && window.certificados[code]) {
+            const cert = window.certificados[code];
+            
+            resultContainer.style.display = 'block';
+            resultContainer.classList.add('valid-certificate');
+            resultTitle.textContent = 'Certificado Válido';
+            
+            // Preenche com as informações do certificado
+            const infoHtml = `
+                <div class="info-row">
+                    <div class="info-label">Código:</div>
+                    <div class="info-value">${code}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Aluno:</div>
+                    <div class="info-value">${cert.nome}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Curso:</div>
+                    <div class="info-value">${cert.curso}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Data de Conclusão:</div>
+                    <div class="info-value">${cert.data}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Carga Horária:</div>
+                    <div class="info-value">${cert.carga} horas</div>
+                </div>
+            `;
+            
+            certificateInfo.innerHTML = infoHtml;
+        } else {
+            // Certificado inválido
+            showResult('Certificado Inválido', false);
+        }
+    }
+    
+    function showResult(message, isValid) {
+        const resultContainer = document.getElementById('result-container');
+        const resultTitle = document.getElementById('result-title');
+        const certificateInfo = document.getElementById('certificate-info');
+        
+        resultContainer.style.display = 'block';
+        resultTitle.textContent = message;
+        
+        if (isValid) {
+            resultContainer.classList.add('valid-certificate');
+        } else {
+            resultContainer.classList.add('invalid-certificate');
+            certificateInfo.innerHTML = '<p>O código inserido não corresponde a nenhum certificado válido em nosso sistema. Verifique o código e tente novamente.</p>';
+        }
+    }
+</script>
+</body>
+</html>

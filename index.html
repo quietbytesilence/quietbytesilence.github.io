@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Byte Schola Arcanum</title>
+    <link rel="icon" href="assets\logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 2rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            height: auto;
+        }
+
+        .nav-bar {
+            background-color: #1a1a1a;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #b8b8b8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background-color: #2d2d2d;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #b8b8b8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .course-card {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-card h3 {
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #2d2d2d;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="assets\logo.png" alt="QuietByte Scholar Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1>Bem-vindo à Quiet Byte Schola Arcanum</h1>
+        <p>Uma instituição dedicada ao conhecimento arcano das artes digitais. Explore nossos cursos e descubra os segredos da programação, ciência de dados e computação.</p>
+        
+        <div id= "lista_cursos" class="courses-grid">
+            <div class="course-card">
+                <h3 id="nome">Alquimia de Dados</h3>
+                <p id="descricao">Domine a transformação de dados brutos em conhecimento valioso</p>
+            </div>
+            <div class="course-card">
+                <h3>Feitiços Web</h3>
+                <p>Aprenda as artes obscuras do desenvolvimento front-end e back-end</p>
+            </div>
+            <div class="course-card">
+                <h3>Encantamentos Mobile</h3>
+                <p>Desenvolva poções digitais para dispositivos móveis</p>
+            </div>
+            <div id="cards" class="course-card">
+                <!--- Quem disera que eu disse?, tu dissestes com eu dizia? --->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <ano id="ano">2024</ano> - Todos os direitos reservados</p>
+    </footer>
+    <script src="dados.js"></script>
+    <script>
+        const anoAtual = new Date().getFullYear();
+        document.getElementById("ano").textContent = anoAtual;
+        //document.getElementById("nome").textContent = dados.nome;
+        //document.getElementById("curso").textContent = dados.curso;
+        let cursos = ``;
+        const cursosInfo = document.getElementById('lista_cursos');
+        for (let cartao in window.cards) {
+          const cert = window.cards[cartao];
+          //console.log(cartao, cert.curso, cert.descricao);
+          cursos += `
+            <div class="course-card">
+                <h3>${cert.curso}</h3>
+                <p>${cert.descricao}</p>
+            </div>
+          `;
+
+        }
+        cursosInfo.innerHTML = cursos;
+
+    </script>
+</body>
+</html>
