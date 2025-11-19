@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fale Conosco - Quiet Byte Schola Arcanum</title>
+    <link rel="icon" href="assets\logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 2rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            height: auto;
+        }
+
+        .nav-bar {
+            background-color: #1a1a1a;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #b8b8b8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background-color: #2d2d2d;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-container {
+            background-color: #1a1a1a;
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-bottom: 2rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #0f0f0f;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .contact-method:hover {
+            transform: translateY(-3px);
+            border-color: #5d5d5d;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+            width: 60px;
+            text-align: center;
+            color: #a0a0a0;
+        }
+
+        .contact-info h3 {
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-details {
+            color: #b8b8b8;
+        }
+
+        .contact-link {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-block;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .contact-link:hover {
+            color: #ffffff;
+        }
+
+        .instructions {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-top: 2rem;
+        }
+
+        .instructions h3 {
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            padding-left: 1.5rem;
+            color: #b8b8b8;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .response-time {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #a0a0a0;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #2d2d2d;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .content {
+                padding: 0 1rem;
+            }
+            
+            .contact-container {
+                padding: 1.5rem;
+            }
+            
+            .contact-method {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contact-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="assets\logo.png" alt="QuietByte Scholar Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1 class="page-title">Fale Conosco</h1>
+        <p class="page-description">Entre em contato conosco através dos canais abaixo. Estamos aqui para responder suas dúvidas e ouvir suas sugestões.</p>
+        
+        <div class="contact-container">
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-info">
+                        <h3>E-mail</h3>
+                        <div class="contact-details">
+                            <p>Nosso principal canal de comunicação</p>
+                            <a href="mailto:quietbytequietbyte@gmail.com" class="contact-link">quietbytequietbyte@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-info">
+                        <h3>Telegram</h3>
+                        <div class="contact-details">
+                            <p>Para conversas mais diretas e rápidas</p>
+                            <a href="https://t.me/lievasomal" target="_blank" class="contact-link">@lievasomal</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-info">
+                        <h3>Discord</h3>
+                        <div class="contact-details">
+                            <p>Participe da nossa comunidade</p>
+                            <span class="contact-link">quietbytesilence1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Como nos contactar</h3>
+            <ul>
+                <li>Para <strong>dúvidas sobre cursos</strong>, utilize o e-mail ou Telegram</li>
+                <li>Para <strong>problemas técnicos</strong>, o e-mail é o canal mais adequado</li>
+                <li>Para <strong>conversas com a comunidade</strong>, junte-se a nós no Discord</li>
+                <li>Para <strong>assuntos urgentes</strong>, o Telegram tem resposta mais rápida</li>
+            </ul>
+            <p class="response-time">Tentamos responder todas as mensagens em até 24 horas.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Atualizar o ano no footer
+        const anoAtual = new Date().getFullYear();
+        document.getElementById("ano").textContent = anoAtual;
+    </script>
+</body>
+</html>
