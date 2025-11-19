@@ -3,6 +3,11 @@ programacao
 dados
 computacao
 math
+===========
+niveis
+Iniciante
+Intermediário
+Avançado
 */
 
 
@@ -15,24 +20,31 @@ window.cards = {
         nivel: "Intermediário"
     },
     "curso2": {
-        curso: "Feitiços Web",
-        descricao: "Aprenda as artes obscuras do desenvolvimento front-end e back-end para criar aplicações web poderosas.",
-        categoria: "web",
+        curso: "Fundamentos da Matemática para Ciência da Computação",
+        descricao: "Aprenda as artes obscuras da matemática que criou a computação.",
+        categoria: "math",
         duracao: "120 horas",
         nivel: "Avançado"
     },"curso3": {
-        curso: "Feitiços Web",
-        descricao: "Aprenda as artes obscuras do desenvolvimento front-end e back-end para criar aplicações web poderosas.",
-        categoria: "web",
-        duracao: "120 horas",
+        curso: "Redes de Computadores - Extendida",
+        descricao: "Aprenda como funcionam as redes de computadores.",
+        categoria: "computacao",
+        duracao: "250 horas",
         nivel: "Avançado"
+    },
+    "curso5": {
+        curso: "Matemática Discreta",
+        descricao: "Curso simples e objetivo de matemática discreta",
+        categoria: "math",
+        duracao: "120 horas",
+        nivel: "Iniciante"
     },
 
 
 
 
 
-    "curso2": {
+    "curso4": {
         curso: "Feitiços Web",
         descricao: "Aprenda as artes obscuras do desenvolvimento front-end e back-end para criar aplicações web poderosas.",
         categoria: "web",
