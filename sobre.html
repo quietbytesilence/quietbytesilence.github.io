@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós - Quiet Byte Schola Arcanum</title>
+    <link rel="icon" href="assets\logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 2rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            height: auto;
+        }
+
+        .nav-bar {
+            background-color: #1a1a1a;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #b8b8b8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background-color: #2d2d2d;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #f0f0f0;
+            text-align: center;
+            border-bottom: 1px solid #2d2d2d;
+            padding-bottom: 1rem;
+        }
+
+        .intro-section {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .intro-text {
+            font-size: 1.3rem;
+            color: #b8b8b8;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #f0f0f0;
+            border-left: 4px solid #5d5d5d;
+            padding-left: 1rem;
+        }
+
+        .section p {
+            margin-bottom: 1.2rem;
+            color: #b8b8b8;
+            font-size: 1.1rem;
+        }
+
+        .mission-list {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-list li {
+            margin-bottom: 0.8rem;
+            color: #b8b8b8;
+        }
+
+        .highlight {
+            color: #e0e0e0;
+            font-weight: 600;
+        }
+
+        .quote {
+            border-left: 4px solid #5d5d5d;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #a0a0a0;
+        }
+
+        .founder-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #2d2d2d;
+        }
+
+        .founder-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #2d2d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #5d5d5d;
+        }
+
+        .founder-info h3 {
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .founder-title {
+            color: #a0a0a0;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #2d2d2d;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .content {
+                padding: 0 1rem;
+            }
+            
+            .founder-section {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="assets\logo.png" alt="QuietByte Scholar Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1 class="page-title">Sobre Nós — Quiet Byte: Schola Arcanum</h1>
+        
+        <div class="intro-section">
+            <p class="intro-text">"O conhecimento é uma forma de magia — não a magia das sombras e dos mitos, mas aquela que nasce da lógica, da matemática e da capacidade humana de transformar símbolos em realidade."</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Nossa Missão</h2>
+            <p>Nossa missão é tornar o estudo da computação teórica acessível, profundo e inspirador. Aqui, buscamos unir o rigor acadêmico com a poesia intelectual — porque aprender não precisa ser árido, e compreender as estruturas do cosmos digital pode ser uma experiência quase espiritual.</p>
+            
+            <p>Queremos formar mentes capazes de:</p>
+            <ul class="mission-list">
+                <li><span class="highlight">Pensar algoritmicamente,</span> e não apenas executar códigos.</li>
+                <li><span class="highlight">Compreender máquinas,</span> e não apenas utilizá-las.</li>
+                <li><span class="highlight">Navegar entre matemática, filosofia e tecnologia</span> com fluidez, curiosidade e propósito.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Nossa Filosofia</h2>
+            <p>A Schola Arcanum nasce da ideia de que toda tecnologia é uma extensão do pensamento humano. Ao estudar autômatos, examinamos o próprio ato de decidir. Ao estudar complexidade, contemplamos nossas limitações e possibilidades. Ao estudar criptografia, descobrimos que segredos, códigos e símbolos sempre fizeram parte da história humana — só mudaram suas formas.</p>
+            
+            <p class="quote">Aqui, cada conceito é tratado como um <span class="highlight">manuscrito arcano</span>, cada algoritmo como um <span class="highlight">ritual lógico</span>, e cada estudante como alguém que caminha em direção ao domínio intelectual do mundo digital.</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">O Caminho do Aprendiz</h2>
+            <p>Na Quiet Byte, guiamos você por uma jornada que combina:</p>
+            
+            <ul class="mission-list">
+                <li><span class="highlight">Fundamentos sólidos</span> — teoria da computação, lógica formal, grafos, complexidade.</li>
+                <li><span class="highlight">Explorações avançadas</span> — IA teórica, algoritmos quânticos, fronteiras matemáticas.</li>
+                <li><span class="highlight">Reflexão filosófica</span> — porque compreender máquinas é, em última instância, compreender a si mesmo.</li>
+            </ul>
+            
+            <p>Cada módulo, cada nota e cada certificado foi construído para que sua evolução seja clara, estruturada e verificável — tudo isso com tecnologia leve, transparente e acessível, funcionando mesmo em hospedagens simples como GitHub Pages.</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Quem Somos</h2>
+            <div class="founder-section">
+                <div class="founder-image">GC</div>
+                <div class="founder-info">
+                    <h3>Gustavo Cícero</h3>
+                    <p class="founder-title">Magister Digitalis</p>
+                    <p>A Schola Arcanum é guiada por Gustavo Cícero — cientista de dados, pesquisador autodidata, discente de licenciatura em computação da universidade federal rural da amazônia. Com paixão por matemática, computação teórica e o simbolismo que atravessa a história do conhecimento, ele construiu esta escola como um refúgio para mentes incansáveis, curiosas e amantes dos enigmas do pensamento.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Nosso Propósito Maior</h2>
+            <p>Mais do que ensinar, buscamos <span class="highlight">cultivar</span>: cultivar rigor, imaginação, disciplina e encantamento. Porque a verdadeira magia não está no código — está na mente que o cria.</p>
+            
+            <p class="quote">Seja bem-vindo à Quiet Byte: Schola Arcanum.<br>Que sua jornada seja profunda, luminosa e transformadora.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Atualizar o ano no footer
+        const anoAtual = new Date().getFullYear();
+        document.getElementById("ano").textContent = anoAtual;
+    </script>
+</body>
+</html>
