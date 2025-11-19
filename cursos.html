@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Quiet Byte Schola Arcanum</title>
+    <link rel="icon" href="assets\logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 2rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            height: auto;
+        }
+
+        .nav-bar {
+            background-color: #1a1a1a;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #b8b8b8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background-color: #2d2d2d;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #b8b8b8;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .course-card {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .course-card h3 {
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .course-card p {
+            color: #b8b8b8;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .course-details {
+            margin-top: auto;
+            border-top: 1px solid #2d2d2d;
+            padding-top: 1rem;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .course-duration, .course-level {
+            color: #a0a0a0;
+        }
+
+        .enroll-btn {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .enroll-btn:hover {
+            background-color: #3a3a3a;
+        }
+
+        .filter-container {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #2d2d2d;
+            margin-bottom: 2rem;
+        }
+
+        .filter-title {
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: #2d2d2d;
+            color: #b8b8b8;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #3a3a3a;
+            color: #ffffff;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #2d2d2d;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+            
+            .filter-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="assets\logo.png" alt="QuietByte Scholar Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1 class="page-title">Nossos Cursos</h1>
+        <p class="page-description">Explore nosso catálogo completo de cursos e encontre o caminho arcano que mais combina com você. Todos os cursos incluem certificação ao concluir.</p>
+        
+        <div class="filter-container">
+            <h3 class="filter-title">Filtrar por categoria:</h3>
+            <div class="filter-options">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="programacao">Programação</button>
+                <button class="filter-btn" data-filter="dados">Ciência de Dados</button>
+                <button class="filter-btn" data-filter="web">Desenvolvimento Web</button>
+                <button class="filter-btn" data-filter="mobile">Mobile</button>
+            </div>
+        </div>
+        
+        <div id="lista_cursos" class="courses-grid">
+            <!-- Os cursos serão carregados dinamicamente via JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="cursos.js"></script>
+    <script>
+        // Atualizar o ano no footer
+        const anoAtual = new Date().getFullYear();
+        document.getElementById("ano").textContent = anoAtual;
+        
+        // Carregar os cursos
+        let cursosHTML = '';
+        const cursosContainer = document.getElementById('lista_cursos');
+        
+        // Verificar se o objeto window.cards existe
+        if (window.cards) {
+            for (let id in window.cards) {
+                const curso = window.cards[id];
+                cursosHTML += `
+                    <div class="course-card" data-category="${curso.categoria || 'programacao'}">
+                        <h3>${curso.curso}</h3>
+                        <p>${curso.descricao}</p>
+                        <div class="course-details">
+                            <div class="course-meta">
+                                <span class="course-duration">${curso.duracao || '60 horas'}</span>
+                                <span class="course-level">${curso.nivel || 'Iniciante'}</span>
+                            </div>
+                            <button class="enroll-btn" data-course="${id}">Inscrever-se</button>
+                        </div>
+                    </div>
+                `;
+            }
+        } else {
+            // Fallback caso o dados.js não esteja carregado
+            cursosHTML = `
+                <div class="course-card">
+                    <h3>Alquimia de Dados</h3>
+                    <p>Domine a transformação de dados brutos em conhecimento valioso através de técnicas avançadas de análise e visualização.</p>
+                    <div class="course-details">
+                        <div class="course-meta">
+                            <span class="course-duration">80 horas</span>
+                            <span class="course-level">Intermediário</span>
+                        </div>
+                        <button class="enroll-btn">Inscrever-se</button>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <h3>Feitiços Web</h3>
+                    <p>Aprenda as artes obscuras do desenvolvimento front-end e back-end para criar aplicações web poderosas.</p>
+                    <div class="course-details">
+                        <div class="course-meta">
+                            <span class="course-duration">120 horas</span>
+                            <span class="course-level">Avançado</span>
+                        </div>
+                        <button class="enroll-btn">Inscrever-se</button>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <h3>Encantamentos Mobile</h3>
+                    <p>Desenvolva poções digitais para dispositivos móveis, criando aplicações nativas e híbridas.</p>
+                    <div class="course-details">
+                        <div class="course-meta">
+                            <span class="course-duration">100 horas</span>
+                            <span class="course-level">Intermediário</span>
+                        </div>
+                        <button class="enroll-btn">Inscrever-se</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        cursosContainer.innerHTML = cursosHTML;
+        
+        // Adicionar funcionalidade de filtro
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const courseCards = document.querySelectorAll('.course-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remover a classe active de todos os botões
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Adicionar a classe active ao botão clicado
+                button.classList.add('active');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                // Filtrar os cursos
+                courseCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Adicionar funcionalidade aos botões de inscrição
+        const enrollButtons = document.querySelectorAll('.enroll-btn');
+        enrollButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const courseId = button.getAttribute('data-course');
+                alert(`Inscrição no curso realizada com sucesso! Em breve entraremos em contato.`);
+                // Aqui você pode adicionar a lógica para redirecionar para uma página de inscrição
+                // ou enviar os dados para o backend
+            });
+        });
+    </script>
+</body>
+</html>
