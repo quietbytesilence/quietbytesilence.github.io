@@ -49,7 +49,7 @@ window.cards = {
 
 
 
-
+/*
 
     "curso4": {
         curso: "Feitiços Web",
@@ -58,4 +58,7 @@ window.cards = {
         duracao: "120 horas",
         nivel: "Avançado"
     },
+
+
+*/
 };
