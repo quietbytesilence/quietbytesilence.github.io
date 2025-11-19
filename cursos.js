@@ -39,6 +39,13 @@ window.cards = {
         duracao: "120 horas",
         nivel: "Iniciante"
     },
+    "curso5": {
+        curso: "Fundamentos da Computação",
+        descricao: "Aprenda as bases da ciência da Computação",
+        categoria: "computacao",
+        duracao: "300 horas",
+        nivel: "Avançado"
+    },
 
 
 
