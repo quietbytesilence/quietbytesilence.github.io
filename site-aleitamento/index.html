@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aleitamento Materno - Proteção, Amor e Saúde</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #d78ad6;
+        --primary-light: #f0d0ef;
+        --primary-dark: #c56bc3;
+        --secondary-color: #6a1b9a;
+        --text-color: #333;
+        --light-bg: #fff9ff;
+        --white: #ffffff;
+        --shadow: 0 4px 12px rgba(215, 138, 214, 0.15);
+        --border-radius: 12px;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--white);
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* Header */
+    header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 30px 0;
+        text-align: center;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        box-shadow: var(--shadow);
+    }
+    
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    
+    .logo i {
+        font-size: 2.8rem;
+        margin-right: 15px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .tagline {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    /* Top Navigation Bar - SIMPLES E FIXA */
+    .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--white);
+        border-bottom: 2px solid var(--primary-light);
+        z-index: 1000;
+        padding: 8px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 5px 0;
+    }
+    
+    .nav-links::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .nav-links::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 4px;
+    }
+    
+    .nav-links li {
+        flex-shrink: 0;
+    }
+    
+    .nav-links a {
+        color: var(--secondary-color);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+    
+    .nav-links a:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .nav-links i {
+        margin-right: 6px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-title {
+        color: var(--secondary-color);
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .nav-title i {
+        margin-right: 8px;
+        color: var(--primary-color);
+    }
+    
+    /* Espaço para compensar a navegação fixa */
+    .header-spacer {
+        height: 70px;
+    }
+    
+    /* Main Content */
+    .main-content {
+        padding: 40px 0;
+    }
+    
+    .section {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin-bottom: 40px;
+        box-shadow: var(--shadow);
+        border-left: 5px solid var(--primary-color);
+    }
+    
+    h2 {
+        color: var(--secondary-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-light);
+        display: flex;
+        align-items: center;
+    }
+    
+    h2 i {
+        margin-right: 15px;
+        color: var(--primary-color);
+    }
+    
+    h3 {
+        color: var(--primary-dark);
+        margin: 20px 0 10px;
+    }
+    
+    p {
+        margin-bottom: 15px;
+    }
+    
+    .highlight {
+        background-color: var(--primary-light);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        margin: 20px 0;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+    
+    .benefit-card {
+        background-color: var(--light-bg);
+        padding: 20px;
+        border-radius: var(--border-radius);
+        border-top: 4px solid var(--primary-color);
+    }
+    
+    .benefit-card h4 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .benefit-card i {
+        margin-right: 10px;
+        color: var(--primary-color);
+    }
+    
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .stat-box {
+        background: linear-gradient(135deg, var(--primary-light), var(--white));
+        padding: 20px;
+        border-radius: var(--border-radius);
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        color: var(--secondary-color);
+        font-weight: 600;
+    }
+    
+    /* Quiz Section */
+    .quiz-container {
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin-top: 30px;
+        border: 2px solid var(--primary-light);
+    }
+    
+    .question {
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--primary-light);
+    }
+    
+    .question:last-child {
+        border-bottom: none;
+    }
+    
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .option {
+        background-color: var(--white);
+        padding: 12px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .option:hover {
+        background-color: var(--primary-light);
+        border-color: var(--primary-color);
+    }
+    
+    .option.selected {
+        background-color: var(--primary-light);
+        border-color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    .quiz-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .btn {
+        padding: 12px 30px;
+        border-radius: 30px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #5a147a;
+    }
+    
+    .result-container {
+        display: none;
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(135deg, var(--primary-light), var(--white));
+        border-radius: var(--border-radius);
+        margin-top: 30px;
+        box-shadow: var(--shadow);
+    }
+    
+    .result-score {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 20px 0;
+    }
+    
+    .result-message {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        color: var(--secondary-color);
+    }
+    
+    /* Footer */
+    footer {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 40px 0 20px;
+        margin-top: 40px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+    }
+    
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .footer-section h4 {
+        color: var(--primary-light);
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+    }
+    
+    .footer-links {
+        list-style: none;
+    }
+    
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+        color: var(--primary-light);
+    }
+    
+    .copyright {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+    
+    /* Responsive para Celulares */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        .logo {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .logo i {
+            margin-right: 0;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            padding: 0 10px;
+        }
+        
+        /* NAVEGAÇÃO MOBILE */
+        .top-nav {
+            padding: 6px 0;
+        }
+        
+        .nav-title {
+            font-size: 1rem;
+            display: none; /* Esconde o título em mobile para economizar espaço */
+        }
+        
+        .nav-links {
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 3px 0;
+        }
+        
+        .nav-links a {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        
+        .nav-links i {
+            margin-right: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .nav-links span {
+            display: none; /* Esconde o texto, mostra apenas ícones em mobile */
+        }
+        
+        .header-spacer {
+            height: 50px;
+        }
+        
+        .main-content {
+            padding: 20px 0;
+        }
+        
+        .section {
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        h2 i {
+            margin-bottom: 10px;
+            margin-right: 0;
+        }
+        
+        .benefits-grid, .stats {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .quiz-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn {
+            width: 100%;
+            max-width: 250px;
+        }
+        
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .footer-section {
+            text-align: center;
+        }
+    }
+    
+    /* Responsive para Telas Pequenas (Celulares menores) */
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+        
+        .tagline {
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            padding: 15px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+        }
+        
+        .result-score {
+            font-size: 2.8rem;
+        }
+        
+        .result-message {
+            font-size: 1.1rem;
+        }
+        
+        /* Ajuste adicional para navegação em telas muito pequenas */
+        .nav-links {
+            gap: 8px;
+        }
+        
+        .nav-links a {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+        }
+        
+        .nav-links i {
+            margin-right: 0;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Top Navigation Bar - FIXA E SIMPLES -->
+    <div class="top-nav">
+        <div class="nav-container">
+            <div class="nav-title">
+                <i class="fas fa-heartbeat"></i>
+                <span>Navegação</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#introducao"><i class="fas fa-home"></i> <span>Introdução</span></a></li>
+                <li><a href="#beneficios"><i class="fas fa-heart"></i> <span>Benefícios</span></a></li>
+                <li><a href="#como-amamentar"><i class="fas fa-child"></i> <span>Como Amamentar</span></a></li>
+                <li><a href="#dados"><i class="fas fa-chart-bar"></i> <span>Dados</span></a></li>
+                <li><a href="#quiz"><i class="fas fa-question-circle"></i> <span>Quiz</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Espaço para compensar a navegação fixa -->
+    <div class="header-spacer"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <div>
+                    <h1>Aleitamento Materno</h1>
+                    <p class="tagline">Proteção, Amor e Saúde - Informação baseada em evidências científicas</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content container">
+        <!-- Introdução -->
+        <section id="introducao" class="section">
+            <h2><i class="fas fa-info-circle"></i> O que é Aleitamento Materno?</h2>
+            <p>O aleitamento materno é o melhor alimento para os bebês, oferecendo os nutrientes necessários e protegendo contra doenças. A Organização Mundial da Saúde recomenda:</p>
+            
+            <div class="highlight">
+                <p><strong>Recomendações da OMS:</strong></p>
+                <ul>
+                    <li><strong>Exclusivo até os 6 meses:</strong> Nenhum outro alimento ou líquido é necessário</li>
+                    <li><strong>Complementado até 2 anos ou mais:</strong> Após os 6 meses, introduzir alimentos saudáveis mantendo o leite materno</li>
+                </ul>
+            </div>
+            
+            <p>Amamentar é muito mais do que nutrir a criança. É um processo que envolve uma interação profunda entre mãe e filho, com repercussões no estado nutricional, habilidade de se defender de infecções, fisiologia e desenvolvimento cognitivo e emocional.</p>
+            
+            <h3>Meta Global de Nutrição</h3>
+            <p>Em 2012, a Assembleia Mundial da Saúde aprovou a meta global de aumentar a taxa de aleitamento materno exclusivo nos primeiros 6 meses para pelo menos 50% até 2025.</p>
+        </section>
+
+        <!-- Benefícios -->
+        <section id="beneficios" class="section">
+            <h2><i class="fas fa-star"></i> Benefícios do Aleitamento Materno</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h4><i class="fas fa-baby"></i> Para o Bebê</h4>
+                    <ul>
+                        <li>Proteção contra diarreias, infecções respiratórias e alergias</li>
+                        <li>Reduz risco de obesidade, diabetes tipo 2 e hipertensão</li>
+                        <li>Diminui em 60% o risco de síndrome da morte súbita infantil</li>
+                        <li>Reduz em 19% o risco de leucemia infantil</li>
+                        <li>Aumenta o desenvolvimento cognitivo (3,4 pontos a mais em testes)</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4><i class="fas fa-female"></i> Para a Mulher</h4>
+                    <ul>
+                        <li>Reduz risco de diabetes tipo 2 em 32%</li>
+                        <li>Diminui câncer de mama em 26% e câncer de ovário em 37%</li>
+                        <li>Reduz hemorragia pós-parto</li>
+                        <li>Fortalecimento do vínculo mãe-filho</li>
+                        <li>Contribui para a perda de peso pós-parto</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card">
+                    <h4><i class="fas fa-globe-americas"></i> Para a Sociedade e Planeta</h4>
+                    <ul>
+                        <li>Economia de US$ 302 bilhões anuais com aumento do QI da população</li>
+                        <li>Sem pegada de carbono - recurso renovável e natural</li>
+                        <li>Sem poluição, embalagens ou resíduos</li>
+                        <li>Reduz custos com saúde pública</li>
+                        <li>Aumenta produtividade no trabalho (com políticas de apoio)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Fato importante:</strong> O leite materno influencia a programação epigenética em momento crítico do desenvolvimento, afetando a expressão gênica para o resto da vida.</p>
+            </div>
+        </section>
+
+        <!-- Como Amamentar -->
+        <section id="como-amamentar" class="section">
+            <h2><i class="fas fa-hands-helping"></i> Como Amamentar Corretamente</h2>
+            
+            <h3>Posição Correta</h3>
+            <ul>
+                <li>Bebê virado para a mãe, bem junto ao seu corpo</li>
+                <li>Cabeça do bebê de frente para o peito e nariz na frente do mamilo</li>
+                <li>Espere o bebê abrir bem a boca para sugar</li>
+                <li>Queixo encosta na mama, lábios virados para fora, nariz livre</li>
+                <li>Aparece mais aréola na parte de cima da boca</li>
+            </ul>
+            
+            <h3>Dicas Importantes</h3>
+            <ul>
+                <li>Amamentar não deve doer - se doer, reveja a pega</li>
+                <li>Bebês não têm horário fixo - respeite o ritmo do seu bebê</li>
+                <li>Nem todo choro é fome (pode ser frio, calor, fralda suja)</li>
+                <li>Deixe o bebê esvaziar bem a mama - o leite do fim tem mais gordura</li>
+                <li>Evite mamadeiras e chupetas - podem atrapalhar a amamentação</li>
+            </ul>
+            
+            <h3>Retorno ao Trabalho</h3>
+            <ul>
+                <li>Comece a extrair leite 15 dias antes do retorno</li>
+                <li>A produção depende do estímulo (sucção ou extração)</li>
+                <li>Extraia leite algumas vezes ao dia para manter a produção</li>
+                <li>Armazene em recipientes de vidro esterilizados</li>
+                <li>Ofereça o leite em copinhos ou colheres, não em mamadeiras</li>
+            </ul>
+        </section>
+
+        <!-- Dados e Estatísticas -->
+        <section id="dados" class="section">
+            <h2><i class="fas fa-chart-line"></i> Dados e Estatísticas</h2>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">52%</div>
+                    <div class="stat-label">Bebês amamentados na primeira hora (América Latina e Caribe)</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-number">43%</div>
+                    <div class="stat-label">Crianças com aleitamento exclusivo até 6 meses</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-number">65%</div>
+                    <div class="stat-label">Países com pelo menos 14 semanas de licença-maternidade</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-number">19/35</div>
+                    <div class="stat-label">Países das Américas com leis para proteção do aleitamento</div>
+                </div>
+            </div>
+            
+            <h3>Políticas de Apoio</h3>
+            <ul>
+                <li><strong>Código Internacional de Comercialização de Substitutos do Leite Materno:</strong> Diretrizes para prevenir propaganda inadequada de fórmulas infantis</li>
+                <li><strong>Iniciativa Hospital Amigo da Criança:</strong> Implementação dos "Dez Passos para o Sucesso do Aleitamento Materno"</li>
+                <li><strong>Licença-maternidade adequada:</strong> Mínimo de 14 semanas recomendado pela OMS</li>
+                <li><strong>Políticas no local de trabalho:</strong> Aumentam retenção, produtividade e lealdade dos funcionários</li>
+            </ul>
+        </section>
+
+        <!-- Quiz -->
+        <section id="quiz" class="section">
+            <h2><i class="fas fa-brain"></i> Teste seus Conhecimentos sobre Aleitamento Materno</h2>
+            
+            <p>Responda as perguntas abaixo para testar o que você aprendeu sobre aleitamento materno. Ao final, você verá sua pontuação e poderá revisar os conteúdos.</p>
+            
+            <div class="quiz-container">
+                <div class="question" id="question1">
+                    <h3>1. Por quanto tempo a OMS recomenda o aleitamento materno exclusivo?</h3>
+                    <div class="options">
+                        <div class="option" data-question="1" data-option="a">Até 3 meses</div>
+                        <div class="option" data-question="1" data-option="b">Até 4 meses</div>
+                        <div class="option correct" data-question="1" data-option="c">Até 6 meses</div>
+                        <div class="option" data-question="1" data-option="d">Até 8 meses</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question2">
+                    <h3>2. Qual desses benefícios NÃO está associado ao aleitamento materno para a mãe?</h3>
+                    <div class="options">
+                        <div class="option" data-question="2" data-option="a">Redução do risco de diabetes tipo 2</div>
+                        <div class="option" data-question="2" data-option="b">Diminuição do risco de câncer de mama</div>
+                        <div class="option" data-question="2" data-option="c">Redução do risco de osteoporose</div>
+                        <div class="option correct" data-question="2" data-option="d">Aumento do risco de depressão pós-parto</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question3">
+                    <h3>3. Qual a porcentagem de redução do risco de síndrome da morte súbita infantil em bebês amamentados?</h3>
+                    <div class="options">
+                        <div class="option" data-question="3" data-option="a">30%</div>
+                        <div class="option" data-question="3" data-option="b">45%</div>
+                        <div class="option correct" data-question="3" data-option="c">60%</div>
+                        <div class="option" data-question="3" data-option="d">75%</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question4">
+                    <h3>4. Qual a meta global para taxa de aleitamento materno exclusivo até 2025?</h3>
+                    <div class="options">
+                        <div class="option" data-question="4" data-option="a">30%</div>
+                        <div class="option" data-question="4" data-option="b">40%</div>
+                        <div class="option correct" data-question="4" data-option="c">50%</div>
+                        <div class="option" data-question="4" data-option="d">60%</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question5">
+                    <h3>5. Quantos países das Américas têm leis para implementar o Código Internacional de Comercialização de Substitutos do Leite Materno?</h3>
+                    <div class="options">
+                        <div class="option" data-question="5" data-option="a">8 de 35</div>
+                        <div class="option" data-question="5" data-option="b">12 de 35</div>
+                        <div class="option correct" data-question="5" data-option="c">19 de 35</div>
+                        <div class="option" data-question="5" data-option="d">25 de 35</div>
+                    </div>
+                </div>
+                
+                <div class="quiz-buttons">
+                    <button class="btn btn-primary" id="submitQuiz">
+                        <i class="fas fa-check-circle"></i> Verificar Respostas
+                    </button>
+                    <button class="btn btn-secondary" id="resetQuiz">
+                        <i class="fas fa-redo"></i> Refazer Teste
+                    </button>
+                </div>
+                
+                <div class="result-container" id="quizResult">
+                    <h3><i class="fas fa-trophy"></i> Resultado do Quiz</h3>
+                    <div class="result-score" id="score">0/5</div>
+                    <div class="result-message" id="resultMessage"></div>
+                    <p id="resultDetails"></p>
+                    <button class="btn btn-primary" id="reviewQuiz">
+                        <i class="fas fa-book"></i> Revisar Conteúdo
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-university"></i> Fontes Oficiais</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://www.paho.org/pt/topicos/aleitamento-materno-e-alimentacao-complementar" target="_blank">OPAS - Aleitamento Materno</a></li>
+                        <li><a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/a/aleitamento-materno" target="_blank">Ministério da Saúde - Brasil</a></li>
+                        <li><a href="https://www.who.int/health-topics/breastfeeding" target="_blank">Organização Mundial da Saúde</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4><i class="fas fa-hands-helping"></i> Apoio e Recursos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#introducao">Informações Básicas</a></li>
+                        <li><a href="#beneficios">Benefícios Comprovados</a></li>
+                        <li><a href="#como-amamentar">Como Amamentar</a></li>
+                        <li><a href="#quiz">Teste seus Conhecimentos</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4><i class="fas fa-heart"></i> Apoio à Amamentação</h4>
+                    <p>Amamentar é um ato de amor que transforma vidas. Busque apoio em grupos de amamentação, bancos de leite humano e profissionais de saúde.</p>
+                    <p>Juntos podemos criar um mundo onde amamentar seja respeitado, protegido e celebrado.</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Aleitamento Materno - Proteção, Amor e Saúde. Desenvolvido para fins educacionais.</p>
+                <p>Cristiane Carneiro</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.option');
+            const submitBtn = document.getElementById('submitQuiz');
+            const resetBtn = document.getElementById('resetQuiz');
+            const reviewBtn = document.getElementById('reviewQuiz');
+            const quizResult = document.getElementById('quizResult');
+            const scoreElement = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultDetails = document.getElementById('resultDetails');
+            
+            let selectedAnswers = {};
+            const correctAnswers = {
+                1: 'c',
+                2: 'd',
+                3: 'c',
+                4: 'c',
+                5: 'c'
+            };
+            
+            const answerExplanations = {
+                1: "A OMS recomenda aleitamento materno exclusivo até os 6 meses de idade.",
+                2: "O aleitamento materno REDUZ o risco de depressão pós-parto, não aumenta.",
+                3: "Bebês amamentados têm 60% menos risco de síndrome da morte súbita infantil.",
+                4: "A meta global é aumentar a taxa de aleitamento materno exclusivo para pelo menos 50% até 2025.",
+                5: "19 dos 35 países das Américas têm leis para implementar o Código Internacional."
+            };
+            
+            // Select option
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionNum = this.getAttribute('data-question');
+                    const optionLetter = this.getAttribute('data-option');
+                    
+                    // Remove selected class from other options in this question
+                    const questionOptions = document.querySelectorAll(`[data-question="${questionNum}"]`);
+                    questionOptions.forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Store selected answer
+                    selectedAnswers[questionNum] = optionLetter;
+                });
+            });
+            
+            // Submit quiz
+            submitBtn.addEventListener('click', function() {
+                let score = 0;
+                let totalQuestions = Object.keys(correctAnswers).length;
+                let explanations = [];
+                
+                // Check answers
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const selected = selectedAnswers[i];
+                    const correct = correctAnswers[i];
+                    
+                    if (selected === correct) {
+                        score++;
+                        explanations.push(`<strong>Pergunta ${i}:</strong> <span style="color: green;">Correta! ✓</span> - ${answerExplanations[i]}`);
+                    } else if (selected) {
+                        explanations.push(`<strong>Pergunta ${i}:</strong> <span style="color: red;">Incorreta ✗</span> - ${answerExplanations[i]}`);
+                    } else {
+                        explanations.push(`<strong>Pergunta ${i}:</strong> <span style="color: orange;">Não respondida</span> - ${answerExplanations[i]}`);
+                    }
+                }
+                
+                // Calculate percentage
+                const percentage = (score / totalQuestions) * 100;
+                
+                // Display score
+                scoreElement.textContent = `${score}/${totalQuestions}`;
+                
+                // Display message based on score
+                if (percentage >= 80) {
+                    resultMessage.textContent = "Excelente! Você domina o assunto sobre aleitamento materno!";
+                    resultMessage.style.color = "#4CAF50";
+                } else if (percentage >= 60) {
+                    resultMessage.textContent = "Bom trabalho! Você tem bons conhecimentos sobre o tema.";
+                    resultMessage.style.color = "#FF9800";
+                } else {
+                    resultMessage.textContent = "Continue aprendendo! Revise o conteúdo para melhorar.";
+                    resultMessage.style.color = "#F44336";
+                }
+                
+                // Display detailed results
+                resultDetails.innerHTML = "<h4>Detalhes das respostas:</h4>" + explanations.join('<br>');
+                
+                // Show result container
+                quizResult.style.display = 'block';
+                
+                // Scroll to result
+                quizResult.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Reset quiz
+            resetBtn.addEventListener('click', function() {
+                // Clear selections
+                options.forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Clear stored answers
+                selectedAnswers = {};
+                
+                // Hide result
+                quizResult.style.display = 'none';
+            });
+            
+            // Review content
+            reviewBtn.addEventListener('click', function() {
+                // Scroll to introduction
+                document.getElementById('introducao').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Highlight current section in navigation
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('.section');
+                const navLinks = document.querySelectorAll('.nav-links a');
+                
+                let currentSectionId = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                        currentSectionId = '#' + section.id;
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === currentSectionId) {
+                        link.classList.add('active');
+                        link.style.backgroundColor = 'var(--primary-color)';
+                        link.style.color = 'white';
+                    } else {
+                        link.style.backgroundColor = '';
+                        link.style.color = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
