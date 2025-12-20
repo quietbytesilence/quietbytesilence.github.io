@@ -1,14 +1,14 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Apostila de R]]></title><description><![CDATA[Obsidian digital garden]]></description><link>quietbytesilence.github.i</link><image><url>quietbytesilence.github.i/site-lib/media/favicon.png</url><title>Apostila de R</title><link>quietbytesilence.github.i</link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sat, 20 Dec 2025 01:06:27 GMT</lastBuildDate><atom:link href="quietbytesilence.github.i/site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 20 Dec 2025 01:06:26 GMT</pubDate><copyright><![CDATA[Gustavo Carneiro]]></copyright><ttl>60</ttl><dc:creator>Gustavo Carneiro</dc:creator><item><title><![CDATA[Ementa]]></title><description><![CDATA[A apostila 1 traz
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Apostila de R]]></title><description><![CDATA[Obsidian digital garden]]></description><link>quietbytesilence.github.i</link><image><url>quietbytesilence.github.i/site-lib/media/favicon.png</url><title>Apostila de R</title><link>quietbytesilence.github.i</link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sat, 20 Dec 2025 01:12:31 GMT</lastBuildDate><atom:link href="quietbytesilence.github.i/site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 20 Dec 2025 01:12:31 GMT</pubDate><copyright><![CDATA[Gustavo Carneiro]]></copyright><ttl>60</ttl><dc:creator>Gustavo Carneiro</dc:creator><item><title><![CDATA[Ementa]]></title><description><![CDATA[A apostila 1 traz
 Tipos de Dados
 Operadores Aritméticos
 Operadores Lógicos
-Varáveis
+Variáveis
 Vetores
 Matrizes
 Listas
 Strings (Textos)
 Data-Frames (uma matriz mais elaborada)
-Novas apostilas serão adicionadas aqui]]></description><link>quietbytesilence.github.i/R-Textual/Ementa.html</link><guid isPermaLink="false">R-Textual/Ementa.md</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Sat, 20 Dec 2025 01:05:45 GMT</pubDate></item><item><title><![CDATA[Apostila de Introdução à Programação em R]]></title><description><![CDATA[R é uma linguagem de programação e ambiente estatístico amplamente utilizado para análise de dados, visualização e modelagem estatística. É de código aberto e possui uma vasta comunidade de usuários.# Numérico (números decimais)
+Novas apostilas serão adicionadas aqui]]></description><link>quietbytesilence.github.i/R-Textual/Ementa.html</link><guid isPermaLink="false">R-Textual/Ementa.md</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Sat, 20 Dec 2025 01:11:40 GMT</pubDate></item><item><title><![CDATA[Apostila de Introdução à Programação em R]]></title><description><![CDATA[R é uma linguagem de programação e ambiente estatístico amplamente utilizado para análise de dados, visualização e modelagem estatística. É de código aberto e possui uma vasta comunidade de usuários.# Numérico (números decimais)
 x &lt;- 10.5
 class(x) # "numeric" # Inteiro
 y &lt;- 10L
