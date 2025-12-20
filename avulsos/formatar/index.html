@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatar Trabalho</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Preencha com os Dados do Trabalho</h1>
+        </header>
+        
+        <div class="form-container">
+            <form id="data-form">
+                <!-- Logo (opcional) -->
+                <div class="form-group">
+                    <label for="image-upload">Logo da Instituição (Opcional)</label>
+                    <div class="upload-container" onclick="document.getElementById('image-upload').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">
+                            <h3>Clique para fazer upload</h3>
+                            <p>Arraste ou clique para selecionar um arquivo</p>
+                            <p>Logo padrão UFRA será usada se não enviar</p>
+                        </div>
+                        <div id="file-name">Nenhum arquivo selecionado</div>
+                    </div>
+                    <input type="file" id="image-upload" accept="image/*">
+                </div>
+                
+                <!-- Nome da instituição -->
+                <div class="form-group">
+                    <label for="institution">Nome da Instituição</label>
+                    <input type="text" id="institution" name="institution" class="input-field" required>
+                </div>
+                
+                <!-- Nome do curso -->
+                <div class="form-group">
+                    <label for="course">Nome do Curso</label>
+                    <input type="text" id="course" name="course" class="input-field" required>
+                </div>
+                
+                <!-- Nome da disciplina -->
+                <div class="form-group">
+                    <label for="discipline">Nome da Disciplina</label>
+                    <input type="text" id="discipline" name="discipline" class="input-field" required>
+                </div>
+                
+                <!-- Nome completo do aluno -->
+                <div class="form-group">
+                    <label for="student">Nome Completo do Aluno</label>
+                    <input type="text" id="student" name="student" class="input-field" required>
+                </div>
+                
+                <!-- Título do trabalho -->
+                <div class="form-group">
+                    <label for="title">Título do Trabalho</label>
+                    <input type="text" id="title" name="title" class="input-field" required>
+                </div>
+                
+                <!-- Conteúdo do trabalho -->
+                <div class="form-group">
+                    <label for="content">Conteúdo do Trabalho</label>
+                    <textarea id="content" name="content" class="input-field" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Gerar Documento ABNT</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Logo padrão da UFRA
+        const DEFAULT_LOGO = "assets/img/logo.png";
+        let logoBase64 = DEFAULT_LOGO;
+
+        // Manipulação do upload de imagem
+        document.getElementById('image-upload').addEventListener('change', function(e) {
+            const fileName = document.getElementById('file-name');
+            if (this.files && this.files.length > 0) {
+                fileName.textContent = `Arquivo selecionado: ${this.files[0].name}`;
+                fileName.style.color = '#4a6fa5';
+                
+                // Converter imagem para Base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoBase64 = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                fileName.textContent = 'Nenhum arquivo selecionado';
+                fileName.style.color = '#888';
+                logoBase64 = DEFAULT_LOGO;
+            }
+        });
+
+        // Manipular envio do formulário
+        document.getElementById('data-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Coletar todos os dados
+            const formData = {
+                logo: logoBase64,
+                institution: document.getElementById('institution').value,
+                course: document.getElementById('course').value,
+                discipline: document.getElementById('discipline').value,
+                student: document.getElementById('student').value,
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value
+            };
+            
+            console.log('Dados coletados:', formData);
+            
+            // Salvar no localStorage
+            localStorage.setItem('abntFormData', JSON.stringify(formData));
+            
+            // Redirecionar para a página ABNT
+            window.location.href = 'abnt.html';
+        });
+    </script>
+</body>
+</html>

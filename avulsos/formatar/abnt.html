@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento ABNT</title>
+    <style>
+        @page { margin: 0 }
+        body { margin: 0 }
+        .sheet {
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+            page-break-after: always;
+        }
+
+        /** Paper sizes **/
+        body.A4 .sheet { width: 210mm; height: 296mm }
+
+        /** Margens **/
+        .sheet {
+            padding-top: 3cm;
+            padding-left: 3cm;
+            padding-right: 2cm;
+            padding-bottom: 2cm;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /** For screen preview **/
+        @media screen {
+            body { 
+                background: #e0e0e0;
+            }
+            .sheet {
+                background: white;
+                box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+                margin: 10mm;
+                height: 100%;
+
+            }
+        }
+        .page-content {
+          margin-top: 3cm;
+          margin-bottom: 2cm; /* ← zona proibida */
+        }
+        /** Fix for Chrome issue #273306 **/
+        @media print {
+            body.A4 { width: 210mm }
+        }
+        
+        p {
+            margin: 0;
+        }
+        
+        .normal{
+            font-family: "Times New Roman", Times;
+            font-size: 12pt;
+            text-align: center;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+        
+        .fill {
+            flex: 1;
+        }
+        
+        .logo {
+            height: 2.5cm;
+            width: 2.5cm;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 5pt;
+        }
+        
+        .conteudo {
+            white-space: pre-line;
+            text-align: justify;
+            text-indent: 1.25cm;
+            font-family: "Times New Roman", Times;
+            font-size: 12pt;
+            line-height: 1.5;
+            flex: 1;              /* ocupa só o espaço disponível */
+            overflow: hidden;
+        }
+        .continua {
+            text-indent: 0;
+        }
+        
+    </style>
+</head>
+<body class="A4">
+
+    <section class="sheet">
+        <img class="logo" id="logo-img" src="assets/img/logo.png">
+        <p id="instituicao" class="normal">Universidade Federal Rural da Amazônia</p>
+        <p id="curso" class="normal">Licenciatura em Computação</p>
+        <p id="disciplina" class="normal">Fundamentos Teóricos e Metodologicos do Ensino de Ciências</p>
+        <br>
+        <p id="aluno" class="normal">Gustavo Cícero Carneiro Maciel</p>
+        
+        <div class="fill"></div>
+        <p id="titulo" class="normal">Um trabalho sobre inclusão social</p>
+        <div class="fill"></div>
+        <p id="local" class="normal data-info">Belém - Pará</p>
+        <p id="data" class="normal data-info">Dezembro - 2025</p>
+    </section>
+
+    <section class="sheet">
+        <div id="conteudo-trabalho" class="conteudo">
+            <!-- O conteúdo será inserido aqui via JavaScript -->
+        </div>
+    </section>
+
+    <script>
+        // Função para obter o mês por extenso
+        function getMonthName(monthIndex) {
+            const months = [
+                "Janeiro", "Fevereiro", "Março", "Abril", 
+                "Maio", "Junho", "Julho", "Agosto", 
+                "Setembro", "Outubro", "Novembro", "Dezembro"
+            ];
+            return months[monthIndex];
+        }
+
+        // Função para processar o conteúdo e criar parágrafos
+function processContent(content, container) {
+    const paragraphs = content.split(/\n\s*\n/);
+
+    let contentArea = container;
+    let sheet = contentArea.closest('.sheet');
+
+    paragraphs.forEach(raw => {
+        const words = raw.replace(/\n/g, ' ').trim().split(' ');
+        if (!words.length) return;
+
+        let p = document.createElement('p');
+        p.className = 'paragrafo';
+        contentArea.appendChild(p);
+
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const previous = p.textContent;
+
+            p.textContent += (p.textContent ? ' ' : '') + word;
+
+            // 🔴 estourou?
+            if (contentArea.scrollHeight > contentArea.clientHeight) {
+                // remove palavra que estourou
+                p.textContent = previous;
+
+                // cria nova página
+                sheet = document.createElement('section');
+                sheet.className = 'sheet';
+
+                contentArea = document.createElement('div');
+                contentArea.className = 'conteudo';
+
+                sheet.appendChild(contentArea);
+                sheet.after(sheet);
+                document.body.appendChild(sheet);
+
+                // novo parágrafo na nova página
+                p = document.createElement('p');
+                p.className = 'paragrafo continua';
+                p.textContent = word;
+                contentArea.appendChild(p);
+            }
+        }
+    });
+}
+
+
+
+        // Carregar dados quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se há dados no localStorage
+            const savedData = localStorage.getItem('abntFormData');
+            
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    console.log('Dados carregados:', data);
+                    
+                    // Preencher os campos com os dados
+                    if (data.logo) {
+                        document.getElementById('logo-img').src = data.logo;
+                    }
+                    
+                    if (data.institution) {
+                        document.getElementById('instituicao').textContent = data.institution;
+                    }
+                    
+                    if (data.course) {
+                        document.getElementById('curso').textContent = data.course;
+                    }
+                    
+                    if (data.discipline) {
+                        document.getElementById('disciplina').textContent = data.discipline;
+                    }
+                    
+                    if (data.student) {
+                        document.getElementById('aluno').textContent = data.student;
+                    }
+                    
+                    if (data.title) {
+                        document.getElementById('titulo').textContent = data.title;
+                    }
+                    
+                    // Atualizar data atual
+                    const now = new Date();
+                    document.getElementById('data').textContent = 
+                        `${getMonthName(now.getMonth())} - ${now.getFullYear()}`;
+                    
+                    // Preencher conteúdo do trabalho
+                    if (data.content) {
+                        const conteudo = document.getElementById('conteudo-trabalho');
+                        processContent(data.content, conteudo);
+                        //document.getElementById('conteudo-trabalho').innerHTML = processContent(data.content);
+                        window.print();
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro ao processar dados:', error);
+                    alert('Erro ao carregar dados. Por favor, preencha o formulário novamente.');
+                }
+            } else {
+                console.log('Nenhum dado encontrado no localStorage');
+                // Mostrar dados de exemplo ou mensagem
+            }
+            
+            // Limpar localStorage após usar (opcional)
+            // localStorage.removeItem('abntFormData');
+        });
+        
+        // Adicionar funcionalidade de impressão
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+        });
+    </script>
+</body>
+</html>
