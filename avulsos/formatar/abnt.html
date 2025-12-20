@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <title>Documento ABNT</title>
     <style>
         @page { margin: 0 }
@@ -20,14 +22,21 @@
 
         /** Margens **/
         .sheet {
-            padding-top: 3cm;
-            padding-left: 3cm;
-            padding-right: 2cm;
-            padding-bottom: 2cm;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+          width: 210mm;
+          height: 297mm;
+          padding-top: 3cm;
+          padding-left: 3cm;
+          padding-right: 2cm;
+          padding-bottom: 2cm;
+
+          display: flex;
+          flex-direction: column;
+
+          background: white;
+          box-sizing: border-box;
+          overflow: visible;
         }
+
 
         /** For screen preview **/
         @media screen {
@@ -93,7 +102,7 @@
 <body class="A4">
 
     <section class="sheet">
-        <img class="logo" id="logo-img" src="assets/img/logo.png">
+        <img class="logo" id="logo-img" crossorigin="anonymous" src="assets/img/logo.png">
         <p id="instituicao" class="normal">Universidade Federal Rural da Amazônia</p>
         <p id="curso" class="normal">Licenciatura em Computação</p>
         <p id="disciplina" class="normal">Fundamentos Teóricos e Metodologicos do Ensino de Ciências</p>
@@ -126,119 +135,136 @@
 
         // Função para processar o conteúdo e criar parágrafos
 function processContent(content, container) {
-    const paragraphs = content.split(/\n\s*\n/);
+  const paragraphs = content.split(/\n\s*\n/);
 
-    let contentArea = container;
-    let sheet = contentArea.closest('.sheet');
+  let contentArea = container;
+  let sheet = contentArea.closest('.sheet');
 
-    paragraphs.forEach(raw => {
-        const words = raw.replace(/\n/g, ' ').trim().split(' ');
-        if (!words.length) return;
+  paragraphs.forEach(raw => {
+    const words = raw.replace(/\n/g, ' ').trim().split(' ');
+    if (!words.length) return;
 
-        let p = document.createElement('p');
-        p.className = 'paragrafo';
+    let p = document.createElement('p');
+    p.className = 'paragrafo';
+    contentArea.appendChild(p);
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const previous = p.textContent;
+
+      p.textContent += (p.textContent ? ' ' : '') + word;
+
+      // Estourou a área da página?
+      if (contentArea.scrollHeight > contentArea.clientHeight) {
+        // desfaz a última palavra
+        p.textContent = previous;
+
+        // cria nova página corretamente
+        const currentSheet = sheet;
+
+        sheet = document.createElement('section');
+        sheet.className = 'sheet';
+
+        contentArea = document.createElement('div');
+        contentArea.className = 'conteudo';
+
+        sheet.appendChild(contentArea);
+        currentSheet.after(sheet);
+
+        // novo parágrafo (continuação)
+        p = document.createElement('p');
+        p.className = 'paragrafo continua';
+        p.textContent = word;
         contentArea.appendChild(p);
+      }
+    }
+  });
+}
 
-        for (let i = 0; i < words.length; i++) {
-            const word = words[i];
-            const previous = p.textContent;
+async function ensureBase64Image(img) {
+  // já é base64 → nada a fazer
+  if (!img || img.src.startsWith('data:')) return;
 
-            p.textContent += (p.textContent ? ' ' : '') + word;
+  const response = await fetch(img.src, { mode: 'cors' });
+  const blob = await response.blob();
 
-            // 🔴 estourou?
-            if (contentArea.scrollHeight > contentArea.clientHeight) {
-                // remove palavra que estourou
-                p.textContent = previous;
-
-                // cria nova página
-                sheet = document.createElement('section');
-                sheet.className = 'sheet';
-
-                contentArea = document.createElement('div');
-                contentArea.className = 'conteudo';
-
-                sheet.appendChild(contentArea);
-                sheet.after(sheet);
-                document.body.appendChild(sheet);
-
-                // novo parágrafo na nova página
-                p = document.createElement('p');
-                p.className = 'paragrafo continua';
-                p.textContent = word;
-                contentArea.appendChild(p);
-            }
-        }
-    });
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      img.src = reader.result;
+      resolve();
+    };
+    reader.readAsDataURL(blob);
+  });
 }
 
 
 
+async function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+
+  // 🔒 blindagem contra canvas contaminado
+  const logo = document.getElementById('logo-img');
+  if (logo) await ensureBase64Image(logo);
+
+  const sheets = document.querySelectorAll('.sheet');
+
+  for (let i = 0; i < sheets.length; i++) {
+    const sheet = sheets[i];
+
+    const canvas = await html2canvas(sheet, {
+      scale: window.devicePixelRatio > 1 ? 2 : 1.5,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: '#ffffff'
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+
+    if (i > 0) pdf.addPage();
+
+    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+  }
+
+  pdf.save('trabalho-abnt.pdf');
+}
+
+
+
+
+
         // Carregar dados quando a página carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            // Verificar se há dados no localStorage
-            const savedData = localStorage.getItem('abntFormData');
-            
-            if (savedData) {
-                try {
-                    const data = JSON.parse(savedData);
-                    console.log('Dados carregados:', data);
-                    
-                    // Preencher os campos com os dados
-                    if (data.logo) {
-                        document.getElementById('logo-img').src = data.logo;
-                    }
-                    
-                    if (data.institution) {
-                        document.getElementById('instituicao').textContent = data.institution;
-                    }
-                    
-                    if (data.course) {
-                        document.getElementById('curso').textContent = data.course;
-                    }
-                    
-                    if (data.discipline) {
-                        document.getElementById('disciplina').textContent = data.discipline;
-                    }
-                    
-                    if (data.student) {
-                        document.getElementById('aluno').textContent = data.student;
-                    }
-                    
-                    if (data.title) {
-                        document.getElementById('titulo').textContent = data.title;
-                    }
-                    
-                    // Atualizar data atual
-                    const now = new Date();
-                    document.getElementById('data').textContent = 
-                        `${getMonthName(now.getMonth())} - ${now.getFullYear()}`;
-                    
-                    // Preencher conteúdo do trabalho
-                    if (data.content) {
-                        const conteudo = document.getElementById('conteudo-trabalho');
-                        processContent(data.content, conteudo);
-                        //document.getElementById('conteudo-trabalho').innerHTML = processContent(data.content);
-                        window.print();
-                    }
-                    
-                } catch (error) {
-                    console.error('Erro ao processar dados:', error);
-                    alert('Erro ao carregar dados. Por favor, preencha o formulário novamente.');
-                }
-            } else {
-                console.log('Nenhum dado encontrado no localStorage');
-                // Mostrar dados de exemplo ou mensagem
-            }
-            
-            // Limpar localStorage após usar (opcional)
-            // localStorage.removeItem('abntFormData');
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+  const savedData = localStorage.getItem('abntFormData');
+  if (!savedData) return;
+
+  const data = JSON.parse(savedData);
+
+  if (data.logo) document.getElementById('logo-img').src = data.logo;
+  if (data.institution) document.getElementById('instituicao').textContent = data.institution;
+  if (data.course) document.getElementById('curso').textContent = data.course;
+  if (data.discipline) document.getElementById('disciplina').textContent = data.discipline;
+  if (data.student) document.getElementById('aluno').textContent = data.student;
+  if (data.title) document.getElementById('titulo').textContent = data.title;
+
+  const now = new Date();
+  document.getElementById('data').textContent =
+    `${getMonthName(now.getMonth())} - ${now.getFullYear()}`;
+
+  if (data.content) {
+    const conteudo = document.getElementById('conteudo-trabalho');
+    processContent(data.content, conteudo);
+    exportPDF();
+  }
+});
+
         
         // Adicionar funcionalidade de impressão
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.key === 'p') {
                 e.preventDefault();
-                window.print();
+                exportPDF();
             }
         });
     </script>
