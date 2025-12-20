@@ -1,58 +1,215 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Apostila de R]]></title><description><![CDATA[Obsidian digital garden]]></description><link>quietbytesilence.github.i</link><image><url>quietbytesilence.github.i/site-lib/media/favicon.png</url><title>Apostila de R</title><link>quietbytesilence.github.i</link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Mon, 15 Dec 2025 02:58:00 GMT</lastBuildDate><atom:link href="quietbytesilence.github.i/site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 15 Dec 2025 02:57:54 GMT</pubDate><copyright><![CDATA[Gustavo Carneiro]]></copyright><ttl>60</ttl><dc:creator>Gustavo Carneiro</dc:creator><item><title><![CDATA[Objetos_e_variaveis]]></title><description><![CDATA[Conceito:
-Variáveis são "contêineres" que armazenam dados. Usamos&nbsp;&lt;-&nbsp;ou&nbsp;=&nbsp;para atribuir valores.Tipos Básicos:
-numeric: números decimais (pH, concentração) integer: números inteiros (número de repetições) character: texto (tratamentos, nomes) logical: TRUE/FALSE (presença/ausência) factor: categorias (tratamentos experimentais) Crie uma variável&nbsp;concentracao_N&nbsp;com valor 15.3
-Crie uma variável&nbsp;tratamento&nbsp;com o valor "Controle"
-Crie uma variável&nbsp;blocos&nbsp;com o valor inteiro 4
-Use&nbsp;class()&nbsp;para verificar o tipo de cada variável
-Pode parecer besteira, no Exemplo Prático, o uso do sufixo L após o número.
-A questão é que o R é dinamicamente tipado, ou seja, uma variável pode assumir tipos diferentes depois da definição.Exemplo:variavel &lt;- "Aurecílio"
-print(variavel)
-# Resultado: "Aurecílio" variavel &lt;- 65
-print(variavel)
-# Resultado: 65
-E onde entra o L nisso?
-O sufixo L serve apenas para dizer ao R que aquele número literal deve ser criado como inteiro (tipo integer), em vez de numeric (double), que é o padrão.Exemplo:x &lt;- 5 # tipo numeric (double)
-y &lt;- 5L # tipo integer
-Isso não impede que a variável mude de tipo depois — apenas define o tipo do valor no momento da criação.Exemplo Prático:# Criando variáveis para experimento com biofertilizantes
-pH_solo &lt;- 5.8
-tratamento &lt;- "Rhizobium"
-repeticoes &lt;- 5L # 'L' indica inteiro
-eficaz &lt;- TRUE # Verificando tipos
-class(pH_solo)
-class(tratamento)
-É possível colar o código acima diretamente no seu R Studio📋 Copiar Código]]></description><link>quietbytesilence.github.i/R Fundamentos/Objetos_e_variaveis.html</link><guid isPermaLink="false">R Fundamentos/Objetos_e_variaveis.canvas</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Fri, 12 Dec 2025 18:29:55 GMT</pubDate></item><item><title><![CDATA[Operadores_e_comparacoes]]></title><description><![CDATA[Conceito:
-Operadores lógicos permitem filtrar e selecionar dados específicos.Operadores:
-==&nbsp;igual !=&nbsp;diferente &lt;,&nbsp;&lt;=&nbsp;menor, menor ou igual &gt;,&nbsp;&gt;=&nbsp;maior, maior ou igual &amp;&nbsp;e (AND) |&nbsp;ou (OR) %in%&nbsp;pertence a (está contido?)
-# Dados fictícios de análise foliar
-teor_N &lt;- c(2.1, 2.3, 1.8, 2.5, 1.9, 2.4)
-tratamento &lt;- c("A", "A", "B", "B", "C", "C") # Selecionando dados específicos
-teor_N &gt; 2.0 # TRUE FALSE FALSE TRUE FALSE TRUE
-alto_N &lt;- teor_N[teor_N &gt; 2.0] # Valores &gt; 2.0 # Múltiplas condições
-teor_N[teor_N &gt; 2.0 &amp; teor_N &lt; 2.4] # Selecionando por tratamento
-teor_N[tratamento == "B"]
-teor_N[tratamento %in% c("A", "C")]
-Copie para seu ambiente de trabalho:pH &lt;- c(5.2, 5.8, 6.1, 5.9, 6.3, 5.5) Selecione valores de pH &gt; 6.0
-Selecione valores de pH entre 5.5 e 6.0 (inclusive)
-Crie um vetor lógico indicando onde pH &lt; 5.8
-Conte quantos valores são &gt; 6.0 usando&nbsp;sum()&nbsp;(TRUE = 1, FALSE = 0)
-]]></description><link>quietbytesilence.github.i/R Fundamentos/Operadores_e_comparacoes.html</link><guid isPermaLink="false">R Fundamentos/Operadores_e_comparacoes.canvas</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Fri, 12 Dec 2025 18:18:18 GMT</pubDate></item><item><title><![CDATA[objetos_e_variaveis]]></title><description><![CDATA[# Criando variáveis para experimento com biofertilizantes
-pH_solo &lt;- 5.8
-tratamento &lt;- "Rhizobium"
-repeticoes &lt;- 5L # 'L' indica inteiro
-eficaz &lt;- TRUE # Verificando tipos
-class(pH_solo)
-class(tratamento)
-]]></description><link>quietbytesilence.github.i/R Fundamentos/objetos_e_variaveis.html</link><guid isPermaLink="false">R Fundamentos/objetos_e_variaveis.md</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Fri, 12 Dec 2025 18:16:56 GMT</pubDate></item><item><title><![CDATA[Ementa]]></title><description><![CDATA[Apostila Interativa.
-Ao Prof. Dr. Aurecílio Guedes]]></description><link>quietbytesilence.github.i/R Fundamentos/Ementa.html</link><guid isPermaLink="false">R Fundamentos/Ementa.canvas</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Fri, 12 Dec 2025 18:07:28 GMT</pubDate></item><item><title><![CDATA[Vetores]]></title><description><![CDATA[Conceito:
-Vetores são sequências de dados do MESMO tipo. Fundamentais para dados experimentais.
-Crie um vetor&nbsp;pH&nbsp;com valores: 5.2, 5.8, 6.1, 5.9, 6.3
-Crie um vetor&nbsp;temperatura&nbsp;com valores de 20 a 30°C (use&nbsp;:)
-Converta&nbsp;produtividade&nbsp;para kg/ha (já criada acima) e calcule a média
-Acesse o 3º elemento do vetor&nbsp;tratamentos
-# Dados de produtividade (ton/ha) em diferentes tratamentos
-produtividade &lt;- c(3.2, 3.8, 4.1, 3.5, 4.3)
-tratamentos &lt;- c("Controle", "BioFert1", "BioFert2", "BioFert3", "BioFert4") # Vetores com sequências
-dias_avaliacao &lt;- 1:30 # Dias 1 a 30
-doses &lt;- seq(0, 100, by = 20) # 0, 20, 40, 60, 80, 100 # Operações vetoriais (importante!)
-produtividade_kg &lt;- produtividade * 1000
-]]></description><link>quietbytesilence.github.i/R Fundamentos/Vetores.html</link><guid isPermaLink="false">R Fundamentos/Vetores.canvas</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Fri, 12 Dec 2025 17:59:32 GMT</pubDate></item></channel></rss>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Apostila de R]]></title><description><![CDATA[Obsidian digital garden]]></description><link>quietbytesilence.github.i</link><image><url>quietbytesilence.github.i/site-lib/media/favicon.png</url><title>Apostila de R</title><link>quietbytesilence.github.i</link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sat, 20 Dec 2025 01:06:27 GMT</lastBuildDate><atom:link href="quietbytesilence.github.i/site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 20 Dec 2025 01:06:26 GMT</pubDate><copyright><![CDATA[Gustavo Carneiro]]></copyright><ttl>60</ttl><dc:creator>Gustavo Carneiro</dc:creator><item><title><![CDATA[Ementa]]></title><description><![CDATA[A apostila 1 traz
+Tipos de Dados
+Operadores Aritméticos
+Operadores Lógicos
+Varáveis
+Vetores
+Matrizes
+Listas
+Strings (Textos)
+Data-Frames (uma matriz mais elaborada)
+Novas apostilas serão adicionadas aqui]]></description><link>quietbytesilence.github.i/R-Textual/Ementa.html</link><guid isPermaLink="false">R-Textual/Ementa.md</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Sat, 20 Dec 2025 01:05:45 GMT</pubDate></item><item><title><![CDATA[Apostila de Introdução à Programação em R]]></title><description><![CDATA[R é uma linguagem de programação e ambiente estatístico amplamente utilizado para análise de dados, visualização e modelagem estatística. É de código aberto e possui uma vasta comunidade de usuários.# Numérico (números decimais)
+x &lt;- 10.5
+class(x) # "numeric" # Inteiro
+y &lt;- 10L
+class(y) # "integer" # Caractere (string)
+z &lt;- "Olá, Mundo!"
+class(z) # "character" # Lógico (booleano)
+w &lt;- TRUE
+class(w) # "logical"
+w2 &lt;- FALSE # Complexo
+c &lt;- 1 + 2i
+class(c) # "complex" # Verificando tipos
+is.numeric(x) # TRUE
+is.character(z) # TRUE
+is.logical(w) # TRUE
+# Adição
+5 + 3 # 8 # Subtração
+10 - 4 # 6 # Multiplicação
+7 * 2 # 14 # Divisão
+15 / 3 # 5 # Potência
+2 ^ 3 # 8
+2 ** 3 # 8 (alternativa) # Módulo (resto da divisão)
+10 %% 3 # 1 # Divisão inteira
+10 %/% 3 # 3 # Exemplos com variáveis
+a &lt;- 20
+b &lt;- 4
+soma &lt;- a + b
+produto &lt;- a * b
+# Operadores de comparação
+5 &gt; 3 # TRUE
+5 &lt; 3 # FALSE
+5 == 5 # TRUE (igualdade)
+5 != 3 # TRUE (diferença)
+5 &gt;= 5 # TRUE
+5 &lt;= 4 # FALSE # Operadores booleanos
+TRUE &amp; FALSE # FALSE (E)
+TRUE | FALSE # TRUE (OU)
+!TRUE # FALSE (NÃO)
+xor(TRUE, TRUE) # FALSE (OU exclusivo) # Exemplos combinados
+x &lt;- 10
+y &lt;- 20
+(x &gt; 5) &amp; (y &lt; 30) # TRUE
+(x &gt; 15) | (y == 20) # TRUE
+# Atribuição de variáveis
+nome &lt;- "João"
+idade &lt;- 25
+altura &lt;- 1.75
+estudante &lt;- TRUE # Exibindo valores
+print(nome)
+idade
+cat("Nome:", nome, "Idade:", idade, "\n") # Tipos dinâmicos
+variavel &lt;- 10
+class(variavel) # "numeric" variavel &lt;- "texto"
+class(variavel) # "character" # Nomes válidos para variáveis
+var1 &lt;- 10
+.var2 &lt;- 20
+var_3 &lt;- 30
+Var4 &lt;- 40 # Nomes inválidos (causarão erro)
+# 1var &lt;- 10 # Inválido
+# var-name &lt;- 10 # Inválido # Removendo variáveis
+rm(variavel) # Listando variáveis existentes
+ls()
+# Vetor com função c() (combine)
+numeros &lt;- c(1, 2, 3, 4, 5)
+letras &lt;- c("a", "b", "c", "d")
+logicos &lt;- c(TRUE, FALSE, TRUE, TRUE) # Vetores com sequências
+1:10 # 1 até 10
+seq(1, 10, by = 2) # 1,3,5,7,9
+seq(1, 10, length.out = 5) # 1.00, 3.25, 5.50, 7.75, 10.00 # Vetores repetidos
+rep(1:3, times = 2) # 1,2,3,1,2,3
+rep(1:3, each = 2) # 1,1,2,2,3,3
+vetor &lt;- c(10, 20, 30, 40, 50) # Acesso por índice (começa em 1)
+vetor[1] # 10 (primeiro elemento)
+vetor[3] # 30 (terceiro elemento)
+vetor[c(1,3)] # 10, 30 (primeiro e terceiro) # Acesso por condição
+vetor[vetor &gt; 25] # 30, 40, 50 # Excluindo elementos
+vetor[-1] # 20, 30, 40, 50 (exceto primeiro)
+vetor[-c(2,4)] # 10, 30, 50 (exceto segundo e quarto)
+v1 &lt;- c(1, 2, 3)
+v2 &lt;- c(4, 5, 6) # Operações aritméticas elemento a elemento
+v1 + v2 # 5, 7, 9
+v1 * 2 # 2, 4, 6
+v1 ^ 2 # 1, 4, 9 # Funções úteis
+length(v1) # 3 (tamanho)
+sum(v1) # 6 (soma)
+mean(v1) # 2 (média)
+sd(v1) # desvio padrão
+sort(v1) # ordenação
+rev(v1) # reversão
+# Atribuindo nomes aos elementos
+notas &lt;- c(90, 85, 88)
+names(notas) &lt;- c("Matemática", "Português", "História")
+notas
+# Matemática Português História # 90 85 88 # Acesso por nome
+notas["Matemática"] # 90
+notas[c("Português", "História")] # 85, 88 # Criando vetor já com nomes
+idades &lt;- c(João = 25, Maria = 30, Pedro = 35)
+# Matriz a partir de vetor
+m &lt;- matrix(1:12, nrow = 3, ncol = 4)
+m
+# [,1] [,2] [,3] [,4]
+# [1,] 1 4 7 10
+# [2,] 2 5 8 11
+# [3,] 3 6 9 12 # Por linhas (byrow = TRUE)
+m2 &lt;- matrix(1:12, nrow = 3, ncol = 4, byrow = TRUE)
+m2 # Combinando vetores
+v1 &lt;- 1:3
+v2 &lt;- 4:6
+rbind(v1, v2) # por linhas
+cbind(v1, v2) # por colunas
+m &lt;- matrix(1:9, nrow = 3, ncol = 3) # Acesso a elementos
+m[2, 3] # elemento linha 2, coluna 3
+m[2, ] # toda linha 2
+m[, 3] # toda coluna 3
+m[1:2, 2:3] # submatriz # Dimensões
+dim(m) # 3, 3
+nrow(m) # 3
+ncol(m) # 3 # Operações
+m * 2 # multiplicação escalar
+t(m) # transposta
+diag(m) # diagonal principal # Nomes em matrizes
+rownames(m) &lt;- c("Linha1", "Linha2", "Linha3")
+colnames(m) &lt;- c("Col1", "Col2", "Col3")
+m["Linha1", "Col2"] # acesso por nome
+# Lista heterogênea
+lista &lt;- list( nome = "Maria", idade = 30, notas = c(7.5, 8.0, 9.2), aprovado = TRUE
+) # Acesso
+lista$nome # "Maria"
+lista[["idade"]] # 30
+lista[[3]] # vetor de notas
+lista[[3]][2] # 8.0 (segunda nota) # Estrutura da lista
+str(lista)
+length(lista) # 4 elementos
+# Adicionando elementos
+lista$curso &lt;- "Estatística" # Removendo elementos
+lista$aprovado &lt;- NULL # Lista de listas
+lista2 &lt;- list( pessoa1 = list(nome = "João", idade = 25), pessoa2 = list(nome = "Ana", idade = 28)
+) # Acesso em listas aninhadas
+lista2$pessoa1$nome # "João"
+# Criação
+s1 &lt;- "Hello"
+s2 &lt;- 'World'
+s3 &lt;- paste(s1, s2) # "Hello World"
+s4 &lt;- paste0(s1, s2) # "HelloWorld" # Concatenação com separador
+paste(c("A", "B", "C"), collapse = ", ") # "A, B, C" # Número de caracteres
+nchar("R Programming") # 13 # Maiúsculas/minúsculas
+toupper("hello") # "HELLO"
+tolower("HELLO") # "hello"
+texto &lt;- "Programação em R é divertido" # Substring
+substr(texto, 1, 11) # "Programação" # Substituição
+sub("divertido", "poderoso", texto) # substitui primeira ocorrência
+gsub(" ", "_", texto) # substitui todas as ocorrências # Divisão
+strsplit(texto, " ") # lista com palavras # Busca
+grepl("R", texto) # TRUE (contém "R")
+grep("R", c("Python", "R", "Java")) # 2 (posição)
+# Criando data frame
+df &lt;- data.frame( nome = c("Ana", "Bruno", "Carla", "Daniel"), idade = c(25, 30, 35, 28), altura = c(1.65, 1.80, 1.70, 1.75), stringsAsFactors = FALSE
+) # Visualização
+View(df) # abre visualizador
+head(df) # primeiras linhas
+tail(df) # últimas linhas
+str(df) # estrutura
+summary(df) # resumo estatístico # Dimensões
+dim(df) # 4 linhas, 3 colunas
+nrow(df) # 4
+ncol(df) # 3
+names(df) # nomes das colunas
+# Acesso por coluna
+df$nome # vetor com nomes
+df[["idade"]] # vetor com idades
+df[, "altura"] # vetor com alturas # Acesso por linha/coluna
+df[2, ] # segunda linha
+df[, 2] # segunda coluna
+df[3, 2] # terceira linha, segunda coluna (idade da Carla) # Subconjuntos
+subset(df, idade &gt; 28) # pessoas com mais de 28 anos
+df[df$altura &gt; 1.70, ] # pessoas com mais de 1.70m # Adicionando colunas
+df$imc &lt;- c(22, 25, 23, 24) # nova coluna # Ordenação
+df[order(df$idade), ] # ordena por idade crescente
+df[order(-df$idade), ] # ordena por idade decrescente
+# Estatísticas básicas
+mean(df$idade) # média das idades
+sd(df$altura) # desvio padrão das alturas # Adicionando linhas
+nova_linha &lt;- data.frame(nome = "Elena", idade = 32, altura = 1.68, imc = 22.5)
+df &lt;- rbind(df, nova_linha) # Combinando data frames
+df2 &lt;- data.frame( nome = c("Fernando", "Gabriela"), idade = c(40, 27), altura = c(1.82, 1.63), imc = c(26, 21)
+)
+df_completo &lt;- rbind(df, df2) # Exportação/Importação
+write.csv(df, "dados.csv", row.names = FALSE)
+df_lido &lt;- read.csv("dados.csv")
+# Crie um vetor com 10 números aleatórios e calcule:
+# - Média
+# - Mediana
+# - Desvio padrão
+# - Valor máximo e mínimo
+numeros &lt;- rnorm(10, mean = 50, sd = 10)
+# Crie um data frame com informações de produtos:
+# - nome do produto
+# - preço
+# - quantidade em estoque
+# Calcule o valor total em estoque por produto
+# Identifique o produto mais caro
+# Crie um vetor com 20 idades
+# Filtre apenas as idades maiores que 18
+# Conte quantas pessoas são maiores de idade
+]]></description><link>quietbytesilence.github.i/R-Textual/Apostila de Introdução à Programação em R.html</link><guid isPermaLink="false">R-Textual/Apostila de Introdução à Programação em R.md</guid><dc:creator><![CDATA[Gustavo Carneiro]]></dc:creator><pubDate>Sat, 20 Dec 2025 01:05:30 GMT</pubDate></item></channel></rss>

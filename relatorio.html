@@ -1,0 +1,563 @@
+<?php
+require 'linkdb.php';
+require 'correlacoes.php';
+$codigo = $_GET['id'] ?? null;
+if (!($codigo)){
+	header('Location: index.php');
+}
+
+$cidade_data = $pdo -> prepare("
+SELECT 
+    d.municipio,
+    d.estado
+FROM desflorestamento d
+WHERE d.geocode_ibge = ?
+LIMIT 1
+");
+
+
+$cidade_data -> execute(array($codigo));
+$cidade = $cidade_data -> fetch(PDO::FETCH_ASSOC);
+
+
+$dados = $pdo->prepare("
+SELECT 
+    d.ano,
+    d.municipio,
+    d.estado,
+    d.area_km,
+    SUM(r.valor) as total_repasses
+FROM desflorestamento d
+LEFT JOIN repasses_municipais r ON d.geocode_ibge = r.codigo_ibge AND d.ano = r.ano
+WHERE r.codigo_ibge = ? AND r.ano > 2013
+GROUP BY d.ano, d.municipio
+ORDER BY d.ano
+");
+$dados->execute(array($codigo));
+$dados_result = $dados->fetchAll(PDO::FETCH_ASSOC);
+
+// Inicializar arrays para cálculos
+$repasses_anuais = [];
+$desflorestamento_anuais = [];
+$repasse_acumulado = 0;
+$desflorestamento_acumulado = 0;
+$dados_anuais = [];
+
+// Processar os dados da consulta
+$desflorestamento_dados = array();
+$repasses_dados = array();
+foreach ($dados_result as $row) {
+    $ano = $row['ano'];
+    $repasse_anual = $row['total_repasses'];
+    $desflorestamento_anual = $row['area_km'];
+    
+    // Acumular totais
+    $repasse_acumulado += $repasse_anual;
+    $desflorestamento_acumulado += $desflorestamento_anual;
+    
+    // Armazenar dados anuais
+    $dados_anuais[$ano] = [
+        'repasse_anual' => $repasse_anual,
+        'desflorestamento_anual' => $desflorestamento_anual,
+        'repasse_acumulado' => $repasse_acumulado,
+        'desflorestamento_acumulado' => $desflorestamento_acumulado
+    ];
+    
+    // Arrays para cálculo de correlações
+    $repasses_anuais[] = $repasse_anual;
+    $desflorestamento_anuais[] = $desflorestamento_anual;
+}
+
+// Dados básicos do município (pegar do primeiro registro)
+if (!empty($dados_result)) {
+    $primeiro_registro = $dados_result[0];
+    $municipio_nome = $primeiro_registro['municipio'];
+    $estado = $primeiro_registro['estado'];
+    $imagem_capa = "fotos/{$codigo}.jpg";
+} else {
+    // Fallback caso não haja dados
+    $municipio_nome = "Município não encontrado";
+    $estado = "Pará";
+    $imagem_capa = "fotos/padrao.jpg";
+}
+
+// Estatísticas totais
+$total_repasse = $repasse_acumulado;
+$total_desflorestamento = $desflorestamento_acumulado;
+
+
+// Calcular correlações
+$correlacao_pearson = pearson($repasses_anuais, $desflorestamento_anuais);
+$correlacao_spearman = spearman($repasses_anuais, $desflorestamento_anuais);
+
+// Formatar correlações para 4 casas decimais
+$correlacao_pearson = round($correlacao_pearson, 4);
+$correlacao_spearman = round($correlacao_spearman, 4);
+
+
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório - <?php echo $municipio_nome; ?></title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header class="header-hero">
+        <img src="<?php echo $imagem_capa; ?>" alt="<?php echo $municipio_nome; ?>" class="header-image">
+        <div class="header-content">
+            <h1 class="municipality-name"><?php echo $municipio_nome; ?></h1>
+            <div class="municipality-state">Pará</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="index.php" class="back-button">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            Voltar para a lista de municípios
+        </a>
+
+        <!-- Estatísticas Principais - LAYOUT 2x2 -->
+        <div class="stats-grid-2x2">
+            <div class="stat-card total-repasse">
+                <div class="stat-label">Total de Repasses (ICMS Verde)</div>
+                <div class="stat-value">R$ <?php echo number_format($total_repasse, 2, ',', '.'); ?></div>
+                <div class="stat-desc">Valor acumulado</div>
+            </div>
+
+            <div class="stat-card total-desflorestamento">
+                <div class="stat-label">Área Desflorestada</div>
+                <div class="stat-value"><?php echo number_format($total_desflorestamento, 2, ',', '.'); ?> km²</div>
+                <div class="stat-desc">Total acumulado</div>
+            </div>
+
+            <div class="stat-card correlacao-pearson">
+                <div class="stat-label">Correlação de Pearson</div>
+                <div class="stat-value"><?php echo number_format($correlacao_pearson, 4, ',', '.'); ?></div>
+                <div class="stat-desc">Relação linear</div>
+            </div>
+
+            <div class="stat-card correlacao-spearman">
+                <div class="stat-label">Correlação de Spearman</div>
+                <div class="stat-value"><?php echo number_format($correlacao_spearman, 4, ',', '.'); ?></div>
+                <div class="stat-desc">Relação monotônica</div>
+            </div>
+        </div>
+
+        <!-- Tabela de Dados Anuais -->
+        <h2 class="section-title">Dados Anuais Detalhados</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Ano</th>
+                    <th>Repasse ICMS Verde (R$)</th>
+                    <th>Desflorestamento (km²)</th>
+                    <th>Repasse Acumulado (R$)</th>
+                    <th>Desflorestamento Acumulado (km²)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($dados_anuais as $ano => $dados): ?>
+                <tr>
+                    <td><?php echo $ano; ?></td>
+                    <td>R$ <?php echo number_format($dados['repasse_anual'], 2, ',', '.'); ?></td>
+                    <td><?php echo number_format($dados['desflorestamento_anual'], 2, ',', '.'); ?></td>
+                    <td>R$ <?php echo number_format($dados['repasse_acumulado'], 2, ',', '.'); ?></td>
+                    <td><?php echo number_format($dados['desflorestamento_acumulado'], 2, ',', '.'); ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <!-- Gráficos -->
+<h2 class="section-title">Visualizações e Análises</h2>
+<div class="charts-container">
+    <div class="chart-card">
+        <h3 class="chart-title">Evolução dos Repasses vs Desflorestamento</h3>
+        <div class="chart-wrapper">
+            <canvas id="evolucaoChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <h3 class="chart-title">Correlação entre Variáveis</h3>
+        <div class="chart-wrapper">
+            <canvas id="correlacaoChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <h3 class="chart-title">Distribuição Temporal</h3>
+        <div class="chart-wrapper">
+            <canvas id="distribuicaoChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Preparar dados para os gráficos
+const anos = <?php echo json_encode(array_keys($dados_anuais)); ?>;
+const repassesAnuais = <?php echo json_encode(array_column($dados_anuais, 'repasse_anual')); ?>;
+const desflorestamentoAnual = <?php echo json_encode(array_column($dados_anuais, 'desflorestamento_anual')); ?>;
+const repassesAcumulados = <?php echo json_encode(array_column($dados_anuais, 'repasse_acumulado')); ?>;
+const desflorestamentoAcumulado = <?php echo json_encode(array_column($dados_anuais, 'desflorestamento_acumulado')); ?>;
+
+// Dados para scatter plot (correlação)
+const scatterData = [];
+<?php 
+foreach ($dados_anuais as $ano => $dados) {
+    echo "scatterData.push({x: {$dados['repasse_anual']}, y: {$dados['desflorestamento_anual']}, ano: {$ano}});\n";
+}
+?>
+
+// Gráfico 1: Evolução dos Repasses vs Desflorestamento
+const evolucaoCtx = document.getElementById('evolucaoChart').getContext('2d');
+new Chart(evolucaoCtx, {
+    type: 'line',
+    data: {
+        labels: anos,
+        datasets: [
+            {
+                label: 'Repasses ICMS Verde (R$)',
+                data: repassesAnuais,
+                borderColor: '#4caf50',
+                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                yAxisID: 'y',
+                tension: 0.4,
+                fill: true
+            },
+            {
+                label: 'Desflorestamento (km²)',
+                data: desflorestamentoAnual,
+                borderColor: '#f44336',
+                backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                yAxisID: 'y1',
+                tension: 0.4,
+                fill: true
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Evolução Temporal - Repasses vs Desflorestamento',
+                color: '#ffc107',
+                font: {
+                    size: 16
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(30, 30, 30, 0.9)',
+                titleColor: '#ffc107',
+                bodyColor: '#e0e0e0',
+                borderColor: '#333',
+                borderWidth: 1
+            },
+            legend: {
+                labels: {
+                    color: '#e0e0e0'
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#a0a0a0'
+                }
+            },
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Repasses (R$)',
+                    color: '#a0a0a0'
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#a0a0a0',
+                    callback: function(value) {
+                        return 'R$ ' + (value / 1000).toFixed(0) + ' mil';
+                    }
+                }
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                title: {
+                    display: true,
+                    text: 'Desflorestamento (km²)',
+                    color: '#a0a0a0'
+                },
+                grid: {
+                    drawOnChartArea: false,
+                },
+                ticks: {
+                    color: '#a0a0a0'
+                }
+            }
+        }
+    }
+});
+
+// Gráfico 2: Correlação entre Variáveis (Scatter Plot)
+const correlacaoCtx = document.getElementById('correlacaoChart').getContext('2d');
+new Chart(correlacaoCtx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Dados Anuais',
+            data: scatterData,
+            backgroundColor: 'rgba(33, 150, 243, 0.6)',
+            borderColor: 'rgba(33, 150, 243, 1)',
+            pointRadius: 8,
+            pointHoverRadius: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Correlação: Repasses vs Desflorestamento',
+                color: '#ffc107',
+                font: {
+                    size: 16
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(30, 30, 30, 0.9)',
+                titleColor: '#ffc107',
+                bodyColor: '#e0e0e0',
+                borderColor: '#333',
+                borderWidth: 1,
+                callbacks: {
+                    label: function(context) {
+                        const point = context.raw;
+                        return [
+                            `Ano: ${point.ano}`,
+                            `Repasse: R$ ${(point.x).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
+                            `Desflorestamento: ${point.y.toFixed(2)} km²`
+                        ];
+                    }
+                }
+            },
+            legend: {
+                labels: {
+                    color: '#e0e0e0'
+                }
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Repasses ICMS Verde (R$)',
+                    color: '#a0a0a0'
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#a0a0a0',
+                    callback: function(value) {
+                        return 'R$ ' + (value / 1000).toFixed(0) + ' mil';
+                    }
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Desflorestamento (km²)',
+                    color: '#a0a0a0'
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#a0a0a0'
+                }
+            }
+        }
+    }
+});
+
+// Gráfico 3: Distribuição Temporal (Barras)
+const distribuicaoCtx = document.getElementById('distribuicaoChart').getContext('2d');
+new Chart(distribuicaoCtx, {
+    type: 'bar',
+    data: {
+        labels: anos,
+        datasets: [
+            {
+                label: 'Repasses Anuais (R$)',
+                data: repassesAnuais,
+                backgroundColor: 'rgba(255, 193, 7, 0.8)',
+                borderColor: 'rgba(255, 193, 7, 1)',
+                borderWidth: 1,
+                yAxisID: 'y'
+            },
+            {
+                label: 'Desflorestamento Anual (km²)',
+                data: desflorestamentoAnual,
+                backgroundColor: 'rgba(244, 67, 54, 0.8)',
+                borderColor: 'rgba(244, 67, 54, 1)',
+                borderWidth: 1,
+                yAxisID: 'y1',
+                type: 'line',
+                tension: 0.4
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Distribuição Anual dos Indicadores',
+                color: '#ffc107',
+                font: {
+                    size: 16
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(30, 30, 30, 0.9)',
+                titleColor: '#ffc107',
+                bodyColor: '#e0e0e0',
+                borderColor: '#333',
+                borderWidth: 1
+            },
+            legend: {
+                labels: {
+                    color: '#e0e0e0'
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#a0a0a0'
+                }
+            },
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Repasses (R$)',
+                    color: '#a0a0a0'
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#a0a0a0',
+                    callback: function(value) {
+                        return 'R$ ' + (value / 1000).toFixed(0) + ' mil';
+                    }
+                }
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                title: {
+                    display: true,
+                    text: 'Desflorestamento (km²)',
+                    color: '#a0a0a0'
+                },
+                grid: {
+                    drawOnChartArea: false,
+                },
+                ticks: {
+                    color: '#a0a0a0'
+                }
+            }
+        }
+    }
+});
+</script>
+
+<style>
+.chart-wrapper {
+    height: 400px;
+    position: relative;
+}
+
+.chart-card canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Ajustes para modo escuro nos gráficos */
+.chartjs-render-monitor {
+    border-radius: 8px;
+}
+</style>
+
+        <!-- Análise -->
+        <div class="analysis-section">
+            <h2 class="section-title">Análise Estatística</h2>
+            <div class="analysis-text">
+                <p>O coeficiente de correlação de Pearson de <strong><?php echo number_format($correlacao_pearson, 4, ',', '.'); ?></strong> 
+                indica uma relação <?php 
+                    $abs_pearson = abs($correlacao_pearson);
+                    if ($abs_pearson < 0.3) echo "fraca";
+                    elseif ($abs_pearson < 0.7) echo "moderada";
+                    else echo "forte";
+                ?> e <?php echo ($correlacao_pearson > 0) ? "positiva" : "negativa"; ?> entre os repasses de ICMS Verde e o desflorestamento no município.</p>
+                
+                <p>Já a correlação de Spearman de <strong><?php echo number_format($correlacao_spearman, 4, ',', '.'); ?></strong> 
+                sugere uma tendência <?php 
+                    $abs_spearman = abs($correlacao_spearman);
+                    if ($abs_spearman < 0.3) echo "fraca";
+                    elseif ($abs_spearman < 0.7) echo "moderada";
+                    else echo "forte";
+                ?> e <?php echo ($correlacao_spearman > 0) ? "positiva" : "negativa"; ?> na relação monotônica entre as variáveis.</p>
+                
+                <p>Estes resultados <?php 
+                    if (($correlacao_pearson > 0 && $correlacao_spearman > 0) || ($correlacao_pearson < 0 && $correlacao_spearman < 0)) {
+                        echo "sugerem uma consistência na relação observada";
+                    } else {
+                        echo "indicam possíveis inconsistências que merecem investigação mais aprofundada";
+                    }
+                ?> entre a política de repasses e os indicadores ambientais no município.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Sistema de Monitoramento - ICMS Verde Pará &copy; quietbyte <?php echo date('Y'); ?></p>
+    </footer>
+</body>
+</html>
