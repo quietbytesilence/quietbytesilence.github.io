@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria | AMQP - Residencial Quinta dos Paricás</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Container do header (preenchido pelo header.js) -->
+    <div id="header-container"></div>
+
+    <main>
+        <!-- Título da página -->
+        <section class="page-title">
+            <div class="container">
+                <h2>Galeria de Fotos</h2>
+                <p>Momentos que marcam a nossa história</p>
+            </div>
+        </section>
+
+        <!-- Introdução -->
+        <section class="intro">
+            <div class="container">
+                <p class="intro-text">Registramos os principais momentos da nossa comunidade: eventos, mutirões, cursos e confraternizações. Navegue pelos álbuns e reviva essas memórias.</p>
+            </div>
+        </section>
+
+        <!-- Álbum 1: Festa das Crianças 2025 -->
+        <section class="album">
+            <div class="container">
+                <h3 class="album-title">
+                    <i class="fas fa-child"></i> Festa das Crianças 2025
+                    <span class="album-date">12 de outubro de 2025</span>
+                </h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Festa das Crianças 1" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Festa das Crianças 2" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Festa das Crianças 3" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Festa das Crianças 4" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Festa das Crianças 5" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Festa das Crianças 6" onclick="openLightbox(this)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Álbum 2: Mutirão de Pintura da Praça -->
+        <section class="album">
+            <div class="container">
+                <h3 class="album-title">
+                    <i class="fas fa-paint-roller"></i> Mutirão de Pintura da Praça
+                    <span class="album-date">20 de setembro de 2025</span>
+                </h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Mutirão 1" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Mutirão 2" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Mutirão 3" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Mutirão 4" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Mutirão 5" onclick="openLightbox(this)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Álbum 3: Formatura do Curso de Informática -->
+        <section class="album">
+            <div class="container">
+                <h3 class="album-title">
+                    <i class="fas fa-laptop"></i> Formatura do Curso de Informática
+                    <span class="album-date">5 de dezembro de 2025</span>
+                </h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Formatura Informática 1" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Formatura Informática 2" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Formatura Informática 3" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Formatura Informática 4" onclick="openLightbox(this)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Álbum 4: Reunião com representantes da Prefeitura -->
+        <section class="album">
+            <div class="container">
+                <h3 class="album-title">
+                    <i class="fas fa-handshake"></i> Reunião com representantes da Prefeitura
+                    <span class="album-date">8 de fevereiro de 2026</span>
+                </h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Reunião 1" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Reunião 2" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Reunião 3" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Reunião 4" onclick="openLightbox(this)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Álbum 5: Campanha do Agasalho -->
+        <section class="album">
+            <div class="container">
+                <h3 class="album-title">
+                    <i class="fas fa-tshirt"></i> Campanha do Agasalho 2025
+                    <span class="album-date">junho de 2025</span>
+                </h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Campanha Agasalho 1" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Campanha Agasalho 2" onclick="openLightbox(this)">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x400" alt="Campanha Agasalho 3" onclick="openLightbox(this)">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox (modal para visualização ampliada) -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox"><i class="fas fa-times"></i></span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="lightbox-caption"></div>
+    </div>
+
+    <!-- Container do footer (preenchido pelo footer.js) -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <!-- Script da galeria (lightbox) -->
+    <script>
+        // Função para abrir o lightbox
+        function openLightbox(imgElement) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+            
+            lightbox.style.display = 'block';
+            lightboxImg.src = imgElement.src;
+            caption.innerHTML = imgElement.alt;
+        }
+
+        // Função para fechar o lightbox
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        // Fechar com a tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>

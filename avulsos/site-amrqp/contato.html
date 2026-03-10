@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato | AMQP - Residencial Quinta dos Paricás</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Container do header (será preenchido pelo header.js) -->
+    <div id="header-container"></div>
+    <script src="header.js"></script>
+    <main>
+        <!-- Título da página -->
+        <section class="page-title">
+            <div class="container">
+                <h2>Fale com a gente</h2>
+                <p>Sua opinião é muito importante. Estamos aqui para ouvir sugestões, críticas, tirar dúvidas ou receber o seu apoio.</p>
+            </div>
+        </section>
+
+        <!-- Informações de contato e formulário -->
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-grid">
+                    <!-- Coluna da esquerda: informações e mapa -->
+                    <div class="contact-info">
+                        <h3><i class="fas fa-map-marker-alt"></i> Onde estamos</h3>
+                        <p><strong>Sede da Associação</strong><br>
+                        Residencial Quinta dos Paricás, Rua 8, Casinha<br>
+                        Funcionamento: Segunda a Sexta, das 14h às 18h</p>
+
+                        <h3 style="margin-top: 2rem;"><i class="fas fa-phone-alt"></i> Telefone e WhatsApp</h3>
+                        <p>(XX) XXXX-XXXX</p>
+
+                        <h3 style="margin-top: 2rem;"><i class="fas fa-envelope"></i> E-mail</h3>
+                        <p>contato@quintadosparkas.org.br</p>
+
+                        <h3 style="margin-top: 2rem;"><i class="fas fa-share-alt"></i> Redes sociais</h3>
+                        <div class="contact-social">
+                            <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i></a>
+                            <a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+                            <a href="#" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp fa-2x"></i></a>
+                        </div>
+
+                        <!-- Mapa (iframe do Google Maps) -->
+                        <div class="map-container" style="margin-top: 2rem;">
+                            <h3><i class="fas fa-map"></i> Localização</h3>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d521.8078388987038!2d-48.44143202480395!3d-1.296607871918865!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-PT!2sbr!4v1773159514719!5m2!1spt-PT!2sbr" 
+                                width="100%" height="300" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy"></iframe>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><i class="fas fa-external-link-alt"></i> <a href="#" target="_blank">Abrir no Google Maps</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Coluna da direita: formulário de contato -->
+                    <div class="contact-form-container">
+                        <h3><i class="fas fa-paper-plane"></i> Envie sua mensagem</h3>
+                        <form action="#" method="post" class="contact-form">
+                            <div class="form-group">
+                                <label for="nome">Nome completo</label>
+                                <input type="text" id="nome" name="nome" required placeholder="Seu nome">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefone">Telefone (opcional)</label>
+                                <input type="tel" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX">
+                            </div>
+                            <div class="form-group">
+                                <label for="assunto">Assunto</label>
+                                <select id="assunto" name="assunto" required>
+                                    <option value="">Selecione</option>
+                                    <option value="sugestao">Sugestão</option>
+                                    <option value="critica">Crítica</option>
+                                    <option value="duvida">Dúvida</option>
+                                    <option value="voluntario">Quero ser voluntário</option>
+                                    <option value="associado">Informações sobre associação</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mensagem">Mensagem</label>
+                                <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Escreva sua mensagem aqui..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit">Enviar mensagem</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Horário de funcionamento em destaque -->
+        <section class="hours-box" style="background-color: #2d6a4f; color: white; padding: 3rem 0; text-align: center;">
+            <div class="container">
+                <i class="fas fa-clock" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>Horário de atendimento presencial</h3>
+                <p style="font-size: 1.3rem; margin-top: 0.5rem;">Segunda a Sexta, das 14h às 18h</p>
+                <p style="margin-top: 1rem;">Fora do horário, entre em contato pelo WhatsApp ou e-mail.</p>
+            </div>
+        </section>
+
+        <!-- Chamada para associação -->
+        <section class="cta">
+            <div class="container">
+                <h2>Ainda não é associado?</h2>
+                <p>Fortaleça essa rede. Associe-se e contribua para o desenvolvimento do nosso residencial.</p>
+                <a href="associe-se.html" class="btn">Quero me associar</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Container do footer (será preenchido pelo footer.js) -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+</body>
+</html>
