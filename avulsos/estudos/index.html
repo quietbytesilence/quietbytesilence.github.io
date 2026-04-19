@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>StudyFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161d;
+    --bg3: #1a1e28;
+    --bg4: #222736;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8eaf0;
+    --text2: #8b90a0;
+    --text3: #555c70;
+    --accent: #6c8fff;
+    --accent2: #4a6dff;
+    --green: #4ade80;
+    --orange: #fb923c;
+    --red: #f87171;
+    --purple: #c084fc;
+    --cyan: #22d3ee;
+    --yellow: #fbbf24;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+  }
+
+  h1, h2, h3, .brand {
+    font-family: 'Syne', sans-serif;
+  }
+
+  /* ── Layout ── */
+  #app { display: flex; flex-direction: column; min-height: 100dvh; }
+
+  .top-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,20,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .brand { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+  .brand span { color: var(--accent); }
+
+  .top-bar-actions { display: flex; gap: 8px; }
+
+  .icon-btn {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: var(--transition);
+    font-size: 18px;
+  }
+  .icon-btn:hover { background: var(--bg4); color: var(--text); }
+
+  .main-content {
+    flex: 1;
+    padding: 0 0 100px;
+    overflow-y: auto;
+  }
+
+  /* ── Bottom Nav ── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(19,22,29,0.96);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 4px max(8px, env(safe-area-inset-bottom));
+  }
+
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    padding: 6px 4px;
+    cursor: pointer; border-radius: 12px;
+    transition: var(--transition);
+    color: var(--text3);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    border: none; background: none;
+  }
+
+  .nav-item .nav-icon { font-size: 20px; transition: var(--transition); }
+  .nav-item.active { color: var(--accent); }
+  .nav-item.active .nav-icon { transform: translateY(-1px); }
+
+  .nav-badge {
+    position: absolute;
+    top: 4px; right: calc(50% - 18px);
+    background: var(--red);
+    color: #fff; font-size: 9px; font-weight: 700;
+    border-radius: 99px; min-width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px;
+  }
+
+  .nav-item { position: relative; }
+
+  /* ── Pages ── */
+  .page { display: none; animation: fadeIn 0.25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Section Headers ── */
+  .section-header {
+    padding: 24px 20px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .section-sub { font-size: 13px; color: var(--text3); margin-top: 2px; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 0 16px 12px;
+    transition: var(--transition);
+  }
+  .card:active { transform: scale(0.98); }
+
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .card-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 16px; }
+
+  /* ── Pills / Badges ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 12px; font-weight: 500;
+  }
+  .pill-blue { background: rgba(108,143,255,0.15); color: var(--accent); }
+  .pill-green { background: rgba(74,222,128,0.12); color: var(--green); }
+  .pill-orange { background: rgba(251,146,60,0.12); color: var(--orange); }
+  .pill-red { background: rgba(248,113,113,0.12); color: var(--red); }
+  .pill-purple { background: rgba(192,132,252,0.12); color: var(--purple); }
+  .pill-cyan { background: rgba(34,211,238,0.12); color: var(--cyan); }
+
+  /* ── Dashboard ── */
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; padding: 0 16px 4px;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500; }
+  .stat-value { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; margin: 4px 0 2px; }
+  .stat-sub { font-size: 12px; color: var(--text2); }
+
+  .stat-card.wide { grid-column: 1 / -1; }
+
+  /* Progress bar */
+  .progress-wrap { background: var(--bg4); border-radius: 99px; height: 6px; overflow: hidden; margin-top: 8px; }
+  .progress-fill { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+
+  /* ── Discipline list ── */
+  .disc-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 0 16px 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .disc-card:active { transform: scale(0.98); }
+
+  .disc-card-header {
+    padding: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .disc-color-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .disc-card-left { display: flex; align-items: center; flex: 1; }
+  .disc-card-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 16px; }
+  .disc-card-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .disc-card-arrow { color: var(--text3); font-size: 18px; }
+
+  /* ── Topic list ── */
+  .topic-item {
+    display: flex; align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition);
+    gap: 12px;
+  }
+  .topic-item:last-child { border-bottom: none; }
+  .topic-item:active { background: var(--bg3); }
+
+  .topic-check {
+    width: 22px; height: 22px; flex-shrink: 0;
+    border-radius: 6px;
+    border: 2px solid var(--border2);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition);
+    color: transparent; font-size: 13px;
+  }
+  .topic-item.studied .topic-check {
+    background: var(--green);
+    border-color: var(--green);
+    color: #000;
+  }
+
+  .topic-info { flex: 1; }
+  .topic-name { font-size: 14px; font-weight: 500; }
+  .topic-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+  .topic-actions { display: flex; gap: 6px; }
+  .topic-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: var(--transition);
+    font-size: 14px;
+  }
+  .topic-btn:active { transform: scale(0.92); }
+
+  /* ── Reviews ── */
+  .review-section { padding: 0 16px 8px; }
+  .review-section-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text3); font-weight: 600;
+    padding: 12px 0 8px;
+  }
+
+  .review-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .review-item.overdue { border-color: rgba(248,113,113,0.3); }
+  .review-item.today { border-color: rgba(251,146,60,0.3); }
+
+  .review-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  .review-info { flex: 1; }
+  .review-topic { font-size: 14px; font-weight: 500; }
+  .review-disc { font-size: 12px; color: var(--text3); }
+  .review-date { font-size: 11px; margin-top: 2px; }
+
+  .review-done-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: rgba(74,222,128,0.12);
+    border: 1px solid rgba(74,222,128,0.2);
+    color: var(--green);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: var(--transition);
+    white-space: nowrap;
+  }
+  .review-done-btn:active { transform: scale(0.95); }
+
+  /* ── Chart ── */
+  .chart-wrap { padding: 4px 0; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 4px; }
+  .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .chart-bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    background: var(--accent);
+    min-height: 4px;
+    transition: height 0.5s cubic-bezier(0.4,0,0.2,1);
+    opacity: 0.8;
+  }
+  .chart-bar.highlight { opacity: 1; background: var(--accent); }
+  .chart-label { font-size: 10px; color: var(--text3); }
+
+  /* ── Modals ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal-sheet {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-bottom: none;
+    border-radius: 24px 24px 0 0;
+    width: 100%; max-width: 480px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 8px 0 max(24px, env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .modal-overlay.open .modal-sheet { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border2);
+    border-radius: 99px;
+    margin: 8px auto 20px;
+  }
+
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700;
+    padding: 0 20px 16px;
+  }
+
+  .modal-close {
+    position: absolute; top: 20px; right: 20px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--bg4);
+    border: none; color: var(--text2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px;
+  }
+
+  .modal-sheet { position: relative; }
+
+  /* ── Forms ── */
+  .form-group { padding: 0 20px 16px; }
+  .form-label { font-size: 12px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; display: block; }
+
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color var(--transition);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--accent);
+  }
+  .form-textarea { resize: none; min-height: 120px; line-height: 1.6; }
+  .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b90a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  .time-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── Buttons ── */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: var(--transition);
+    width: 100%;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-ghost { background: var(--bg4); color: var(--text); }
+  .btn-danger { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+  .btn-row { display: flex; gap: 10px; padding: 4px 20px 0; }
+  .btn-row .btn { flex: 1; }
+
+  /* ── FAB ── */
+  .fab {
+    position: fixed; bottom: 80px; right: 20px; z-index: 90;
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(108,143,255,0.4);
+    transition: var(--transition);
+  }
+  .fab:active { transform: scale(0.92); }
+
+  /* ── Back button ── */
+  .back-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 16px 20px 8px;
+    color: var(--text2); font-size: 14px;
+    cursor: pointer; background: none; border: none;
+    transition: var(--transition);
+  }
+  .back-btn:active { color: var(--accent); }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center; padding: 60px 32px;
+    color: var(--text3);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+  .empty-title { font-family: 'Syne', sans-serif; font-size: 18px; color: var(--text2); margin-bottom: 6px; }
+  .empty-desc { font-size: 13px; line-height: 1.6; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 14px; font-weight: 500;
+    white-space: nowrap;
+    z-index: 300;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { color: var(--green); border-color: rgba(74,222,128,0.3); }
+  .toast.info { color: var(--accent); border-color: rgba(108,143,255,0.3); }
+
+  /* ── Annotations ── */
+  .annotation-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 14px; line-height: 1.6;
+    color: var(--text2);
+    margin-top: 8px;
+    white-space: pre-wrap;
+    min-height: 60px;
+  }
+  .annotation-box.placeholder { color: var(--text3); font-style: italic; }
+
+  /* ── Sub-page (Discipline detail) ── */
+  #subpage-disc {
+    position: fixed; inset: 0; z-index: 150;
+    background: var(--bg);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  #subpage-disc.open { transform: translateX(0); }
+
+  /* ── Div. colors ── */
+  .colors { --c0:#6c8fff;--c1:#4ade80;--c2:#fb923c;--c3:#c084fc;--c4:#22d3ee;--c5:#fbbf24;--c6:#f87171;--c7:#34d399; }
+
+  /* ── Import/Export ── */
+  .data-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    cursor: pointer; width: 100%;
+    transition: var(--transition);
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .data-btn:active { background: var(--bg3); }
+  .data-btn-icon { font-size: 20px; width: 24px; text-align: center; }
+
+  /* ── Misc ── */
+  .divider { height: 1px; background: var(--border); margin: 4px 16px 16px; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .color-accent { color: var(--accent); }
+
+  .disc-detail-header {
+    padding: 0 20px 16px;
+  }
+  .disc-detail-name { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; }
+  .disc-detail-stats { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+
+  .time-display { font-variant-numeric: tabular-nums; }
+
+  .scroll-x { overflow-x: auto; padding: 0 16px 8px; display: flex; gap: 10px; scrollbar-width: none; }
+  .scroll-x::-webkit-scrollbar { display: none; }
+
+  .quick-disc-chip {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 99px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: var(--transition);
+    white-space: nowrap;
+    color: var(--text2);
+  }
+  .quick-disc-chip.active { border-color: var(--accent); color: var(--accent); background: rgba(108,143,255,0.1); }
+  .quick-disc-chip:active { transform: scale(0.95); }
+
+  @media (min-width: 480px) {
+    .bottom-nav { justify-content: center; }
+    .nav-item { max-width: 96px; }
+    .modal-overlay { align-items: center; padding: 20px; }
+    .modal-sheet { border-radius: 24px; border-bottom: 1px solid var(--border2); max-height: 85vh; }
+  }
+</style>
+</head>
+<body class="colors">
+
+<div id="app">
+  <div class="top-bar">
+    <div class="brand">Study<span>Flow</span></div>
+    <div class="top-bar-actions">
+      <button class="icon-btn" onclick="openModal('modal-export')" title="Dados">⬆️</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dash">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Dashboard</div>
+          <div class="section-sub" id="dash-greeting">Bom estudo hoje! 📚</div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total estudado</div>
+          <div class="stat-value time-display" id="stat-total-time">0h</div>
+          <div class="stat-sub">todas as sessões</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tópicos</div>
+          <div class="stat-value" id="stat-topics-done">0</div>
+          <div class="stat-sub">estudados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Revisões hoje</div>
+          <div class="stat-value" id="stat-reviews-today" style="color:var(--orange)">0</div>
+          <div class="stat-sub" id="stat-overdue-sub">pendentes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Disciplinas</div>
+          <div class="stat-value" id="stat-discs">0</div>
+          <div class="stat-sub">cadastradas</div>
+        </div>
+        <div class="stat-card wide">
+          <div class="card-header" style="margin-bottom:4px;">
+            <div class="card-title" style="font-size:14px;">Últimos 7 dias</div>
+            <div class="stat-sub" id="dash-week-total">0 min</div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-bars" id="week-chart"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header" style="padding-top:12px;">
+        <div class="section-title" style="font-size:17px;">Por disciplina</div>
+      </div>
+      <div id="dash-disc-list" style="padding: 0 16px 8px;"></div>
+    </div>
+
+    <!-- DISCIPLINAS -->
+    <div class="page" id="page-discs">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Disciplinas</div>
+          <div class="section-sub" id="discs-sub">Nenhuma cadastrada ainda</div>
+        </div>
+      </div>
+      <div id="disc-list"></div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- REGISTRAR ESTUDO -->
+    <div class="page" id="page-study">
+      <div class="section-header">
+        <div class="section-title">Registrar Estudo</div>
+      </div>
+      <div style="padding: 0 16px 16px;">
+        <div class="form-group" style="padding: 0 0 14px;">
+          <label class="form-label">Disciplina</label>
+          <select class="form-select" id="study-disc-sel" onchange="loadStudyTopics()">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="form-group" style="padding: 0 0 14px;">
+          <label class="form-label">Tópico</label>
+          <select class="form-select" id="study-topic-sel">
+            <option value="">Selecione a disciplina primeiro</option>
+          </select>
+        </div>
+        <div class="form-group" style="padding: 0 0 14px;">
+          <label class="form-label">Tempo estudado</label>
+          <div class="time-inputs">
+            <div>
+              <input class="form-input" type="number" id="study-hours" placeholder="Horas" min="0" max="23" style="text-align:center;">
+            </div>
+            <div>
+              <input class="form-input" type="number" id="study-mins" placeholder="Minutos" min="0" max="59" style="text-align:center;">
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="padding: 0 0 14px;">
+          <label class="form-label">Observações (opcional)</label>
+          <textarea class="form-textarea" id="study-obs" placeholder="Anote o que estudou, dúvidas, insights..." style="min-height:90px;"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveStudySession()">
+          ✅ Salvar Sessão de Estudo
+        </button>
+      </div>
+    </div>
+
+    <!-- REVISÕES -->
+    <div class="page" id="page-reviews">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Revisões</div>
+          <div class="section-sub">Revisão espaçada inteligente</div>
+        </div>
+      </div>
+      <div id="reviews-container"></div>
+    </div>
+
+    <!-- CONFIGURAÇÕES / EXPORT -->
+    <div class="page" id="page-settings">
+      <div class="section-header">
+        <div class="section-title">Dados & Config</div>
+      </div>
+      <div style="padding: 0 16px;">
+        <button class="data-btn" onclick="exportData()">
+          <span class="data-btn-icon">📤</span>
+          <div>
+            <div style="font-weight:600;">Exportar dados (JSON)</div>
+            <div style="font-size:12px; color:var(--text3); margin-top:2px;">Faça backup de todos os seus dados</div>
+          </div>
+        </button>
+        <button class="data-btn" onclick="document.getElementById('import-file').click()">
+          <span class="data-btn-icon">📥</span>
+          <div>
+            <div style="font-weight:600;">Importar dados (JSON)</div>
+            <div style="font-size:12px; color:var(--text3); margin-top:2px;">Restaurar backup anterior</div>
+          </div>
+        </button>
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+        <div class="divider" style="margin: 16px 0;"></div>
+        <div style="font-size:13px; color:var(--text3); line-height:1.7;">
+          <strong style="color:var(--text2);">StudyFlow</strong> v1.0<br>
+          Todos os dados são armazenados localmente no seu dispositivo via IndexedDB.<br>
+          Nenhuma informação é enviada a servidores externos.
+        </div>
+        <div class="divider" style="margin: 16px 0;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div style="font-size:13px; color:var(--text3); font-weight:600;">Intervalos de revisão espaçada</div>
+          <div style="font-size:11px; color:var(--text3);">ordenados automaticamente</div>
+        </div>
+        <div id="intervals-list" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;"></div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input class="form-input" type="number" id="new-interval-val" placeholder="Ex: 45" min="1" max="365"
+            style="flex:1; padding:10px 14px;" onkeydown="if(event.key==='Enter') addInterval()">
+          <span style="color:var(--text3); font-size:13px; white-space:nowrap;">dias</span>
+          <button class="btn btn-primary" onclick="addInterval()" style="width:auto; padding:10px 16px; font-size:14px;">+ Adicionar</button>
+        </div>
+        <div class="divider" style="margin: 16px 0;"></div>
+        <button class="btn btn-danger" onclick="confirmClearData()">🗑️ Apagar todos os dados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="dash" onclick="navigate('dash')">
+      <span class="nav-icon">📊</span>
+      <span>Início</span>
+    </button>
+    <button class="nav-item" data-page="discs" onclick="navigate('discs')">
+      <span class="nav-icon">📚</span>
+      <span>Disciplinas</span>
+    </button>
+    <button class="nav-item" data-page="study" onclick="navigate('study')">
+      <span class="nav-icon">✏️</span>
+      <span>Estudar</span>
+    </button>
+    <button class="nav-item" data-page="reviews" onclick="navigate('reviews')">
+      <span class="nav-icon">🔁</span>
+      <span>Revisões</span>
+      <div class="nav-badge" id="reviews-badge" style="display:none;">0</div>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="navigate('settings')">
+      <span class="nav-icon">⚙️</span>
+      <span>Config</span>
+    </button>
+  </nav>
+</div>
+
+<!-- FAB: Add discipline -->
+<button class="fab" id="fab-add" onclick="openModal('modal-new-disc')" title="Nova disciplina" style="display:none;">+</button>
+
+<!-- ════════════════════════════════
+     MODAIS
+     ════════════════════════════════ -->
+
+<!-- Modal: Nova Disciplina -->
+<div class="modal-overlay" id="modal-new-disc">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nova Disciplina</div>
+    <button class="modal-close" onclick="closeModal('modal-new-disc')">✕</button>
+    <div class="form-group">
+      <label class="form-label">Nome da disciplina</label>
+      <input class="form-input" type="text" id="new-disc-name" placeholder="Ex: Matemática, Biologia...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tópicos (um por linha)</label>
+      <textarea class="form-textarea" id="new-disc-topics" placeholder="Funções quadráticas&#10;Geometria analítica&#10;Trigonometria&#10;..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new-disc')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveNewDisc()">Criar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Registro de estudo (rápido, a partir do tópico) -->
+<div class="modal-overlay" id="modal-quick-study">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="quick-study-title">Registrar Estudo</div>
+    <button class="modal-close" onclick="closeModal('modal-quick-study')">✕</button>
+    <input type="hidden" id="qs-topic-id">
+    <input type="hidden" id="qs-disc-id">
+    <div class="form-group">
+      <label class="form-label">Tempo estudado</label>
+      <div class="time-inputs">
+        <input class="form-input" type="number" id="qs-hours" placeholder="Horas" min="0" max="23" style="text-align:center;">
+        <input class="form-input" type="number" id="qs-mins" placeholder="Minutos" min="0" max="59" style="text-align:center;">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Observações (opcional)</label>
+      <textarea class="form-textarea" id="qs-obs" placeholder="Anote o que estudou..." style="min-height:80px;"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeModal('modal-quick-study')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveQuickStudy()">✅ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Anotações do tópico -->
+<div class="modal-overlay" id="modal-annotations">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="ann-title">Anotações</div>
+    <button class="modal-close" onclick="closeModal('modal-annotations')">✕</button>
+    <input type="hidden" id="ann-topic-id">
+    <div class="form-group">
+      <label class="form-label">Anotações persistentes</label>
+      <textarea class="form-textarea" id="ann-text" placeholder="Conceitos importantes, fórmulas, resumos..." style="min-height:160px;"></textarea>
+    </div>
+    <div class="form-group" style="padding-bottom:4px;">
+      <label class="form-label">Histórico de sessões</label>
+      <div id="ann-sessions" style="max-height:160px; overflow-y:auto;"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeModal('modal-annotations')">Fechar</button>
+      <button class="btn btn-primary" onclick="saveAnnotation()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Export/Import -->
+<div class="modal-overlay" id="modal-export">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Dados</div>
+    <button class="modal-close" onclick="closeModal('modal-export')">✕</button>
+    <div style="padding: 0 20px 16px;">
+      <button class="data-btn" onclick="exportData(); closeModal('modal-export')">
+        <span class="data-btn-icon">📤</span>Exportar JSON
+      </button>
+      <button class="data-btn" onclick="document.getElementById('import-file2').click()">
+        <span class="data-btn-icon">📥</span>Importar JSON
+      </button>
+      <input type="file" id="import-file2" accept=".json" style="display:none;" onchange="importData(event); closeModal('modal-export')">
+    </div>
+  </div>
+</div>
+
+<!-- Subpage: Discipline detail -->
+<div id="subpage-disc">
+  <div class="top-bar">
+    <button class="icon-btn" onclick="closeDiscDetail()" style="margin-right:4px;">←</button>
+    <div class="brand" id="subdisc-brand" style="font-size:18px;"></div>
+    <button class="icon-btn" onclick="openDeleteDisc()">🗑️</button>
+  </div>
+  <div style="padding: 16px 20px 8px;">
+    <div class="disc-detail-stats" id="subdisc-stats"></div>
+  </div>
+  <div id="subdisc-topics"></div>
+  <div style="height:100px;"></div>
+  <button class="fab" onclick="openQuickStudyFromDisc()" title="Registrar estudo">✏️</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DB
+// ═══════════════════════════════════════════════════════
+const DEFAULT_INTERVALS = [1,3,7,14,21,35,55,89];
+
+async function getIntervals() {
+  try {
+    const rec = await dbGet('settings', 'intervals');
+    if (rec && Array.isArray(rec.value) && rec.value.length > 0) return rec.value;
+  } catch(e) {}
+  return [...DEFAULT_INTERVALS];
+}
+
+async function saveIntervals(arr) {
+  await dbPut('settings', { key: 'intervals', value: arr });
+}
+const COLORS = ['var(--c0)','var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)','var(--c6)','var(--c7)'];
+
+let db;
+
+function openDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('studyflow', 3);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains('disciplines'))
+        d.createObjectStore('disciplines', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('topics')) {
+        const ts = d.createObjectStore('topics', { keyPath: 'id' });
+        ts.createIndex('disciplineId', 'disciplineId');
+      }
+      if (!d.objectStoreNames.contains('sessions')) {
+        const ss = d.createObjectStore('sessions', { keyPath: 'id' });
+        ss.createIndex('topicId', 'topicId');
+        ss.createIndex('disciplineId', 'disciplineId');
+      }
+      if (!d.objectStoreNames.contains('reviews')) {
+        const rs = d.createObjectStore('reviews', { keyPath: 'id' });
+        rs.createIndex('topicId', 'topicId');
+        rs.createIndex('nextDate', 'nextDate');
+      }
+      if (!d.objectStoreNames.contains('settings'))
+        d.createObjectStore('settings', { keyPath: 'key' });
+    };
+    req.onsuccess = e => { db = e.target.result; res(db); };
+    req.onerror = () => rej(req.error);
+  });
+}
+
+function tx(stores, mode = 'readonly') {
+  return db.transaction(stores, mode);
+}
+
+function dbGet(store, key) {
+  return new Promise((res, rej) => {
+    const r = tx(store).objectStore(store).get(key);
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+
+function dbGetAll(store) {
+  return new Promise((res, rej) => {
+    const r = tx(store).objectStore(store).getAll();
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+
+function dbGetByIndex(store, index, value) {
+  return new Promise((res, rej) => {
+    const r = tx(store).objectStore(store).index(index).getAll(value);
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+
+function dbPut(store, item) {
+  return new Promise((res, rej) => {
+    const t = tx(store, 'readwrite');
+    const r = t.objectStore(store).put(item);
+    r.onsuccess = () => res(r.result);
+    t.onerror = () => rej(t.error);
+  });
+}
+
+function dbDelete(store, key) {
+  return new Promise((res, rej) => {
+    const t = tx(store, 'readwrite');
+    const r = t.objectStore(store).delete(key);
+    r.onsuccess = () => res();
+    t.onerror = () => rej(t.error);
+  });
+}
+
+function dbDeleteWhere(store, index, value) {
+  return new Promise((res, rej) => {
+    const t = tx(store, 'readwrite');
+    const s = t.objectStore(store);
+    const r = s.index(index).openCursor(IDBKeyRange.only(value));
+    r.onsuccess = e => {
+      const cursor = e.target.result;
+      if (cursor) { cursor.delete(); cursor.continue(); }
+    };
+    t.oncomplete = () => res();
+    t.onerror = () => rej(t.error);
+  });
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+let currentPage = 'dash';
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelector(`[data-page="${page}"]`).classList.add('active');
+  currentPage = page;
+  document.getElementById('fab-add').style.display = page === 'discs' ? 'flex' : 'none';
+
+  if (page === 'dash') renderDashboard();
+  if (page === 'discs') renderDiscList();
+  if (page === 'reviews') renderReviews();
+  if (page === 'study') populateStudySelects();
+  if (page === 'settings') renderSettingsIntervals();
+}
+
+// ═══════════════════════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) m.classList.remove('open');
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+// DISCIPLINES
+// ═══════════════════════════════════════════════════════
+async function saveNewDisc() {
+  const name = document.getElementById('new-disc-name').value.trim();
+  if (!name) { showToast('Digite o nome da disciplina', 'info'); return; }
+
+  const topicsRaw = document.getElementById('new-disc-topics').value;
+  const topicLines = topicsRaw.split('\n').map(l => l.trim()).filter(Boolean);
+
+  const allDiscs = await dbGetAll('disciplines');
+  const discId = uid();
+  await dbPut('disciplines', { id: discId, name, colorIdx: allDiscs.length % COLORS.length });
+
+  for (const t of topicLines) {
+    await dbPut('topics', { id: uid(), disciplineId: discId, name: t, notes: '' });
+  }
+
+  closeModal('modal-new-disc');
+  document.getElementById('new-disc-name').value = '';
+  document.getElementById('new-disc-topics').value = '';
+  renderDiscList();
+  showToast(`"${name}" criada com ${topicLines.length} tópicos ✅`, 'success');
+}
+
+async function renderDiscList() {
+  const discs = await dbGetAll('disciplines');
+  const container = document.getElementById('disc-list');
+  document.getElementById('discs-sub').textContent = discs.length
+    ? `${discs.length} disciplina${discs.length > 1 ? 's' : ''} cadastrada${discs.length > 1 ? 's' : ''}`
+    : 'Nenhuma cadastrada ainda';
+
+  if (!discs.length) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📚</div>
+      <div class="empty-title">Nenhuma disciplina</div>
+      <div class="empty-desc">Toque no <strong>+</strong> para cadastrar sua primeira disciplina com os tópicos.</div>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+  for (const d of discs) {
+    const topics = await dbGetByIndex('topics', 'disciplineId', d.id);
+    const sessions = await dbGetByIndex('sessions', 'disciplineId', d.id);
+    const totalMin = sessions.reduce((s, x) => s + (x.minutes || 0), 0);
+    html += `<div class="disc-card" onclick="openDiscDetail('${d.id}')">
+      <div class="disc-card-header">
+        <div class="disc-card-left">
+          <div class="disc-color-dot" style="background:${COLORS[d.colorIdx % COLORS.length]};"></div>
+          <div>
+            <div class="disc-card-name">${esc(d.name)}</div>
+            <div class="disc-card-meta">${topics.length} tópicos · ${fmtTime(totalMin)}</div>
+          </div>
+        </div>
+        <span class="disc-card-arrow">›</span>
+      </div>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════
+// DISCIPLINE DETAIL
+// ═══════════════════════════════════════════════════════
+let currentDiscId = null;
+
+async function openDiscDetail(discId) {
+  currentDiscId = discId;
+  const disc = await dbGet('disciplines', discId);
+  const topics = await dbGetByIndex('topics', 'disciplineId', discId);
+  const sessions = await dbGetByIndex('sessions', 'disciplineId', discId);
+
+  document.getElementById('subdisc-brand').textContent = disc.name;
+
+  const totalMin = sessions.reduce((s, x) => s + (x.minutes || 0), 0);
+  const studiedTopicIds = new Set(sessions.map(s => s.topicId));
+
+  document.getElementById('subdisc-stats').innerHTML = `
+    <span class="pill pill-blue">⏱ ${fmtTime(totalMin)}</span>
+    <span class="pill pill-green">✅ ${studiedTopicIds.size}/${topics.length} tópicos</span>
+    <span class="pill pill-purple">📖 ${sessions.length} sessões</span>
+  `;
+
+  // Build reviews map
+  const reviewsAll = await dbGetAll('reviews');
+  const reviewMap = {};
+  for (const r of reviewsAll) reviewMap[r.topicId] = r;
+
+  let html = '';
+  if (!topics.length) {
+    html = `<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">Sem tópicos</div><div class="empty-desc">Esta disciplina não tem tópicos ainda.</div></div>`;
+  } else {
+    for (const t of topics) {
+      const studied = studiedTopicIds.has(t.id);
+      const rev = reviewMap[t.id];
+      let revPill = '';
+      if (rev) {
+        const today = todayStr();
+        const diff = daysBetween(today, rev.nextDate);
+        if (diff < 0) revPill = `<span class="pill pill-red" style="font-size:11px;">Revisão atrasada</span>`;
+        else if (diff === 0) revPill = `<span class="pill pill-orange" style="font-size:11px;">Revisar hoje</span>`;
+        else revPill = `<span class="pill pill-blue" style="font-size:11px;">Revisão em ${diff}d</span>`;
+      }
+      html += `<div class="topic-item${studied ? ' studied' : ''}">
+        <div class="topic-check" onclick="openQuickStudyModal('${disc.id}','${t.id}','${esc(t.name)}')">✓</div>
+        <div class="topic-info">
+          <div class="topic-name">${esc(t.name)}</div>
+          <div class="topic-meta" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;">${revPill}</div>
+        </div>
+        <div class="topic-actions">
+          <button class="topic-btn" onclick="openAnnotationModal('${t.id}','${esc(t.name)}')" title="Anotações">📝</button>
+          <button class="topic-btn" onclick="openQuickStudyModal('${disc.id}','${t.id}','${esc(t.name)}')" title="Registrar estudo">✏️</button>
+        </div>
+      </div>`;
+    }
+  }
+  document.getElementById('subdisc-topics').innerHTML = html;
+  document.getElementById('subpage-disc').classList.add('open');
+}
+
+function closeDiscDetail() {
+  document.getElementById('subpage-disc').classList.remove('open');
+  renderDiscList();
+}
+
+async function openDeleteDisc() {
+  if (!currentDiscId) return;
+  const disc = await dbGet('disciplines', currentDiscId);
+  if (!confirm(`Excluir "${disc.name}" e todos seus dados?`)) return;
+  const topics = await dbGetByIndex('topics', 'disciplineId', currentDiscId);
+  for (const t of topics) {
+    await dbDeleteWhere('sessions', 'topicId', t.id);
+    await dbDeleteWhere('reviews', 'topicId', t.id);
+    await dbDelete('topics', t.id);
+  }
+  await dbDeleteWhere('sessions', 'disciplineId', currentDiscId);
+  await dbDelete('disciplines', currentDiscId);
+  closeDiscDetail();
+  showToast('Disciplina excluída', 'info');
+}
+
+function openQuickStudyFromDisc() {
+  if (!currentDiscId) return;
+  openModal('modal-quick-study');
+  document.getElementById('qs-disc-id').value = currentDiscId;
+  document.getElementById('qs-topic-id').value = '';
+  document.getElementById('quick-study-title').textContent = 'Registrar Estudo';
+  loadQSTopics(currentDiscId);
+}
+
+async function loadQSTopics(discId) {
+  // If called via openQuickStudyModal we set topic directly
+  // If called generically, provide select
+}
+
+// ═══════════════════════════════════════════════════════
+// QUICK STUDY MODAL
+// ═══════════════════════════════════════════════════════
+function openQuickStudyModal(discId, topicId, topicName) {
+  document.getElementById('qs-disc-id').value = discId;
+  document.getElementById('qs-topic-id').value = topicId;
+  document.getElementById('quick-study-title').textContent = `Estudar: ${topicName}`;
+  document.getElementById('qs-hours').value = '';
+  document.getElementById('qs-mins').value = '';
+  document.getElementById('qs-obs').value = '';
+  openModal('modal-quick-study');
+}
+
+async function saveQuickStudy() {
+  const discId = document.getElementById('qs-disc-id').value;
+  const topicId = document.getElementById('qs-topic-id').value;
+
+  if (!discId || !topicId) { showToast('Selecione tópico e disciplina', 'info'); return; }
+
+  const hRaw = document.getElementById('qs-hours').value;
+  const mRaw = document.getElementById('qs-mins').value;
+  const h = Math.max(0, parseInt(hRaw) || 0);
+  const m = Math.min(59, Math.max(0, parseInt(mRaw) || 0));
+  const mins = h * 60 + m;
+  if (mins <= 0) { showToast('Informe ao menos 1 minuto de estudo', 'info'); return; }
+
+  const obs = document.getElementById('qs-obs').value.trim();
+
+  await dbPut('sessions', {
+    id: uid(), disciplineId: discId, topicId,
+    minutes: mins, date: todayStr(), observations: obs
+  });
+
+  await updateReview(topicId);
+  closeModal('modal-quick-study');
+  showToast(`${fmtTime(mins)} registrados! 🎉`, 'success');
+
+  // Refresh detail if open
+  if (document.getElementById('subpage-disc').classList.contains('open')) {
+    openDiscDetail(discId);
+  }
+  updateReviewBadge();
+}
+
+// ═══════════════════════════════════════════════════════
+// STUDY PAGE (full form)
+// ═══════════════════════════════════════════════════════
+async function populateStudySelects() {
+  const discs = await dbGetAll('disciplines');
+  const sel = document.getElementById('study-disc-sel');
+  sel.innerHTML = '<option value="">Selecione...</option>';
+  for (const d of discs) {
+    sel.innerHTML += `<option value="${d.id}">${esc(d.name)}</option>`;
+  }
+}
+
+async function loadStudyTopics() {
+  const discId = document.getElementById('study-disc-sel').value;
+  const sel = document.getElementById('study-topic-sel');
+  if (!discId) { sel.innerHTML = '<option value="">Selecione a disciplina primeiro</option>'; return; }
+  const topics = await dbGetByIndex('topics', 'disciplineId', discId);
+  sel.innerHTML = '<option value="">Selecione o tópico...</option>';
+  for (const t of topics) sel.innerHTML += `<option value="${t.id}">${esc(t.name)}</option>`;
+}
+
+async function saveStudySession() {
+  const discId = document.getElementById('study-disc-sel').value;
+  const topicId = document.getElementById('study-topic-sel').value;
+  if (!discId || !topicId) { showToast('Selecione disciplina e tópico', 'info'); return; }
+
+  const hRaw = document.getElementById('study-hours').value;
+  const mRaw = document.getElementById('study-mins').value;
+  const h = Math.max(0, parseInt(hRaw) || 0);
+  const m = Math.min(59, Math.max(0, parseInt(mRaw) || 0));
+  const mins = h * 60 + m;
+  if (mins <= 0) { showToast('Informe ao menos 1 minuto de estudo', 'info'); return; }
+
+  const obs = document.getElementById('study-obs').value.trim();
+
+  await dbPut('sessions', { id: uid(), disciplineId: discId, topicId, minutes: mins, date: todayStr(), observations: obs });
+  await updateReview(topicId);
+
+  document.getElementById('study-hours').value = '';
+  document.getElementById('study-mins').value = '';
+  document.getElementById('study-obs').value = '';
+  showToast(`${fmtTime(mins)} registrados! 🎉`, 'success');
+  updateReviewBadge();
+}
+
+// ═══════════════════════════════════════════════════════
+// REVIEWS / SPACED REPETITION
+// ═══════════════════════════════════════════════════════
+async function updateReview(topicId) {
+  const intervals = await getIntervals();
+  let rev = await dbGet('reviews', topicId);
+  const today = todayStr();
+
+  if (!rev) {
+    rev = { id: topicId, topicId, nextDate: addDays(today, intervals[0]), intervalIdx: 0, history: [] };
+  } else {
+    const nextIdx = Math.min(rev.intervalIdx + 1, intervals.length - 1);
+    rev.history.push({ date: today, intervalIdx: rev.intervalIdx });
+    rev.intervalIdx = nextIdx;
+    rev.nextDate = addDays(today, intervals[nextIdx]);
+  }
+  await dbPut('reviews', rev);
+}
+
+async function markReviewDone(topicId) {
+  await updateReview(topicId);
+  showToast('Revisão concluída! ✅', 'success');
+  renderReviews();
+  updateReviewBadge();
+}
+
+async function renderReviews() {
+  const container = document.getElementById('reviews-container');
+  const reviews = await dbGetAll('reviews');
+  const topics = await dbGetAll('topics');
+  const discs = await dbGetAll('disciplines');
+  const intervals = await getIntervals();
+
+  const topicMap = Object.fromEntries(topics.map(t => [t.id, t]));
+  const discMap = Object.fromEntries(discs.map(d => [d.id, d]));
+
+  const today = todayStr();
+  const overdue = [], todayItems = [], upcoming = [];
+
+  for (const r of reviews) {
+    const diff = daysBetween(today, r.nextDate);
+    const t = topicMap[r.topicId];
+    const d = t ? discMap[t.disciplineId] : null;
+    if (!t || !d) continue;
+    const item = { ...r, topicName: t.name, discName: d.name, diff };
+    if (diff < 0) overdue.push(item);
+    else if (diff === 0) todayItems.push(item);
+    else if (diff <= 7) upcoming.push(item);
+  }
+
+  upcoming.sort((a, b) => a.diff - b.diff);
+
+  if (!overdue.length && !todayItems.length && !upcoming.length) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🎉</div>
+      <div class="empty-title">Tudo em dia!</div>
+      <div class="empty-desc">Nenhuma revisão pendente. Continue estudando para iniciar ciclos de revisão.</div>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+  if (overdue.length) {
+    html += `<div class="review-section"><div class="review-section-title">⚠️ Atrasadas (${overdue.length})</div>`;
+    for (const r of overdue) html += reviewItemHTML(r, 'overdue', `Atrasada ${Math.abs(r.diff)}d`, intervals);
+    html += '</div>';
+  }
+  if (todayItems.length) {
+    html += `<div class="review-section"><div class="review-section-title">📅 Para hoje (${todayItems.length})</div>`;
+    for (const r of todayItems) html += reviewItemHTML(r, 'today', 'Hoje', intervals);
+    html += '</div>';
+  }
+  if (upcoming.length) {
+    html += `<div class="review-section"><div class="review-section-title">🗓 Próximos 7 dias</div>`;
+    for (const r of upcoming) html += reviewItemHTML(r, '', `Em ${r.diff} dia${r.diff > 1 ? 's' : ''}`, intervals);
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+function reviewItemHTML(r, cls, dateLabel, intervals) {
+  const dotColor = cls === 'overdue' ? 'var(--red)' : cls === 'today' ? 'var(--orange)' : 'var(--accent)';
+  const inter = intervals[Math.min(r.intervalIdx, intervals.length - 1)];
+  const showBtn = cls === 'overdue' || cls === 'today';
+  return `<div class="review-item ${cls}">
+    <div class="review-dot" style="background:${dotColor};"></div>
+    <div class="review-info">
+      <div class="review-topic">${esc(r.topicName)}</div>
+      <div class="review-disc">${esc(r.discName)}</div>
+      <div class="review-date" style="color:${dotColor};">${dateLabel} · Intervalo: ${inter}d</div>
+    </div>
+    ${showBtn ? `<button class="review-done-btn" onclick="markReviewDone('${r.topicId}')">✓ Feito</button>` : ''}
+  </div>`;
+}
+
+async function updateReviewBadge() {
+  const reviews = await dbGetAll('reviews');
+  const today = todayStr();
+  let count = 0;
+  for (const r of reviews) {
+    if (daysBetween(today, r.nextDate) <= 0) count++;
+  }
+  const badge = document.getElementById('reviews-badge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'flex' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════
+// ANNOTATIONS
+// ═══════════════════════════════════════════════════════
+async function openAnnotationModal(topicId, topicName) {
+  const topic = await dbGet('topics', topicId);
+  document.getElementById('ann-topic-id').value = topicId;
+  document.getElementById('ann-title').textContent = `📝 ${topicName}`;
+  document.getElementById('ann-text').value = topic.notes || '';
+
+  const sessions = await dbGetByIndex('sessions', 'topicId', topicId);
+  sessions.sort((a, b) => b.date.localeCompare(a.date));
+  let sessHTML = '';
+  if (!sessions.length) {
+    sessHTML = '<div style="font-size:13px; color:var(--text3); padding:8px 0;">Nenhuma sessão registrada ainda.</div>';
+  } else {
+    for (const s of sessions.slice(0, 10)) {
+      sessHTML += `<div style="padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+          <span style="color:var(--text2);">${fmtDate(s.date)}</span>
+          <span style="color:var(--accent);">${fmtTime(s.minutes)}</span>
+        </div>
+        ${s.observations ? `<div style="color:var(--text3);">${esc(s.observations)}</div>` : ''}
+      </div>`;
+    }
+  }
+  document.getElementById('ann-sessions').innerHTML = sessHTML;
+  openModal('modal-annotations');
+}
+
+async function saveAnnotation() {
+  const topicId = document.getElementById('ann-topic-id').value;
+  const text = document.getElementById('ann-text').value;
+  const topic = await dbGet('topics', topicId);
+  topic.notes = text;
+  await dbPut('topics', topic);
+  closeModal('modal-annotations');
+  showToast('Anotação salva 💾', 'success');
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+async function renderDashboard() {
+  const sessions = await dbGetAll('sessions');
+  const discs = await dbGetAll('disciplines');
+  const topics = await dbGetAll('topics');
+  const reviews = await dbGetAll('reviews');
+
+  const totalMin = sessions.reduce((s, x) => s + (x.minutes || 0), 0);
+  const topicsDone = new Set(sessions.map(s => s.topicId)).size;
+
+  const today = todayStr();
+  let pendingToday = 0, overdue = 0;
+  for (const r of reviews) {
+    const diff = daysBetween(today, r.nextDate);
+    if (diff === 0) pendingToday++;
+    if (diff < 0) overdue++;
+  }
+
+  document.getElementById('stat-total-time').textContent = fmtTime(totalMin);
+  document.getElementById('stat-topics-done').textContent = topicsDone;
+  document.getElementById('stat-reviews-today').textContent = pendingToday + overdue;
+  document.getElementById('stat-discs').textContent = discs.length;
+  document.getElementById('stat-overdue-sub').textContent = overdue > 0 ? `${overdue} atrasada${overdue > 1 ? 's' : ''}` : 'pendentes';
+
+  // Week chart
+  renderWeekChart(sessions);
+
+  // Per discipline
+  let discHTML = '';
+  if (!discs.length) {
+    discHTML = `<div style="color:var(--text3); font-size:14px; padding:8px 0;">Nenhuma disciplina ainda.</div>`;
+  } else {
+    for (const d of discs) {
+      const dSessions = sessions.filter(s => s.disciplineId === d.id);
+      const dMin = dSessions.reduce((s, x) => s + (x.minutes || 0), 0);
+      const dTopics = topics.filter(t => t.disciplineId === d.id).length;
+      const dDone = new Set(dSessions.map(s => s.topicId)).size;
+      const pct = dTopics ? Math.round(dDone / dTopics * 100) : 0;
+      discHTML += `<div style="margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:${COLORS[d.colorIdx % COLORS.length]};"></div>
+            <span style="font-size:14px; font-weight:500;">${esc(d.name)}</span>
+          </div>
+          <span style="font-size:13px; color:var(--text2);">${fmtTime(dMin)}</span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-fill" style="width:${pct}%; background:${COLORS[d.colorIdx % COLORS.length]};"></div>
+        </div>
+        <div style="font-size:11px; color:var(--text3); margin-top:3px;">${dDone}/${dTopics} tópicos · ${pct}%</div>
+      </div>`;
+    }
+  }
+  document.getElementById('dash-disc-list').innerHTML = discHTML;
+
+  // Greeting
+  const h = new Date().getHours();
+  const greetings = h < 12 ? 'Bom dia! ☀️' : h < 18 ? 'Boa tarde! 🌤' : 'Boa noite! 🌙';
+  document.getElementById('dash-greeting').textContent = greetings;
+
+  updateReviewBadge();
+}
+
+function renderWeekChart(sessions) {
+  const days = [];
+  const labels = ['D','S','T','Q','Q','S','S'];
+  const today = new Date();
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    days.push(dateToStr(d));
+  }
+
+  const totals = days.map(day => {
+    return sessions.filter(s => s.date === day).reduce((sum, s) => sum + (s.minutes || 0), 0);
+  });
+
+  const max = Math.max(...totals, 1);
+  const weekTotal = totals.reduce((s, x) => s + x, 0);
+  document.getElementById('dash-week-total').textContent = fmtTime(weekTotal);
+
+  const bars = document.getElementById('week-chart');
+  bars.innerHTML = totals.map((t, i) => {
+    const h = Math.max(4, Math.round(t / max * 72));
+    const todayIdx = 6;
+    const highlight = i === todayIdx ? ' highlight' : '';
+    const dayLabel = labels[new Date(days[i] + 'T00:00:00').getDay()];
+    return `<div class="chart-bar-wrap">
+      <div class="chart-bar${highlight}" style="height:${h}px;opacity:${t ? (0.4 + 0.6 * (t/max)) : 0.15};"></div>
+      <div class="chart-label">${dayLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ═══════════════════════════════════════════════════════
+async function exportData() {
+  const data = {
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    disciplines: await dbGetAll('disciplines'),
+    topics: await dbGetAll('topics'),
+    sessions: await dbGetAll('sessions'),
+    reviews: await dbGetAll('reviews'),
+    settings: await dbGetAll('settings'),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `studyflow-backup-${todayStr()}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('Dados exportados! 📤', 'success');
+}
+
+async function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  let data;
+  try { data = JSON.parse(text); } catch { showToast('Arquivo inválido ❌', 'info'); return; }
+
+  if (!confirm('Isso irá substituir todos os dados atuais pelo backup. Continuar?')) {
+    event.target.value = '';
+    return;
+  }
+
+  // Clear every store before importing
+  const stores = ['disciplines', 'topics', 'sessions', 'reviews', 'settings'];
+  for (const s of stores) {
+    await new Promise((res, rej) => {
+      const t = db.transaction(s, 'readwrite');
+      const req = t.objectStore(s).clear();
+      t.oncomplete = () => res();
+      t.onerror = () => rej(t.error);
+    });
+  }
+
+  // Write all records
+  for (const d of (data.disciplines || [])) await dbPut('disciplines', d);
+  for (const t of (data.topics     || [])) await dbPut('topics', t);
+  for (const s of (data.sessions   || [])) await dbPut('sessions', s);
+  for (const r of (data.reviews    || [])) await dbPut('reviews', r);
+  if (data.settings) {
+    for (const s of data.settings) await dbPut('settings', s);
+  }
+
+  event.target.value = '';
+  showToast('Dados importados com sucesso! 📥', 'success');
+
+  // Refresh all active views
+  await renderDashboard();
+  await renderDiscList();
+  await renderReviews();
+  await renderSettingsIntervals();
+  updateReviewBadge();
+}
+
+async function confirmClearData() {
+  if (!confirm('Tem certeza? Todos os dados serão apagados permanentemente.')) return;
+  const stores = ['disciplines', 'topics', 'sessions', 'reviews', 'settings'];
+  for (const s of stores) {
+    await new Promise((res, rej) => {
+      const t = db.transaction(s, 'readwrite');
+      t.objectStore(s).clear();
+      t.oncomplete = () => res();
+      t.onerror = () => rej(t.error);
+    });
+  }
+  showToast('Dados apagados', 'info');
+  renderDashboard();
+  renderDiscList();
+  renderSettingsIntervals();
+  updateReviewBadge();
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function todayStr() { return dateToStr(new Date()); }
+function dateToStr(d) { return d.toISOString().slice(0,10); }
+function addDays(dateStr, n) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + n);
+  return dateToStr(d);
+}
+function daysBetween(a, b) {
+  const da = new Date(a + 'T00:00:00');
+  const db = new Date(b + 'T00:00:00');
+  return Math.round((db - da) / 86400000);
+}
+function fmtTime(min) {
+  if (!min || min <= 0) return '0 min';
+  min = Math.round(min);
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return m > 0 ? `${h}h ${m}min` : `${h}h`;
+}
+function fmtDate(str) {
+  const [y,mo,d] = str.split('-');
+  return `${d}/${mo}/${y}`;
+}
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+let toastTimer;
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = 'toast', 2500);
+}
+
+// ═══════════════════════════════════════════════════════
+// INTERVALS MANAGEMENT (Settings)
+// ═══════════════════════════════════════════════════════
+async function renderSettingsIntervals() {
+  const intervals = await getIntervals();
+  const container = document.getElementById('intervals-list');
+  if (!container) return;
+
+  if (!intervals.length) {
+    container.innerHTML = `<span style="font-size:13px;color:var(--text3);">Nenhum intervalo. Adicione ao menos um.</span>`;
+    return;
+  }
+
+  container.innerHTML = intervals.map((v, i) =>
+    `<div style="display:inline-flex;align-items:center;gap:6px;
+       background:rgba(108,143,255,0.12);border:1px solid rgba(108,143,255,0.25);
+       border-radius:99px;padding:5px 6px 5px 12px;">
+      <span style="color:var(--accent);font-size:13px;font-weight:600;">${v} dia${v !== 1 ? 's' : ''}</span>
+      <button onclick="removeInterval(${i})"
+        style="width:20px;height:20px;border-radius:50%;border:none;background:rgba(248,113,113,0.18);
+               color:var(--red);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;
+               flex-shrink:0;">✕</button>
+    </div>`
+  ).join('');
+}
+
+async function addInterval() {
+  const input = document.getElementById('new-interval-val');
+  const val = parseInt(input.value);
+  if (!val || val < 1 || val > 365) {
+    showToast('Digite um valor entre 1 e 365 dias', 'info');
+    return;
+  }
+  let intervals = await getIntervals();
+  if (intervals.includes(val)) {
+    showToast(`Intervalo de ${val} dias já existe`, 'info');
+    return;
+  }
+  intervals.push(val);
+  intervals.sort((a, b) => a - b);
+  await saveIntervals(intervals);
+  input.value = '';
+  renderSettingsIntervals();
+  showToast(`Intervalo de ${val} dias adicionado ✅`, 'success');
+}
+
+async function removeInterval(idx) {
+  let intervals = await getIntervals();
+  if (intervals.length <= 1) {
+    showToast('É necessário ao menos um intervalo', 'info');
+    return;
+  }
+  const removed = intervals[idx];
+  intervals.splice(idx, 1);
+  await saveIntervals(intervals);
+  renderSettingsIntervals();
+  showToast(`Intervalo de ${removed} dias removido`, 'info');
+}
+
+
+(async () => {
+  await openDB();
+  await renderDashboard();
+  await renderSettingsIntervals();
+  navigate('dash');
+
+  // Seed demo data if empty
+  const discs = await dbGetAll('disciplines');
+  if (!discs.length) {
+    // seed nothing, let user start fresh
+  }
+})();
+</script>
+</body>
+</html>
