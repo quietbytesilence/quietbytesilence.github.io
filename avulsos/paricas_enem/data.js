@@ -54,7 +54,7 @@ const cursos = [
                  ]
                 },
                 {
-                    titulo: "Aula 4: Função Afim - 16/05/2026",
+                    titulo: "Aula 5: Função Afim - 16/05/2026",
                     arquivos: [
                         {tipo:"Site", link: "https://www.todamateria.com.br/funcao-afim/"},
                         { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=eTf2g3Sx8cE" },
@@ -62,7 +62,7 @@ const cursos = [
                   ]
                 },
                 {
-                    titulo: "Aula 5: Relação e Função - 16/05/2026",
+                    titulo: "Aula 6: Relação e Função - 16/05/2026",
                     arquivos: [
                         {tipo:"Site", link: "https://www.todamateria.com.br/funcao/"},
                         { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=295AGZeVA6E" },
