@@ -38,10 +38,6 @@ const cursos = [
         
 
 
-
-
-
-
 // FIM DO ARRAY CURSO MATEMÁTICA BÁSICA
         ]
     },
@@ -93,19 +89,19 @@ const cursos = [
                   ]
                 },
                 {
-                    titulo: "Aula 9: Revisão Propriedades de Potência - 06/06/2026",
+                    titulo: "Aula 9 Parte 1: Revisão Propriedades de Potência - 06/06/2026",
                     arquivos: [
-                        {tipo:"Site", link: "https://www.todamateria.com.br/funcao-quadratica/"},
-                        { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=mX3Xeq4QEyQ" },
-                        { tipo: "PDF", link: "https://www.ufs.br/uploads/page_attach/path/8506/Fun__o_de_2__grau.pdf" }
+                        { tipo: "PDF", link: "https://d23vy2bv3rsfba.cloudfront.net/biblioteca/768392_e6bc65d78d4ae557b39d88d54b6fb7f6_potenciacao.pdf" },
+                        { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=WNG0UkUSoWY" },
+                        { tipo: "Site", link: "https://www.todamateria.com.br/propriedades-da-potenciacao/" }
                   ]
                 },
                 {
-                    titulo: "Aula 9: Equações Exponenciais - 06/06/2026",
+                    titulo: "Aula 9 Parte 2: Equações Exponenciais - 06/06/2026",
                     arquivos: [
-                        {tipo:"Site", link: "https://www.todamateria.com.br/funcao-quadratica/"},
-                        { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=mX3Xeq4QEyQ" },
-                        { tipo: "PDF", link: "https://www.ufs.br/uploads/page_attach/path/8506/Fun__o_de_2__grau.pdf" }
+                        {tipo:"Site", link: "https://www.todamateria.com.br/equacao-exponencial/"},
+                        { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=jbdsry6XjMM" },
+                        { tipo: "Site", link: "https://pt.khanacademy.org/math/2-serie-em-mat-sp/x308dd140681488ca:1-bimestre-2026/x308dd140681488ca:equacoes-exponenciais/e/resolva-as-equacoes-exponenciais" }
                   ]
                 },
 
