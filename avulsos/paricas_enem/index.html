@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pré-Enem Quinta dos Paricás - Matemática</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --bg-hover: #252542;
+            --accent: #7c3aed;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: #2d2d44;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .math-icon {
+            font-size: 3rem;
+            color: var(--accent-light);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Botão Principal */
+        .btn-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 2rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-toggle:active {
+            transform: translateY(0);
+        }
+
+        .btn-toggle i.seta {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-toggle.active i.seta {
+            transform: rotate(180deg);
+        }
+
+        /* Lista de Cursos */
+        .cursos-lista {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .cursos-lista.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card do Curso */
+        .curso-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .curso-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+        }
+
+        .curso-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .curso-header i {
+            font-size: 1.5rem;
+            color: var(--accent-light);
+        }
+
+        .curso-header h2 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Aulas */
+        .aulas-container {
+            padding: 1rem;
+        }
+
+        /* Aula Item - Accordion */
+        .aula-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .aula-item:hover {
+            border-color: var(--accent);
+        }
+
+        /* Cabeçalho clicável da aula */
+        .aula-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .aula-header:hover {
+            background: var(--bg-hover);
+        }
+
+        .aula-header-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .aula-header-info i.aula-icone {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .aula-header-info span {
+            font-weight: 600;
+            color: var(--accent-light);
+            font-size: 1.05rem;
+        }
+
+        .aula-header .seta-aula {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .aula-item.expanded .seta-aula {
+            transform: rotate(180deg);
+            color: var(--accent-light);
+        }
+
+        /* Conteúdo da aula (arquivos) */
+        .aula-conteudo {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 1.25rem;
+        }
+
+        .aula-item.expanded .aula-conteudo {
+            max-height: 2000px; /* valor alto o suficiente */
+            padding: 0 1.25rem 1.25rem 1.25rem;
+        }
+
+        /* Arquivos */
+        .arquivos-lista {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .arquivo-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arquivo-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .arquivo-link:hover {
+            background: var(--bg-card);
+            border-color: var(--accent);
+            transform: translateX(4px);
+            color: var(--text-primary);
+        }
+
+        .arquivo-link:hover::before {
+            opacity: 1;
+        }
+
+        .arquivo-icone {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .arquivo-icone.pdf {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .arquivo-icone.video {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .arquivo-icone.site {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--info);
+        }
+
+        .arquivo-icone.imagem {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .arquivo-info {
+            flex: 1;
+        }
+
+        .arquivo-info .tipo {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            opacity: 0.7;
+            margin-bottom: 0.25rem;
+        }
+
+        .arquivo-info .url {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        .arquivo-link i.fa-external-link-alt {
+            color: var(--accent-light);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .arquivo-link:hover i.fa-external-link-alt {
+            opacity: 1;
+        }
+
+        /* Contador */
+        .contador {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .contador span {
+            color: var(--accent-light);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        footer i {
+            color: var(--danger);
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .curso-header {
+                padding: 1rem;
+            }
+            
+            .curso-header h2 {
+                font-size: 1.1rem;
+            }
+            
+            .aula-header {
+                padding: 0.875rem 1rem;
+            }
+            
+            .aula-header-info span {
+                font-size: 0.95rem;
+            }
+            
+            .arquivo-link {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-light);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="math-icon">
+            <i class="fas fa-square-root-alt"></i>
+        </div>
+        <h1>Pré-Enem Quinta dos Paricás</h1>
+        <p>Materiais Complementares — Matemática</p>
+    </header>
+
+    <main class="container">
+        <button class="btn-toggle" id="btnToggle" onclick="toggleLista()">
+            <i class="fas fa-book-open"></i>
+            <span>Ver Lista de Aulas</span>
+            <i class="fas fa-chevron-down seta"></i>
+        </button>
+
+        <div class="contador" id="contador"></div>
+
+        <div class="cursos-lista" id="cursosLista">
+            <!-- Conteúdo gerado dinamicamente via JS -->
+        </div>
+    </main>
+
+    <footer>
+        <p>Pré-Enem Quinta dos Paricás <i class="fas fa-heart"></i> 2026</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script>
+        // Ícones por tipo
+        const icones = {
+            'PDF': 'fa-file-pdf',
+            'Vídeo': 'fa-play-circle',
+            'Site': 'fa-globe',
+            'Imagem': 'fa-image'
+        };
+
+        // Cores por tipo
+        const cores = {
+            'PDF': 'pdf',
+            'Vídeo': 'video',
+            'Site': 'site',
+            'Imagem': 'imagem'
+        };
+
+        function renderizarCursos() {
+            const container = document.getElementById('cursosLista');
+            const contador = document.getElementById('contador');
+            
+            let totalAulas = 0;
+            let totalArquivos = 0;
+
+            let html = '';
+
+            cursos.forEach((curso, cursoIndex) => {
+                html += `
+                    <div class="curso-card">
+                        <div class="curso-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h2>${curso.titulo}</h2>
+                        </div>
+                        <div class="aulas-container">
+                `;
+
+                curso.aulas.forEach((aula, aulaIndex) => {
+                    totalAulas++;
+                    const aulaId = `aula-${cursoIndex}-${aulaIndex}`;
+                    
+                    let arquivosHtml = '';
+                    aula.arquivos.forEach(arquivo => {
+                        totalArquivos++;
+                        const icone = icones[arquivo.tipo] || 'fa-link';
+                        const cor = cores[arquivo.tipo] || 'site';
+
+                        arquivosHtml += `
+                            <a href="${arquivo.link}" target="_blank" rel="noopener noreferrer" class="arquivo-link">
+                                <div class="arquivo-icone ${cor}">
+                                    <i class="fas ${icone}"></i>
+                                </div>
+                                <div class="arquivo-info">
+                                    <div class="tipo">${arquivo.tipo}</div>
+                                    <div class="url">${arquivo.link}</div>
+                                </div>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        `;
+                    });
+
+                    html += `
+                        <div class="aula-item" id="${aulaId}">
+                            <div class="aula-header" onclick="toggleAula('${aulaId}')">
+                                <div class="aula-header-info">
+                                    <i class="fas fa-chalkboard-teacher aula-icone"></i>
+                                    <span>${aula.titulo}</span>
+                                </div>
+                                <i class="fas fa-chevron-down seta-aula"></i>
+                            </div>
+                            <div class="aula-conteudo">
+                                <div class="arquivos-lista">
+                                    ${arquivosHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            contador.innerHTML = `
+                <span>${cursos.length}</span> módulos | 
+                <span>${totalAulas}</span> aulas | 
+                <span>${totalArquivos}</span> materiais
+            `;
+        }
+
+        function toggleLista() {
+            const lista = document.getElementById('cursosLista');
+            const btn = document.getElementById('btnToggle');
+            const span = btn.querySelector('span');
+
+            if (lista.classList.contains('active')) {
+                lista.classList.remove('active');
+                btn.classList.remove('active');
+                span.textContent = 'Ver Lista de Aulas';
+            } else {
+                lista.classList.add('active');
+                btn.classList.add('active');
+                span.textContent = 'Ocultar Lista de Aulas';
+            }
+        }
+
+        function toggleAula(aulaId) {
+            const aulaItem = document.getElementById(aulaId);
+            aulaItem.classList.toggle('expanded');
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', renderizarCursos);
+    </script>
+
+</body>
+</html>
