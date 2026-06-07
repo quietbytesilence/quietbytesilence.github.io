@@ -93,7 +93,8 @@ const cursos = [
                     arquivos: [
                         { tipo: "PDF", link: "https://d23vy2bv3rsfba.cloudfront.net/biblioteca/768392_e6bc65d78d4ae557b39d88d54b6fb7f6_potenciacao.pdf" },
                         { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=WNG0UkUSoWY" },
-                        { tipo: "Site", link: "https://www.todamateria.com.br/propriedades-da-potenciacao/" }
+                        { tipo: "Site", link: "https://www.todamateria.com.br/propriedades-da-potenciacao/" },
+                        { tipo: "Imagem", link: "https://waldexifba.wordpress.com/wp-content/uploads/2023/03/image-5.png"}
                   ]
                 },
                 {
@@ -104,13 +105,21 @@ const cursos = [
                         { tipo: "Site", link: "https://pt.khanacademy.org/math/2-serie-em-mat-sp/x308dd140681488ca:1-bimestre-2026/x308dd140681488ca:equacoes-exponenciais/e/resolva-as-equacoes-exponenciais" }
                   ]
                 },
+                {
+                    titulo: "Aula 9 Parte 3: Funções Logarítmicas - 06/06/2026",
+                    arquivos: [
+                        {tipo:"Site", link: "https://www.todamateria.com.br/funcao-logaritmica/"},
+                        { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=jbdsry6XjMM" },
+                        { tipo: "PDF", link: "http://paginapessoal.utfpr.edu.br/lcpereira/esta-e-uma-pasta/ma02a-t11/FuncaoLogaritmica.pdf" }
+                  ]
+                },
 
 // FIM DO ARRAY FUNÇÕES E EQUAÇÕES                
             ]
         },
 
     
-// FIM DO ARRAY GERAL    
+// FIM DO ARRAY GERAL   https://youtu.be/xpUxOm7M76w?si=tMVN-SWGfP5BJcAd 
 ];
 /*
 {
@@ -122,6 +131,7 @@ const cursos = [
                     { tipo: "PDF", link: "https://exemplo.com/conjuntos.pdf" },
                     { tipo: "Vídeo", link: "https://youtube.com/watch?v=conjuntos123" },
                     { tipo: "Site", link: "https://brasilescola.uol.com.br/matematica/conjuntos-numericos.htm" }
+                    { tipo: "Imagem", link: "https://brasilescola.uol.com.br/logo.png" },
                 ]
             },
             {
