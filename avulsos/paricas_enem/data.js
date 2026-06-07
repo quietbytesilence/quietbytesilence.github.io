@@ -109,7 +109,7 @@ const cursos = [
                     titulo: "Aula 9 Parte 3: Funções Logarítmicas - 06/06/2026",
                     arquivos: [
                         {tipo:"Site", link: "https://www.todamateria.com.br/funcao-logaritmica/"},
-                        { tipo: "Vídeo", link: "https://www.youtube.com/watch?v=jbdsry6XjMM" },
+                        { tipo: "Vídeo", link: "https://youtu.be/xpUxOm7M76w?si=tMVN-SWGfP5BJcAd" },
                         { tipo: "PDF", link: "http://paginapessoal.utfpr.edu.br/lcpereira/esta-e-uma-pasta/ma02a-t11/FuncaoLogaritmica.pdf" }
                   ]
                 },
