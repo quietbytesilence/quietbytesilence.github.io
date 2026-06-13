@@ -132,6 +132,24 @@ arquivos: [
 ]
 },
 
+{
+titulo: "Aula 10 Parte 1: Operações com Frações - 13/06/2026",
+arquivos: [
+{tipo:"Site", link: "https://www.todamateria.com.br/fracoes/"},
+{ tipo: "Vídeo", link: "https://www.youtube.com/watch?v=VrVP5h-bNqg" },
+{ tipo: "PDF", link: "https://jabora.sc.gov.br/uploads/sites/430/2022/04/1922331_MATEMATICA.pdf" }
+]
+},
+
+
+{
+titulo: "Aula 10 Parte 2: Propriedades dos Logaritmos - 13/06/2026",
+arquivos: [
+{tipo:"Site", link: "https://www.todamateria.com.br/propriedades-dos-logaritmos/"},
+{ tipo: "Vídeo", link: "https://www.youtube.com/watch?v=SEnXq39-Te8" },
+{ tipo: "PDF", link: "https://codap.ufs.br/uploads/page_attach/path/8508/Logaritmos.pdf" }
+]
+},
 
 
 
