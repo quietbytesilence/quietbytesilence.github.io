@@ -1253,18 +1253,36 @@ async function saveStudySession() {
 // ═══════════════════════════════════════════════════════
 async function updateReview(topicId) {
   const intervals = await getIntervals();
-  let rev = await dbGet('reviews', topicId);
   const today = todayStr();
 
-  if (!rev) {
-    rev = { id: topicId, topicId, nextDate: addDays(today, intervals[0]), intervalIdx: 0, history: [] };
+  // Verifica se já existem reviews para este tópico
+  const existingReviews = await dbGetByIndex('reviews', 'topicId', topicId);
+
+  if (!existingReviews || existingReviews.length === 0) {
+    // Cria uma review para CADA intervalo
+    for (let i = 0; i < intervals.length; i++) {
+      const reviewId = uid();
+      await dbPut('reviews', {
+        id: reviewId,
+        topicId: topicId,
+        nextDate: addDays(today, intervals[i]),
+        intervalIdx: i,
+        history: [],
+        done: false
+      });
+    }
   } else {
-    const nextIdx = Math.min(rev.intervalIdx + 1, intervals.length - 1);
-    rev.history.push({ date: today, intervalIdx: rev.intervalIdx });
-    rev.intervalIdx = nextIdx;
-    rev.nextDate = addDays(today, intervals[nextIdx]);
+    // Atualiza a próxima review não concluída
+    const pending = existingReviews
+      .filter(r => !r.done)
+      .sort((a, b) => a.intervalIdx - b.intervalIdx)[0];
+
+    if (pending) {
+      pending.history.push({ date: today, intervalIdx: pending.intervalIdx });
+      pending.done = true;
+      await dbPut('reviews', pending);
+    }
   }
-  await dbPut('reviews', rev);
 }
 
 async function markReviewDone(topicId) {
@@ -1285,13 +1303,24 @@ async function renderReviews() {
   const discMap = Object.fromEntries(discs.map(d => [d.id, d]));
 
   const today = todayStr();
+
+  // Filtra apenas reviews pendentes e pega a próxima de cada tópico
+  const pendingByTopic = {};
+  for (const r of reviews) {
+    if (r.done) continue; // Ignora concluídas
+    if (!pendingByTopic[r.topicId] || r.intervalIdx < pendingByTopic[r.topicId].intervalIdx) {
+      pendingByTopic[r.topicId] = r;
+    }
+  }
+
   const overdue = [], todayItems = [], upcoming = [];
 
-  for (const r of reviews) {
+  for (const r of Object.values(pendingByTopic)) {
     const diff = daysBetween(today, r.nextDate);
     const t = topicMap[r.topicId];
     const d = t ? discMap[t.disciplineId] : null;
     if (!t || !d) continue;
+
     const item = { ...r, topicName: t.name, discName: d.name, diff };
     if (diff < 0) overdue.push(item);
     else if (diff === 0) todayItems.push(item);
@@ -1338,7 +1367,7 @@ function reviewItemHTML(r, cls, dateLabel, intervals) {
     <div class="review-info">
       <div class="review-topic">${esc(r.topicName)}</div>
       <div class="review-disc">${esc(r.discName)}</div>
-      <div class="review-date" style="color:${dotColor};">${dateLabel} · Intervalo: ${inter}d</div>
+      <div class="review-date" style="color:${dotColor};">${dateLabel}</div>
     </div>
     ${showBtn ? `<button class="review-done-btn" onclick="markReviewDone('${r.topicId}')">✓ Feito</button>` : ''}
   </div>`;
