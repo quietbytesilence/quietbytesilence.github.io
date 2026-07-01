@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Quiet Byte Schola Arcanum</title>
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <img src="assets/logo.png" alt="QuietByte Scholar Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1 class="page-title">Nossos Cursos</h1>
+        <p class="page-subtitle">Explore nosso catálogo e encontre o caminho arcano que mais combina com você</p>
+
+        <div class="ornament">&#10087;</div>
+
+        <div class="filter-container">
+            <h3 class="filter-title">Filtrar por categoria:</h3>
+            <div class="filter-options">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="programacao">Programação</button>
+                <button class="filter-btn" data-filter="dados">Ciência de Dados</button>
+                <button class="filter-btn" data-filter="computacao">Computação</button>
+                <button class="filter-btn" data-filter="math">Matemática</button>
+            </div>
+        </div>
+
+        <div id="lista_cursos" class="courses-grid">
+            <!-- Cursos carregados dinamicamente -->
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> &mdash; Todos os direitos reservados</p>
+    </footer>
+
+    <script src="dados.js"></script>
+    <script>
+        document.getElementById('ano').textContent = new Date().getFullYear();
+
+        const cursosContainer = document.getElementById('lista_cursos');
+        let cursosHTML = '';
+
+        if (window.cards) {
+            for (let id in window.cards) {
+                const curso = window.cards[id];
+                cursosHTML += `
+                    <div class="course-card" data-category="${curso.categoria || 'programacao'}">
+                        <h3>${curso.curso}</h3>
+                        <p>${curso.descricao}</p>
+                        <div class="course-details">
+                            <div class="course-meta">
+                                <span>${curso.duracao || '60 horas'}</span>
+                                <span>${curso.nivel || 'Iniciante'}</span>
+                            </div>
+                            <button class="btn btn-secondary" data-course="${id}">Saiba Mais</button>
+                        </div>
+                    </div>
+                `;
+            }
+        } else {
+            cursosHTML = `
+                <div class="course-card">
+                    <h3>Alquimia de Dados</h3>
+                    <p>Domine a transformação de dados brutos em conhecimento valioso através de técnicas avançadas de análise e visualização.</p>
+                    <div class="course-details">
+                        <div class="course-meta">
+                            <span>80 horas</span>
+                            <span>Intermediário</span>
+                        </div>
+                        <button class="btn btn-secondary">Inscrever-se</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        cursosContainer.innerHTML = cursosHTML;
+
+        // Filtros
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const filterValue = button.getAttribute('data-filter');
+                document.querySelectorAll('.course-card').forEach(card => {
+                    card.style.display = (filterValue === 'all' || card.getAttribute('data-category') === filterValue) ? '' : 'none';
+                });
+            });
+        });
+
+        // Botões de inscrição
+        document.querySelectorAll('.enroll-btn, .btn-secondary[data-course]').forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Inscrição no curso realizada com sucesso! Em breve entraremos em contato.');
+            });
+        });
+    </script>
+</body>
+</html>

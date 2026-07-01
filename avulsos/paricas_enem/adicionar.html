@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Materiais — Pré-Enem Quinta dos Paricás</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --bg-hover: #252542;
+            --bg-input: #0d0d18;
+            --accent: #7c3aed;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #2d2d44;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-bottom: 100px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding: 0 0.25rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+            color: white;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px var(--accent-glow);
+        }
+
+        .btn-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+
+        .btn-success:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+
+        .btn-sm {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.78rem;
+            border-radius: 6px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            z-index: 300;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success { border-color: rgba(16,185,129,0.4); color: var(--success); }
+        .toast.info { border-color: rgba(124,58,237,0.4); color: var(--accent-light); }
+
+        /* Module Card */
+        .module-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .module-card:hover {
+            border-color: var(--accent);
+        }
+
+        .module-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .module-header:hover {
+            background: var(--bg-hover);
+        }
+
+        .module-title-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .module-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .module-chevron {
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .module-card.open .module-chevron {
+            transform: rotate(180deg);
+            color: var(--accent-light);
+        }
+
+        .module-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .module-card.open .module-body {
+            max-height: 6000px;
+        }
+
+        .module-content {
+            padding: 1rem 1.25rem;
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Lesson Item */
+        .lesson-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+
+        .lesson-header {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lesson-header:hover {
+            background: var(--bg-hover);
+        }
+
+        .lesson-title-area {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .lesson-title {
+            font-size: 0.9rem;
+            color: var(--accent-light);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lesson-chevron {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .lesson-item.open .lesson-chevron {
+            transform: rotate(180deg);
+            color: var(--accent-light);
+        }
+
+        .lesson-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .lesson-item.open .lesson-body {
+            max-height: 4000px;
+        }
+
+        .lesson-content {
+            padding: 0 1rem 0.75rem;
+        }
+
+        /* File row */
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.2s;
+        }
+
+        .file-row:hover {
+            border-color: var(--accent);
+        }
+
+        .file-type-badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+            min-width: 52px;
+            text-align: center;
+        }
+
+        .badge-PDF { background: rgba(239,68,68,0.15); color: var(--danger); }
+        .badge-Vídeo { background: rgba(16,185,129,0.15); color: var(--success); }
+        .badge-Site { background: rgba(59,130,246,0.15); color: var(--info); }
+        .badge-Imagem { background: rgba(245,158,11,0.15); color: var(--warning); }
+
+        .file-link {
+            flex: 1;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        /* Form inputs */
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.88rem;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--accent);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-row .btn {
+            flex-shrink: 0;
+            margin-bottom: 0;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1.25rem;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .toolbar {
+                flex-direction: column;
+            }
+            .toolbar .btn {
+                justify-content: center;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+            .module-title {
+                font-size: 0.95rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-pen-to-square"></i> Gerenciar Materiais</h1>
+    <p>Pré-Enem Quinta dos Paricás — Matemática</p>
+    <div class="nav-links">
+        <a href="index.html"><i class="fas fa-eye"></i> Ver página</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="toolbar">
+        <button class="btn btn-primary" onclick="openModuleModal()">
+            <i class="fas fa-plus"></i> Novo Módulo
+        </button>
+        <button class="btn btn-success" onclick="exportarDataJS()">
+            <i class="fas fa-download"></i> Baixar data.js
+        </button>
+        <button class="btn btn-outline" onclick="resetarDados()">
+            <i class="fas fa-undo"></i> Recarregar original
+        </button>
+    </div>
+
+    <div id="modules-container">
+        <!-- Renderizado dinamicamente -->
+    </div>
+</div>
+
+<!-- Modal: Módulo -->
+<div class="modal-overlay" id="modal-module">
+    <div class="modal-box">
+        <div class="modal-title" id="modal-module-title">Novo Módulo</div>
+        <input type="hidden" id="modal-module-idx">
+        <div class="form-group">
+            <label class="form-label">Nome do Módulo</label>
+            <input class="form-input" id="modal-module-name" placeholder="Ex: Matemática Básica">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal('modal-module')">Cancelar</button>
+            <button class="btn btn-primary" onclick="salvarModulo()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Aula -->
+<div class="modal-overlay" id="modal-lesson">
+    <div class="modal-box">
+        <div class="modal-title" id="modal-lesson-title">Nova Aula</div>
+        <input type="hidden" id="modal-lesson-module-idx">
+        <input type="hidden" id="modal-lesson-idx">
+        <div class="form-group">
+            <label class="form-label">Nome da Aula</label>
+            <input class="form-input" id="modal-lesson-name" placeholder="Ex: Aula 1: Conjuntos Numéricos">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal('modal-lesson')">Cancelar</button>
+            <button class="btn btn-primary" onclick="salvarAula()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Arquivo -->
+<div class="modal-overlay" id="modal-file">
+    <div class="modal-box">
+        <div class="modal-title" id="modal-file-title">Novo Arquivo</div>
+        <input type="hidden" id="modal-file-module-idx">
+        <input type="hidden" id="modal-file-lesson-idx">
+        <input type="hidden" id="modal-file-idx">
+        <div class="form-group">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="modal-file-type">
+                <option value="PDF">PDF</option>
+                <option value="Vídeo">Vídeo</option>
+                <option value="Site">Site</option>
+                <option value="Imagem">Imagem</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Link / URL</label>
+            <input class="form-input" id="modal-file-link" placeholder="https://...">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal('modal-file')">Cancelar</button>
+            <button class="btn btn-primary" onclick="salvarArquivo()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+// ═══════════════════════════════════════
+// Carrega via <script src="data.js"> (funciona em file://)
+// Declara const cursos no escopo global — acessível pelo nome "cursos"
+// ═══════════════════════════════════════
+const STORAGE_KEY = 'paricas_enem_data_v3';
+let _cursos = [];
+
+function sanitizar(arr) {
+    return arr.filter(function(c) { return c && c.titulo && c.aulas; }).map(function(c) {
+        c.aulas = c.aulas.filter(function(a) { return a && a.titulo && a.arquivos; });
+        return c;
+    });
+}
+
+function init() {
+    try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            _cursos = JSON.parse(saved);
+            renderizar();
+            return;
+        }
+    } catch(e) {}
+
+    // Deep clone a partir da const cursos do data.js
+    _cursos = JSON.parse(JSON.stringify(sanitizar(cursos)));
+    renderizar();
+    salvarDados();
+}
+
+function salvarDados() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(_cursos));
+    } catch(e) {}
+}
+
+function resetarDados() {
+    if (!confirm('Descartar alterações e recarregar o data.js original?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+let toastTimer;
+function toast(msg, type) {
+    type = type || 'info';
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast ' + type + ' show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.className = 'toast'; }, 2500);
+}
+
+// ═══════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(function(m) {
+    m.addEventListener('click', function(e) {
+        if (e.target === m) m.classList.remove('open');
+    });
+});
+
+// ═══════════════════════════════════════
+// EXPORT data.js
+// ═══════════════════════════════════════
+function exportarDataJS() {
+    var lines = [];
+    lines.push('');
+    lines.push('// ============================================');
+    lines.push('// Página de preenchimento automático de materiais');
+    lines.push('// ============================================');
+    lines.push('// Estrutura: Array de cursos, cada um com aulas e arquivos');
+    lines.push('// Tipos aceitos: "PDF", "Vídeo", "Site", "Imagem"');
+    lines.push('');
+    lines.push('const cursos = [');
+
+    for (var mi = 0; mi < _cursos.length; mi++) {
+        var modulo = _cursos[mi];
+        lines.push('    {');
+        lines.push('        titulo: ' + JSON.stringify(modulo.titulo) + ',');
+        lines.push('        aulas: [');
+        for (var ai = 0; ai < modulo.aulas.length; ai++) {
+            var aula = modulo.aulas[ai];
+            lines.push('            {');
+            lines.push('                titulo: ' + JSON.stringify(aula.titulo) + ',');
+            lines.push('                arquivos: [');
+            for (var fi = 0; fi < aula.arquivos.length; fi++) {
+                var arq = aula.arquivos[fi];
+                var comma = fi < aula.arquivos.length - 1 ? ',' : '';
+                lines.push('                    { tipo: ' + JSON.stringify(arq.tipo) + ', link: ' + JSON.stringify(arq.link) + ' }' + comma);
+            }
+            lines.push('                ]');
+            lines.push('            }' + (ai < modulo.aulas.length - 1 ? ',' : ''));
+        }
+        lines.push('        ]');
+        lines.push('    }' + (mi < _cursos.length - 1 ? ',' : ''));
+    }
+
+    lines.push('];');
+    lines.push('');
+
+    var blob = new Blob([lines.join('\n')], { type: 'application/javascript' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.js';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('data.js gerado! Substitua o arquivo na pasta.', 'success');
+}
+
+// ═══════════════════════════════════════
+// MODULE CRUD
+// ═══════════════════════════════════════
+function openModuleModal(idx) {
+    if (idx !== undefined) {
+        document.getElementById('modal-module-idx').value = idx;
+        document.getElementById('modal-module-name').value = _cursos[idx].titulo;
+        document.getElementById('modal-module-title').textContent = 'Editar Módulo';
+    } else {
+        document.getElementById('modal-module-idx').value = '';
+        document.getElementById('modal-module-name').value = '';
+        document.getElementById('modal-module-title').textContent = 'Novo Módulo';
+    }
+    openModal('modal-module');
+}
+
+function salvarModulo() {
+    var idx = document.getElementById('modal-module-idx').value;
+    var nome = document.getElementById('modal-module-name').value.trim();
+    if (!nome) { toast('Digite o nome do módulo', 'info'); return; }
+
+    if (idx !== '') {
+        _cursos[idx].titulo = nome;
+    } else {
+        _cursos.push({ titulo: nome, aulas: [] });
+    }
+    salvarDados();
+    closeModal('modal-module');
+    renderizar();
+    toast(idx !== '' ? 'Módulo atualizado!' : 'Módulo adicionado!', 'success');
+}
+
+function removerModulo(idx) {
+    var nome = _cursos[idx].titulo;
+    if (!confirm('Remover o módulo "' + nome + '" e todas as suas aulas?')) return;
+    _cursos.splice(idx, 1);
+    salvarDados();
+    renderizar();
+    toast('Módulo removido.', 'info');
+}
+
+// ═══════════════════════════════════════
+// LESSON CRUD
+// ═══════════════════════════════════════
+function openLessonModal(modIdx, lessonIdx) {
+    document.getElementById('modal-lesson-module-idx').value = modIdx;
+    if (lessonIdx !== undefined) {
+        document.getElementById('modal-lesson-idx').value = lessonIdx;
+        document.getElementById('modal-lesson-name').value = _cursos[modIdx].aulas[lessonIdx].titulo;
+        document.getElementById('modal-lesson-title').textContent = 'Editar Aula';
+    } else {
+        document.getElementById('modal-lesson-idx').value = '';
+        document.getElementById('modal-lesson-name').value = '';
+        document.getElementById('modal-lesson-title').textContent = 'Nova Aula';
+    }
+    openModal('modal-lesson');
+}
+
+function salvarAula() {
+    var modIdx = parseInt(document.getElementById('modal-lesson-module-idx').value);
+    var lessonIdx = document.getElementById('modal-lesson-idx').value;
+    var nome = document.getElementById('modal-lesson-name').value.trim();
+    if (!nome) { toast('Digite o nome da aula', 'info'); return; }
+
+    if (lessonIdx !== '') {
+        _cursos[modIdx].aulas[parseInt(lessonIdx)].titulo = nome;
+    } else {
+        _cursos[modIdx].aulas.push({ titulo: nome, arquivos: [] });
+    }
+    salvarDados();
+    closeModal('modal-lesson');
+    renderizar();
+    toast(lessonIdx !== '' ? 'Aula atualizada!' : 'Aula adicionada!', 'success');
+}
+
+function removerAula(modIdx, lessonIdx) {
+    var nome = _cursos[modIdx].aulas[lessonIdx].titulo;
+    if (!confirm('Remover a aula "' + nome + '"?')) return;
+    _cursos[modIdx].aulas.splice(lessonIdx, 1);
+    salvarDados();
+    renderizar();
+    toast('Aula removida.', 'info');
+}
+
+// ═══════════════════════════════════════
+// FILE CRUD
+// ═══════════════════════════════════════
+function openFileModal(modIdx, lessonIdx, fileIdx) {
+    document.getElementById('modal-file-module-idx').value = modIdx;
+    document.getElementById('modal-file-lesson-idx').value = lessonIdx;
+    if (fileIdx !== undefined) {
+        document.getElementById('modal-file-idx').value = fileIdx;
+        var arq = _cursos[modIdx].aulas[lessonIdx].arquivos[fileIdx];
+        document.getElementById('modal-file-type').value = arq.tipo;
+        document.getElementById('modal-file-link').value = arq.link;
+        document.getElementById('modal-file-title').textContent = 'Editar Arquivo';
+    } else {
+        document.getElementById('modal-file-idx').value = '';
+        document.getElementById('modal-file-type').value = 'PDF';
+        document.getElementById('modal-file-link').value = '';
+        document.getElementById('modal-file-title').textContent = 'Novo Arquivo';
+    }
+    openModal('modal-file');
+}
+
+function salvarArquivo() {
+    var modIdx = parseInt(document.getElementById('modal-file-module-idx').value);
+    var lessonIdx = parseInt(document.getElementById('modal-file-lesson-idx').value);
+    var fileIdx = document.getElementById('modal-file-idx').value;
+    var tipo = document.getElementById('modal-file-type').value;
+    var link = document.getElementById('modal-file-link').value.trim();
+    if (!link) { toast('Digite o link do arquivo', 'info'); return; }
+
+    if (fileIdx !== '') {
+        _cursos[modIdx].aulas[lessonIdx].arquivos[parseInt(fileIdx)] = { tipo: tipo, link: link };
+    } else {
+        _cursos[modIdx].aulas[lessonIdx].arquivos.push({ tipo: tipo, link: link });
+    }
+    salvarDados();
+    closeModal('modal-file');
+    renderizar();
+    toast(fileIdx !== '' ? 'Arquivo atualizado!' : 'Arquivo adicionado!', 'success');
+}
+
+function removerArquivo(modIdx, lessonIdx, fileIdx) {
+    if (!confirm('Remover este arquivo?')) return;
+    _cursos[modIdx].aulas[lessonIdx].arquivos.splice(fileIdx, 1);
+    salvarDados();
+    renderizar();
+    toast('Arquivo removido.', 'info');
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function renderizar() {
+    var container = document.getElementById('modules-container');
+    var html = '';
+
+    if (!_cursos.length) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-book-open"></i><p>Nenhum módulo cadastrado.</p><button class="btn btn-primary btn-sm" onclick="openModuleModal()"><i class="fas fa-plus"></i> Criar Primeiro Módulo</button></div>';
+        return;
+    }
+
+    for (var mi = 0; mi < _cursos.length; mi++) {
+        var modulo = _cursos[mi];
+        html += '<div class="module-card open" id="mod-' + mi + '">';
+        html += '<div class="module-header" onclick="toggleModulo(' + mi + ')">';
+        html += '<div class="module-title-area">';
+        html += '<i class="fas fa-graduation-cap" style="color:var(--accent-light);"></i>';
+        html += '<span class="module-title">' + esc(modulo.titulo) + '</span>';
+        html += '<span style="font-size:0.75rem;color:var(--text-muted);">(' + modulo.aulas.length + ' aulas)</span>';
+        html += '</div>';
+        html += '<div style="display:flex;gap:0.4rem;align-items:center;">';
+        html += '<button class="btn btn-outline btn-sm btn-icon" onclick="event.stopPropagation();openModuleModal(' + mi + ')" title="Editar módulo"><i class="fas fa-pen"></i></button>';
+        html += '<button class="btn btn-danger btn-sm btn-icon" onclick="event.stopPropagation();removerModulo(' + mi + ')" title="Remover módulo"><i class="fas fa-trash"></i></button>';
+        html += '<i class="fas fa-chevron-down module-chevron"></i>';
+        html += '</div></div>';
+        html += '<div class="module-body"><div class="module-content">';
+        html += '<div class="module-actions"><button class="btn btn-primary btn-sm" onclick="openLessonModal(' + mi + ')"><i class="fas fa-plus"></i> Nova Aula</button></div>';
+
+        for (var ai = 0; ai < modulo.aulas.length; ai++) {
+            var aula = modulo.aulas[ai];
+            html += '<div class="lesson-item open" id="lesson-' + mi + '-' + ai + '">';
+            html += '<div class="lesson-header" onclick="toggleAula(' + mi + ',' + ai + ')">';
+            html += '<div class="lesson-title-area">';
+            html += '<i class="fas fa-chalkboard-teacher" style="color:var(--accent);"></i>';
+            html += '<span class="lesson-title">' + esc(aula.titulo) + '</span>';
+            html += '<span style="font-size:0.7rem;color:var(--text-muted);">(' + aula.arquivos.length + ' arquivos)</span>';
+            html += '</div>';
+            html += '<div style="display:flex;gap:0.3rem;align-items:center;">';
+            html += '<button class="btn btn-outline btn-sm btn-icon" onclick="event.stopPropagation();openLessonModal(' + mi + ',' + ai + ')" title="Editar aula"><i class="fas fa-pen"></i></button>';
+            html += '<button class="btn btn-danger btn-sm btn-icon" onclick="event.stopPropagation();removerAula(' + mi + ',' + ai + ')" title="Remover aula"><i class="fas fa-trash"></i></button>';
+            html += '<i class="fas fa-chevron-down lesson-chevron"></i>';
+            html += '</div></div>';
+            html += '<div class="lesson-body"><div class="lesson-content"><div class="file-list">';
+
+            for (var fi = 0; fi < aula.arquivos.length; fi++) {
+                var arq = aula.arquivos[fi];
+                html += '<div class="file-row">';
+                html += '<span class="file-type-badge badge-' + esc(arq.tipo) + '">' + esc(arq.tipo) + '</span>';
+                html += '<span class="file-link" title="' + esc(arq.link) + '">' + esc(arq.link) + '</span>';
+                html += '<button class="btn btn-outline btn-sm btn-icon" onclick="openFileModal(' + mi + ',' + ai + ',' + fi + ')" title="Editar"><i class="fas fa-pen"></i></button>';
+                html += '<button class="btn btn-danger btn-sm btn-icon" onclick="removerArquivo(' + mi + ',' + ai + ',' + fi + ')" title="Remover"><i class="fas fa-trash"></i></button>';
+                html += '</div>';
+            }
+
+            html += '<button class="btn btn-outline btn-sm" style="margin-top:0.5rem;width:100%;" onclick="openFileModal(' + mi + ',' + ai + ')"><i class="fas fa-plus"></i> Adicionar Arquivo</button>';
+            html += '</div></div></div></div>';
+        }
+
+        html += '</div></div></div>';
+    }
+
+    container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// TOGGLE
+// ═══════════════════════════════════════
+function toggleModulo(idx) {
+    document.getElementById('mod-' + idx).classList.toggle('open');
+}
+
+function toggleAula(modIdx, lessonIdx) {
+    document.getElementById('lesson-' + modIdx + '-' + lessonIdx).classList.toggle('open');
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ═══════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════
+init();
+</script>
+</body>
+</html>

@@ -779,6 +779,12 @@
     <button class="modal-close" onclick="closeModal('modal-quick-study')">✕</button>
     <input type="hidden" id="qs-topic-id">
     <input type="hidden" id="qs-disc-id">
+    <div class="form-group" id="qs-topic-group" style="display:none;">
+      <label class="form-label">Tópico</label>
+      <select class="form-select" id="qs-topic-sel" onchange="document.getElementById('qs-topic-id').value=this.value">
+        <option value="">Selecione o tópico...</option>
+      </select>
+    </div>
     <div class="form-group">
       <label class="form-label">Tempo estudado</label>
       <div class="time-inputs">
@@ -1139,7 +1145,6 @@ async function openDeleteDisc() {
     await dbDeleteWhere('reviews', 'topicId', t.id);
     await dbDelete('topics', t.id);
   }
-  await dbDeleteWhere('sessions', 'disciplineId', currentDiscId);
   await dbDelete('disciplines', currentDiscId);
   closeDiscDetail();
   showToast('Disciplina excluída', 'info');
@@ -1147,16 +1152,25 @@ async function openDeleteDisc() {
 
 function openQuickStudyFromDisc() {
   if (!currentDiscId) return;
-  openModal('modal-quick-study');
   document.getElementById('qs-disc-id').value = currentDiscId;
   document.getElementById('qs-topic-id').value = '';
   document.getElementById('quick-study-title').textContent = 'Registrar Estudo';
+  document.getElementById('qs-hours').value = '';
+  document.getElementById('qs-mins').value = '';
+  document.getElementById('qs-obs').value = '';
+  openModal('modal-quick-study');
   loadQSTopics(currentDiscId);
 }
 
 async function loadQSTopics(discId) {
-  // If called via openQuickStudyModal we set topic directly
-  // If called generically, provide select
+  const sel = document.getElementById('qs-topic-sel');
+  if (!sel) return;
+  const topics = await dbGetByIndex('topics', 'disciplineId', discId);
+  sel.innerHTML = '<option value="">Selecione o tópico...</option>';
+  for (const t of topics) {
+    sel.innerHTML += `<option value="${t.id}">${esc(t.name)}</option>`;
+  }
+  document.getElementById('qs-topic-group').style.display = 'block';
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1165,6 +1179,7 @@ async function loadQSTopics(discId) {
 function openQuickStudyModal(discId, topicId, topicName) {
   document.getElementById('qs-disc-id').value = discId;
   document.getElementById('qs-topic-id').value = topicId;
+  document.getElementById('qs-topic-group').style.display = 'none';
   document.getElementById('quick-study-title').textContent = `Estudar: ${topicName}`;
   document.getElementById('qs-hours').value = '';
   document.getElementById('qs-mins').value = '';
@@ -1241,6 +1256,8 @@ async function saveStudySession() {
   await dbPut('sessions', { id: uid(), disciplineId: discId, topicId, minutes: mins, date: todayStr(), observations: obs });
   await updateReview(topicId);
 
+  document.getElementById('study-disc-sel').value = '';
+  document.getElementById('study-topic-sel').innerHTML = '<option value="">Selecione a disciplina primeiro</option>';
   document.getElementById('study-hours').value = '';
   document.getElementById('study-mins').value = '';
   document.getElementById('study-obs').value = '';
@@ -1255,15 +1272,13 @@ async function updateReview(topicId) {
   const intervals = await getIntervals();
   const today = todayStr();
 
-  // Verifica se já existem reviews para este tópico
   const existingReviews = await dbGetByIndex('reviews', 'topicId', topicId);
 
   if (!existingReviews || existingReviews.length === 0) {
-    // Cria uma review para CADA intervalo
+    // Primeira sessão: cria uma review para CADA intervalo, todas com nextDate = today + interval[i]
     for (let i = 0; i < intervals.length; i++) {
-      const reviewId = uid();
       await dbPut('reviews', {
-        id: reviewId,
+        id: uid(),
         topicId: topicId,
         nextDate: addDays(today, intervals[i]),
         intervalIdx: i,
@@ -1272,7 +1287,7 @@ async function updateReview(topicId) {
       });
     }
   } else {
-    // Atualiza a próxima review não concluída
+    // Marca a próxima review pendente como concluída
     const pending = existingReviews
       .filter(r => !r.done)
       .sort((a, b) => a.intervalIdx - b.intervalIdx)[0];
@@ -1281,6 +1296,14 @@ async function updateReview(topicId) {
       pending.history.push({ date: today, intervalIdx: pending.intervalIdx });
       pending.done = true;
       await dbPut('reviews', pending);
+
+      // Recalcula o nextDate das revisões restantes a partir de hoje
+      for (const r of existingReviews) {
+        if (!r.done && r.intervalIdx > pending.intervalIdx) {
+          r.nextDate = addDays(today, intervals[r.intervalIdx]);
+          await dbPut('reviews', r);
+        }
+      }
     }
   }
 }
@@ -1378,7 +1401,7 @@ async function updateReviewBadge() {
   const today = todayStr();
   let count = 0;
   for (const r of reviews) {
-    if (daysBetween(today, r.nextDate) <= 0) count++;
+    if (!r.done && daysBetween(today, r.nextDate) <= 0) count++;
   }
   const badge = document.getElementById('reviews-badge');
   badge.textContent = count;
@@ -1439,6 +1462,7 @@ async function renderDashboard() {
   const today = todayStr();
   let pendingToday = 0, overdue = 0;
   for (const r of reviews) {
+    if (r.done) continue;
     const diff = daysBetween(today, r.nextDate);
     if (diff === 0) pendingToday++;
     if (diff < 0) overdue++;
@@ -1705,7 +1729,6 @@ async function removeInterval(idx) {
 
 (async () => {
   await openDB();
-  await renderDashboard();
   await renderSettingsIntervals();
   navigate('dash');
 

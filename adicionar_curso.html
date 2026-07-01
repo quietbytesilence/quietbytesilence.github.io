@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Cursos — Quiet Byte Schola Arcanum</title>
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .categoria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.5rem;
+        }
+        .cat-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+        .cat-chip.active {
+            border-color: var(--gold-dark);
+            background: rgba(201,169,110,0.12);
+            color: var(--gold);
+        }
+        .cat-chip input { display: none; }
+        .descricao-preview {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.6rem;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        .header-actions a {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .header-actions a:hover { color: var(--gold-light); }
+        @media (max-width: 600px) {
+            .categoria-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <img src="assets/logo.png" alt="QuietByte" class="logo">
+</header>
+
+<nav class="nav-bar">
+    <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="validar.html">Validar Certificado</a></li>
+        <li><a href="contato.html">Fale Conosco</a></li>
+    </ul>
+</nav>
+
+<main class="content" style="max-width:760px;">
+    <h1 class="page-title">Gerenciar Cursos</h1>
+    <p class="page-subtitle">Adicione, edite e remova cursos do catálogo</p>
+    <div class="ornament">&#10087;</div>
+
+    <div class="toolbar" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <button class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus" style="font-style:normal;">+</i> Novo Curso</button>
+        <button class="btn btn-success" onclick="exportar()" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:var(--success);padding:0.65rem 1.25rem;border-radius:4px;cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:0.9rem;"><i class="fas fa-download" style="font-style:normal;">↓</i> Baixar dados.js</button>
+        <button class="btn btn-outline" onclick="resetar()" style="padding:0.65rem 1.25rem;border-radius:4px;cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:0.9rem;">↺ Recarregar original</button>
+    </div>
+
+    <div id="lista-cursos"></div>
+</main>
+
+<footer>
+    <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> &mdash; Todos os direitos reservados</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-curso" style="position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s ease;padding:1rem;">
+<div class="modal-box" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;padding:1.5rem;">
+<div class="modal-title" id="modal-title" style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--gold);margin-bottom:1.25rem;">Novo Curso</div>
+<input type="hidden" id="edit-id">
+<div class="form-group" style="margin-bottom:1rem;">
+<label class="form-label" style="display:block;font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.3rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">ID do curso</label>
+<input class="form-input" id="campo-id" placeholder="Ex: matematica_basica" style="width:100%;padding:0.6rem 0.75rem;background:var(--bg-deep);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-family:var(--font-body);font-size:0.88rem;">
+</div>
+<div class="form-group" style="margin-bottom:1rem;">
+<label class="form-label">Nome do curso</label>
+<input class="form-input" id="campo-nome" placeholder="Ex: Matemática Básica">
+</div>
+<div class="form-group" style="margin-bottom:1rem;">
+<label class="form-label">Descrição</label>
+<textarea class="form-input" id="campo-desc" placeholder="Descrição do curso..." style="resize:none;min-height:70px;font-family:var(--font-body);"></textarea>
+</div>
+<div class="form-group" style="margin-bottom:1rem;">
+<label class="form-label">Categoria</label>
+<div class="categoria-grid" id="campo-cat">
+<label class="cat-chip" data-val="programacao"><input type="radio" name="cat" value="programacao"> Programação</label>
+<label class="cat-chip" data-val="dados"><input type="radio" name="cat" value="dados"> Ciência de Dados</label>
+<label class="cat-chip" data-val="computacao"><input type="radio" name="cat" value="computacao"> Computação</label>
+<label class="cat-chip" data-val="math"><input type="radio" name="cat" value="math"> Matemática</label>
+</div>
+</div>
+<div class="form-row" style="display:flex;gap:0.75rem;margin-bottom:1rem;">
+<div class="form-group" style="flex:1;">
+<label class="form-label">Duração</label>
+<input class="form-input" id="campo-duracao" placeholder="Ex: 80 horas">
+</div>
+<div class="form-group" style="flex:1;">
+<label class="form-label">Nível</label>
+<select class="form-input" id="campo-nivel"><option value="">Selecione...</option><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
+</div>
+</div>
+<div class="modal-actions" style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.25rem;">
+<button class="btn btn-outline" onclick="fecharModal()" style="padding:0.6rem 1.2rem;border-radius:4px;cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:0.85rem;">Cancelar</button>
+<button class="btn btn-primary" onclick="salvar()" style="padding:0.6rem 1.8rem;border-radius:4px;cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:0.85rem;">Salvar</button>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast-curso" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;padding:10px 24px;font-size:0.9rem;z-index:300;opacity:0;transition:all 0.3s ease;pointer-events:none;"></div>
+
+<script src="dados.js"></script>
+<script>
+// ═══════════════════════════════════════
+// State
+// ═══════════════════════════════════════
+var STORAGE_KEY = 'qbsa_cursos_v1';
+var _cards = {};
+
+function sanitizar(obj) {
+    var out = {};
+    for (var k in obj) {
+        if (obj[k] && obj[k].curso) out[k] = obj[k];
+    }
+    return out;
+}
+
+function init() {
+    try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) { _cards = JSON.parse(saved); renderizar(); return; }
+    } catch(e) {}
+    _cards = JSON.parse(JSON.stringify(sanitizar(window.cards)));
+    renderizar();
+    salvar();
+}
+
+function salvar() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(_cards)); } catch(e) {}
+}
+
+function resetar() {
+    if (!confirm('Descartar alterações e recarregar dados originais?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+}
+
+// ═══════════════════════════════════════
+// Toast
+// ═══════════════════════════════════════
+var _tt;
+function toast(msg, tipo) {
+    tipo = tipo || 'info';
+    var el = document.getElementById('toast-curso');
+    el.textContent = msg;
+    el.style.opacity = '1';
+    el.style.transform = 'translateX(-50%) translateY(0)';
+    el.style.borderColor = tipo === 'success' ? 'rgba(16,185,129,0.4)' : 'rgba(201,169,110,0.4)';
+    el.style.color = tipo === 'success' ? '#4ade80' : '#d4bc8b';
+    clearTimeout(_tt);
+    _tt = setTimeout(function(){ el.style.opacity = '0'; el.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
+}
+
+// ═══════════════════════════════════════
+// Modal
+// ═══════════════════════════════════════
+function abrirModal(id) {
+    document.getElementById('edit-id').value = id || '';
+    document.getElementById('modal-title').textContent = id ? 'Editar Curso' : 'Novo Curso';
+    document.getElementById('campo-id').value = id || '';
+    if (id && _cards[id]) {
+        var c = _cards[id];
+        document.getElementById('campo-nome').value = c.curso || '';
+        document.getElementById('campo-desc').value = c.descricao || '';
+        document.getElementById('campo-duracao').value = c.duracao || '';
+        document.getElementById('campo-nivel').value = c.nivel || '';
+        // Radio
+        var cats = document.querySelectorAll('#campo-cat .cat-chip');
+        for (var i = 0; i < cats.length; i++) {
+            var inp = cats[i].querySelector('input');
+            inp.checked = inp.value === (c.categoria || '');
+            cats[i].classList.toggle('active', inp.checked);
+        }
+    } else {
+        document.getElementById('campo-nome').value = '';
+        document.getElementById('campo-desc').value = '';
+        document.getElementById('campo-duracao').value = '';
+        document.getElementById('campo-nivel').value = '';
+        var cats = document.querySelectorAll('#campo-cat .cat-chip');
+        for (var i = 0; i < cats.length; i++) {
+            cats[i].querySelector('input').checked = false;
+            cats[i].classList.remove('active');
+        }
+    }
+    document.getElementById('campo-id').disabled = !!id;
+    document.getElementById('modal-curso').style.opacity = '1';
+    document.getElementById('modal-curso').style.pointerEvents = 'all';
+}
+
+function fecharModal() {
+    document.getElementById('modal-curso').style.opacity = '0';
+    document.getElementById('modal-curso').style.pointerEvents = 'none';
+}
+
+document.getElementById('modal-curso').addEventListener('click', function(e) {
+    if (e.target === this) fecharModal();
+});
+
+// Radio chip toggle
+var chips = document.querySelectorAll('#campo-cat .cat-chip');
+for (var i = 0; i < chips.length; i++) {
+    (function(chip) {
+        chip.addEventListener('click', function() {
+            var chips2 = document.querySelectorAll('#campo-cat .cat-chip');
+            for (var j = 0; j < chips2.length; j++) chips2[j].classList.remove('active');
+            chip.classList.add('active');
+            chip.querySelector('input').checked = true;
+        });
+    })(chips[i]);
+}
+
+// ═══════════════════════════════════════
+// CRUD
+// ═══════════════════════════════════════
+function salvar() {
+    var editId = document.getElementById('edit-id').value;
+    var id = document.getElementById('campo-id').value.trim();
+    var nome = document.getElementById('campo-nome').value.trim();
+    var desc = document.getElementById('campo-desc').value.trim();
+    var duracao = document.getElementById('campo-duracao').value.trim();
+    var nivel = document.getElementById('campo-nivel').value;
+
+    var cat = '';
+    var chips = document.querySelectorAll('#campo-cat .cat-chip');
+    for (var i = 0; i < chips.length; i++) {
+        if (chips[i].querySelector('input').checked) { cat = chips[i].querySelector('input').value; break; }
+    }
+
+    if (!id || !nome || !desc || !cat || !duracao || !nivel) {
+        toast('Preencha todos os campos', 'info'); return;
+    }
+
+    if (!editId && _cards[id]) {
+        toast('Já existe um curso com este ID', 'info'); return;
+    }
+
+    _cards[id] = { curso: nome, descricao: desc, categoria: cat, duracao: duracao, nivel: nivel };
+
+    if (editId && editId !== id) delete _cards[editId];
+
+    salvar();
+    fecharModal();
+    renderizar();
+    toast(editId ? 'Curso atualizado!' : 'Curso adicionado!', 'success');
+}
+
+function remover(id) {
+    if (!confirm('Remover o curso "' + _cards[id].curso + '"?')) return;
+    delete _cards[id];
+    salvar();
+    renderizar();
+    toast('Curso removido.', 'info');
+}
+
+// ═══════════════════════════════════════
+// Export
+// ═══════════════════════════════════════
+function exportar() {
+    var lines = [];
+    lines.push('/*categorias');
+    lines.push('programacao');
+    lines.push('dados');
+    lines.push('computacao');
+    lines.push('math');
+    lines.push('===========');
+    lines.push('niveis');
+    lines.push('Iniciante');
+    lines.push('Intermedi\u00E1rio');
+    lines.push('Avan\u00E7ado');
+    lines.push('*/');
+    lines.push('');
+    lines.push('window.cards = {');
+
+    var keys = Object.keys(_cards);
+    for (var i = 0; i < keys.length; i++) {
+        var c = _cards[keys[i]];
+        lines.push('    ' + JSON.stringify(keys[i]) + ': {');
+        lines.push('        curso: ' + JSON.stringify(c.curso) + ',');
+        lines.push('        descricao: ' + JSON.stringify(c.descricao) + ',');
+        lines.push('        categoria: ' + JSON.stringify(c.categoria) + ',');
+        lines.push('        duracao: ' + JSON.stringify(c.duracao) + ',');
+        lines.push('        nivel: ' + JSON.stringify(c.nivel));
+        lines.push('    }' + (i < keys.length - 1 ? ',' : ''));
+    }
+
+    lines.push('};');
+    lines.push('');
+
+    var blob = new Blob([lines.join('\n')], { type: 'application/javascript' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'dados.js';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('dados.js gerado! Substitua o arquivo.', 'success');
+}
+
+// ═══════════════════════════════════════
+// Render
+// ═══════════════════════════════════════
+function renderizar() {
+    var container = document.getElementById('lista-cursos');
+    var html = '';
+
+    var keys = Object.keys(_cards);
+    if (!keys.length) {
+        container.innerHTML = '<div class="empty-state"><div style="font-size:2.5rem;opacity:0.4;text-align:center;color:var(--text-muted);">📚</div><p style="text-align:center;color:var(--text-muted);">Nenhum curso cadastrado.</p></div>';
+        return;
+    }
+
+    for (var i = 0; i < keys.length; i++) {
+        var c = _cards[keys[i]];
+        var categoriaLabel = ({ programacao:'Programação', dados:'Dados', computacao:'Computação', math:'Matemática' })[c.categoria] || c.categoria;
+        html += '<div class="module-card open" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;margin-bottom:1rem;overflow:hidden;">';
+        html += '<div style="padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;background:var(--bg-elevated);border-bottom:1px solid var(--border);">';
+        html += '<div style="flex:1;min-width:0;"><div style="font-family:var(--font-display);font-weight:600;font-size:1.1rem;color:var(--gold);">' + esc(c.curso) + '</div>';
+        html += '<div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;"><code style="background:var(--bg-deep);padding:0.1rem 0.4rem;border-radius:3px;font-size:0.75rem;">' + esc(keys[i]) + '</code> &middot; ' + esc(categoriaLabel) + ' &middot; ' + esc(c.nivel) + ' &middot; ' + esc(c.duracao) + '</div></div>';
+        html += '<div style="display:flex;gap:0.4rem;flex-shrink:0;"><button class="btn btn-outline btn-sm" onclick="abrirModal(' + JSON.stringify(keys[i]) + ')" style="padding:0.3rem 0.7rem;font-size:0.78rem;border-radius:4px;cursor:pointer;">✏️ Editar</button>';
+        html += '<button class="btn btn-danger btn-sm" onclick="remover(' + JSON.stringify(keys[i]) + ')" style="padding:0.3rem 0.7rem;font-size:0.78rem;border-radius:4px;cursor:pointer;">🗑️</button></div></div>';
+        html += '<div style="padding:0.75rem 1.25rem;"><span class="descricao-preview">' + esc(c.descricao) + '</span></div>';
+        html += '</div>';
+    }
+
+    container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// Utils
+// ═══════════════════════════════════════
+function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ═══════════════════════════════════════
+// Boot
+// ═══════════════════════════════════════
+document.getElementById('ano').textContent = new Date().getFullYear();
+init();
+</script>
+</body>
+</html>

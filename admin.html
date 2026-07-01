@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gerenciar Certificados</title>
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <img src="assets/logo.png" alt="QuietByte Schola Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1 class="page-title">Gerenciar Certificados</h1>
+        <p class="page-subtitle">Adicione, visualize e remova certificados do sistema</p>
+
+        <div class="ornament">&#10087;</div>
+
+        <div class="card">
+            <h2 class="card-title">Adicionar Novo Certificado</h2>
+            <div class="form-group">
+                <label for="codigo">Código do Certificado</label>
+                <input type="text" id="codigo" placeholder="Ex: 05d92cde1d3f168f6b33a3434c47a804">
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome do Aluno</label>
+                <input type="text" id="nome" placeholder="Ex: João da Silva">
+            </div>
+            <div class="form-group">
+                <label for="curso">Curso</label>
+                <input type="text" id="curso" placeholder="Ex: Alquimia de Dados">
+            </div>
+            <div class="form-group">
+                <label for="carga">Carga Horária (horas)</label>
+                <input type="number" id="carga" placeholder="Ex: 80" min="1">
+            </div>
+            <div class="form-group">
+                <label for="data">Data de Conclusão</label>
+                <input type="text" id="data" placeholder="Ex: 15/10/2025">
+            </div>
+            <button class="btn btn-primary" onclick="adicionar()">Adicionar Certificado</button>
+            <div id="msg" class="msg"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Certificados Cadastrados</h2>
+            <div id="lista-certificados"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> &mdash; Todos os direitos reservados</p>
+    </footer>
+
+    <script src="certificados.js"></script>
+    <script>
+        document.getElementById('ano').textContent = new Date().getFullYear();
+
+        function mostrarMensagem(texto, tipo) {
+            const msg = document.getElementById('msg');
+            msg.textContent = texto;
+            msg.className = 'msg msg-' + tipo;
+            msg.style.display = 'block';
+            setTimeout(() => { msg.style.display = 'none'; }, 4000);
+        }
+
+        function adicionar() {
+            const codigo = document.getElementById('codigo').value.trim();
+            const nome = document.getElementById('nome').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const carga = document.getElementById('carga').value.trim();
+            const data = document.getElementById('data').value.trim();
+
+            const resultado = window.adicionarCertificado(codigo, nome, curso, carga, data);
+
+            if (resultado.sucesso) {
+                mostrarMensagem(resultado.mensagem, 'success');
+                document.querySelectorAll('#codigo, #nome, #curso, #carga, #data').forEach(el => el.value = '');
+                renderizarLista();
+            } else {
+                mostrarMensagem(resultado.mensagem, 'error');
+            }
+        }
+
+        function remover(codigo) {
+            if (confirm('Tem certeza que deseja remover o certificado ' + codigo + '?')) {
+                const resultado = window.removerCertificado(codigo);
+                mostrarMensagem(resultado.mensagem, resultado.sucesso ? 'success' : 'error');
+                if (resultado.sucesso) renderizarLista();
+            }
+        }
+
+        function renderizarLista() {
+            const container = document.getElementById('lista-certificados');
+            const certificados = window.listarCertificados();
+
+            if (certificados.length === 0) {
+                container.innerHTML = '<div class="empty-state">Nenhum certificado cadastrado ainda.</div>';
+                return;
+            }
+
+            let html = `<table class="data-table"><thead><tr>
+                <th>Código</th><th>Aluno</th><th>Curso</th><th>Carga</th><th>Data</th><th>Ação</th>
+            </tr></thead><tbody>`;
+
+            certificados.forEach(cert => {
+                html += `<tr>
+                    <td><code>${cert.codigo}</code></td>
+                    <td>${cert.nome}</td>
+                    <td>${cert.curso}</td>
+                    <td>${cert.carga}h</td>
+                    <td>${cert.data}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="remover('${cert.codigo}')">Remover</button></td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        renderizarLista();
+    </script>
+</body>
+</html>

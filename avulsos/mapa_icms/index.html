@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulso da Floresta - Mapa Interativo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #ffffff;
+            --surface: #f7f7f7;
+            --card: #f0f0f0;
+            --accent: #d14900;
+            --accent2: #800020;
+            --text: #1a1a1a;
+            --text2: #666666;
+            --border: #d0d0d0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            height: 56px;
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-controls select,
+        .header-controls input {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 5px 8px;
+            font-size: 0.82rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .header-controls select:focus,
+        .header-controls input:focus {
+            border-color: var(--accent);
+        }
+        .header-controls label {
+            font-size: 0.78rem;
+            color: var(--text2);
+            white-space: nowrap;
+        }
+        .ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .back-btn {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.82rem;
+            padding: 5px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .back-btn:hover {
+            background: var(--card);
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        /* Map */
+        #map {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 300px;
+            bottom: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            right: 0;
+            bottom: 0;
+            width: 300px;
+            background: rgba(255,255,255,0.97);
+            border-left: 1px solid var(--border);
+            padding: 16px;
+            overflow-y: auto;
+            z-index: 500;
+        }
+        .sidebar h3 {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .sidebar .search-box {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            outline: none;
+            margin-bottom: 12px;
+        }
+        .sidebar .search-box:focus {
+            border-color: var(--accent);
+        }
+        .sidebar .search-box::placeholder {
+            color: #6a7a9a;
+        }
+
+        /* Municipality list */
+        .mun-list {
+            list-style: none;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        .mun-list li {
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            color: var(--text2);
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mun-list li:hover {
+            background: var(--card);
+            color: var(--text);
+            border-left-color: var(--accent);
+        }
+        .mun-list li .val {
+            font-size: 0.72rem;
+            opacity: 0.7;
+        }
+        .mun-list li.active {
+            background: rgba(230,81,0,0.15);
+            color: var(--text);
+            border-left-color: var(--accent);
+        }
+
+        /* Scrollbar */
+        .mun-list::-webkit-scrollbar,
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .mun-list::-webkit-scrollbar-thumb,
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* Legend */
+        .legend {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: var(--text);
+            font-size: 0.78rem;
+            line-height: 1.6;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            max-width: 210px;
+        }
+        .legend h4 {
+            margin: 0 0 4px 0;
+            font-size: 0.76rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .legend i {
+            width: 14px;
+            height: 12px;
+            float: left;
+            margin-right: 6px;
+            border-radius: 2px;
+            margin-top: 3px;
+        }
+        .legend .row {
+            clear: both;
+            margin-bottom: 1px;
+        }
+
+        /* Leaflet overrides */
+        .leaflet-container {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f0f0f0;
+        }
+        .leaflet-control-zoom a {
+            background: #fff !important;
+            color: #333 !important;
+            border-color: var(--border) !important;
+        }
+        .leaflet-control-zoom a:hover {
+            background: #f5f5f5 !important;
+        }
+        .leaflet-control-attribution {
+            background: rgba(255,255,255,0.85) !important;
+            color: #666 !important;
+        }
+        .leaflet-control-attribution a {
+            color: var(--accent) !important;
+        }
+
+        .map-tooltip {
+            background: rgba(255,255,255,0.97) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text) !important;
+            border-radius: 6px !important;
+            padding: 8px 12px !important;
+            font-size: 0.82rem !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12) !important;
+        }
+        .map-tooltip::before {
+            border-top-color: var(--border) !important;
+        }
+
+        /* Loading */
+        .loading {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            transition: opacity 0.5s ease;
+        }
+        .loading.hidden { opacity: 0; pointer-events: none; }
+        .loading .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid #ddd;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading p { color: var(--text2); font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            #map {
+                right: 0;
+            }
+            .header h1 { font-size: 1rem; }
+        }
+        @media (max-width: 600px) {
+            .header {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 6px 10px;
+                gap: 6px;
+            }
+            #map { top: 100px; }
+            .header-controls { flex-wrap: wrap; }
+            .header-controls select,
+            .header-controls input { font-size: 0.72rem; padding: 3px 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Carregando mapa interativo...</p>
+    </div>
+
+    <div class="header">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <a href="index.html" class="back-btn">&larr; Voltar</a>
+            <h1>Pulso da Floresta</h1>
+        </div>
+        <div class="header-controls">
+            <div class="ctrl-group">
+                <label for="modoSelect">Dado:</label>
+                <select id="modoSelect">
+                    <option value="desf_total">Desmatamento Total</option>
+                    <option value="desf_ano">Desmatamento</option>
+                    <option value="rep_total">ICMS Verde Total</option>
+                    <option value="rep_ano">ICMS Verde</option>
+                </select>
+            </div>
+            <div class="ctrl-group" id="anoGroup" style="display:none;">
+                <label for="anoSelect">Ano:</label>
+                <select id="anoSelect"></select>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="sidebar" id="sidebar">
+        <input type="text" class="search-box" id="searchInput" placeholder="Buscar município..." />
+        <h3 id="sidebarTitle">Municípios</h3>
+        <ul class="mun-list" id="munList"></ul>
+        <div id="sidebarDetail" style="display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+            <a id="relatorioLink" href="#" class="back-btn" style="display:block;text-align:center;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;">Ver Relatório Completo &rarr;</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+    // ============================================================
+    // STATE
+    // ============================================================
+    const S = {
+        map: null,
+        geojson: null,   // GeoJSON data
+        data: null,       // mapa_dados.json
+        layer: null,      // Leaflet geoJSON layer
+        mode: 'desf_total',
+        ano: '2024',
+        selected: null,   // selected feature
+        selectedLayer: null,
+        searchTerm: '',
+    };
+
+    const COLORS = {
+        desf: ['#ffffcc','#c2e699','#78c679','#31a354','#006837'],
+        rep:  ['#feedde','#fdbe85','#fd8d3c','#d94701','#8c2d04'],
+    };
+
+    // ============================================================
+    // DATA ACCESS
+    // ============================================================
+    function getValor(feature) {
+        const id = feature.properties.id;
+        const D = S.data;
+        if (S.mode === 'desf_total') {
+            const d = D.desflorestamento[id];
+            return d ? d.total : 0;
+        }
+        if (S.mode === 'desf_ano') {
+            const d = D.desf_por_ano[id];
+            return d ? (d[S.ano] ?? 0) : 0;
+        }
+        if (S.mode === 'rep_total') {
+            const d = D.repasses[id];
+            return d ? d.total : 0;
+        }
+        if (S.mode === 'rep_ano') {
+            const d = D.rep_por_ano[id];
+            return d ? (d[S.ano] ?? 0) : 0;
+        }
+        return 0;
+    }
+
+    function getLabel() {
+        if (S.mode === 'desf_total') return 'Desmatamento Total (km²)';
+        if (S.mode === 'desf_ano') return `Desmatamento ${S.ano} (km²)`;
+        if (S.mode === 'rep_total') return 'ICMS Verde Total (R$)';
+        if (S.mode === 'rep_ano') return `ICMS Verde ${S.ano} (R$)`;
+        return '';
+    }
+
+    function fmtVal(val) {
+        if (S.mode.startsWith('rep')) {
+            return 'R$ ' + val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+        }
+        return val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' km²';
+    }
+
+    function getColorScheme() {
+        return S.mode.startsWith('rep') ? COLORS.rep : COLORS.desf;
+    }
+
+    function computeBreaks(values, n) {
+        const sorted = values.filter(v => v > 0).sort((a,b) => a-b);
+        if (sorted.length < n) return [0, 0.1, 1, 10, 100, 1000];
+        const breaks = [0];
+        for (let i = 1; i <= n; i++) {
+            const idx = Math.floor(sorted.length * i / n) - 1;
+            breaks.push(sorted[Math.max(0, idx)]);
+        }
+        // ensure strictly increasing
+        for (let i = 1; i < breaks.length; i++) {
+            if (breaks[i] <= breaks[i-1]) breaks[i] = breaks[i-1] * 1.05 + 0.001;
+        }
+        return breaks;
+    }
+
+    function getAllValues() {
+        const vals = [];
+        for (const f of S.geojson.features) vals.push(getValor(f));
+        return vals;
+    }
+
+    function getColor(val, breaks, colors) {
+        for (let i = breaks.length - 1; i >= 0; i--) {
+            if (val >= breaks[i]) return colors[Math.min(i, colors.length-1)];
+        }
+        return colors[0];
+    }
+
+    function styleFor(feature) {
+        const val = getValor(feature);
+        const colors = getColorScheme();
+        const breaks = computeBreaks(getAllValues(), colors.length);
+        const fc = val > 0 ? getColor(val, breaks, colors) : '#f5f5f5';
+        return {
+            fillColor: fc,
+            fillOpacity: 0.8,
+            color: '#999999',
+            weight: 0.4,
+            opacity: 0.8,
+        };
+    }
+
+    // ============================================================
+    // LAYER MANAGEMENT
+    // ============================================================
+    function rebuildLayer() {
+        if (S.layer) S.map.removeLayer(S.layer);
+
+        S.layer = L.geoJSON(S.geojson, {
+            style: styleFor,
+            onEachFeature: (feature, layer) => {
+                layer.on({
+                    mouseover: (e) => {
+                        const l = e.target;
+                        if (S.selectedLayer && S.selectedLayer._leaflet_id === l._leaflet_id) return;
+                        l.setStyle({ weight: 1.5, color: '#333', fillOpacity: 0.9 });
+                        l.bringToFront();
+                        const val = getValor(feature);
+                        l.bindTooltip(
+                            `<strong>${feature.properties.name}</strong><br>${getLabel()}: ${fmtVal(val)}`,
+                            { sticky: true, className: 'map-tooltip' }
+                        ).openTooltip();
+                    },
+                    mouseout: (e) => {
+                        const l = e.target;
+                        if (S.selectedLayer && S.selectedLayer._leaflet_id === l._leaflet_id) {
+                            l.setStyle({ fillColor: '#e65100', fillOpacity: 0.9, color: '#222', weight: 2, opacity: 1 });
+                            return;
+                        }
+                        S.layer.resetStyle(l);
+                        l.unbindTooltip();
+                    },
+                    click: (e) => {
+                        selectFeature(feature, e.target);
+                    },
+                    click: (e) => {
+                        selectFeature(feature, e.target);
+                    },
+                });
+            },
+        }).addTo(S.map);
+
+        // Restore selection if any
+        if (S.selected) {
+            S.layer.eachLayer(l => {
+                if (l.feature && l.feature.properties.id === S.selected.properties.id) {
+                    selectFeature(S.selected, l);
+                }
+            });
+        }
+
+        updateLegend();
+        updateList();
+    }
+
+    function selectFeature(feature, layer) {
+        // Reset previous
+        if (S.selectedLayer) {
+            S.layer.resetStyle(S.selectedLayer);
+        }
+        S.selected = feature;
+        S.selectedLayer = layer;
+        if (layer) {
+            layer.setStyle({
+                fillColor: '#e65100',
+                fillOpacity: 0.9,
+                color: '#222',
+                weight: 2,
+                opacity: 1,
+            });
+            layer.bringToFront();
+        }
+        updateList();
+        // Scroll to in list
+        const el = document.getElementById('li-' + feature.properties.id);
+        if (el) el.scrollIntoView({ block: 'nearest' });
+        // Show report link
+        const detail = document.getElementById('sidebarDetail');
+        const link = document.getElementById('relatorioLink');
+        if (feature) {
+            link.href = 'municipio.html?id=' + feature.properties.id;
+            detail.style.display = 'block';
+        } else {
+            detail.style.display = 'none';
+        }
+    }
+
+    // ============================================================
+    // LEGEND
+    // ============================================================
+    let legendControl = null;
+
+    function updateLegend() {
+        if (!legendControl) return;
+        const colors = getColorScheme();
+        const vals = getAllValues();
+        const breaks = computeBreaks(vals, colors.length);
+
+        let html = `<h4>${getLabel()}</h4>`;
+        for (let i = 0; i < colors.length; i++) {
+            const from = breaks[i];
+            const to = breaks[i+1];
+            const fs = S.mode.startsWith('rep')
+                ? 'R$ ' + from.toLocaleString('pt-BR', {maximumFractionDigits:0})
+                : from.toLocaleString('pt-BR', {maximumFractionDigits:1}) + ' km²';
+            const ts = S.mode.startsWith('rep')
+                ? 'R$ ' + to.toLocaleString('pt-BR', {maximumFractionDigits:0})
+                : to.toLocaleString('pt-BR', {maximumFractionDigits:1}) + ' km²';
+            html += `<div class="row"><i style="background:${colors[i]}"></i> `;
+            if (i === 0) html += `0 – ${ts}`;
+            else if (i === colors.length - 1) html += `> ${fs}`;
+            else html += `${fs} – ${ts}`;
+            html += '</div>';
+        }
+        legendControl._div.innerHTML = html;
+    }
+
+    // ============================================================
+    // SIDEBAR LIST
+    // ============================================================
+    function updateList() {
+        const ul = document.getElementById('munList');
+        const features = [...S.geojson.features].sort((a,b) => a.properties.name.localeCompare(b.properties.name));
+        const term = S.searchTerm.toLowerCase().trim();
+
+        let html = '';
+        for (const f of features) {
+            if (term && !f.properties.name.toLowerCase().includes(term)) continue;
+            const val = getValor(f);
+            const active = S.selected && S.selected.properties.id === f.properties.id ? 'active' : '';
+            html += `<li class="${active}" id="li-${f.properties.id}" data-id="${f.properties.id}">
+                <span>${f.properties.name}</span>
+                <span class="val">${fmtVal(val)}</span>
+            </li>`;
+        }
+        ul.innerHTML = html;
+
+        // Add click handlers
+        ul.querySelectorAll('li').forEach(el => {
+            el.addEventListener('click', () => {
+                const id = el.dataset.id;
+                const feature = S.geojson.features.find(f => f.properties.id === id);
+                if (feature) {
+                    S.layer.eachLayer(l => {
+                        if (l.feature && l.feature.properties.id === id) {
+                            selectFeature(feature, l);
+                            const bounds = l.getBounds();
+                            S.map.fitBounds(bounds, { padding: [40,40] });
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    async function init() {
+        // Load data
+        const [geoResp, dataResp] = await Promise.all([
+            fetch('municipios.geojson'),
+            fetch('mapa_dados.json'),
+        ]);
+        S.geojson = await geoResp.json();
+        S.data = await dataResp.json();
+
+        // Setup map
+        S.map = L.map('map', {
+            center: [-3.8, -52.0],
+            zoom: 6,
+            minZoom: 5,
+            maxZoom: 10,
+            zoomControl: true,
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20,
+        }).addTo(S.map);
+
+        // Legend
+        legendControl = L.control({ position: 'bottomright' });
+        legendControl.onAdd = function() {
+            this._div = L.DomUtil.create('div', 'legend');
+            this._div.innerHTML = '<h4>Carregando...</h4>';
+            return this._div;
+        };
+        legendControl.addTo(S.map);
+
+        // Populate year select
+        const anos = [...new Set([...S.data.anos_desflorestamento, ...S.data.anos_repasses])].sort();
+        const sel = document.getElementById('anoSelect');
+        sel.innerHTML = anos.map(a => `<option value="${a}">${a}</option>`).join('');
+        sel.value = '2024';
+
+        // Controls
+        document.getElementById('modoSelect').addEventListener('change', function() {
+            S.mode = this.value;
+            document.getElementById('anoGroup').style.display = (S.mode === 'desf_ano' || S.mode === 'rep_ano') ? 'flex' : 'none';
+            rebuildLayer();
+        });
+
+        document.getElementById('anoSelect').addEventListener('change', function() {
+            S.ano = this.value;
+            rebuildLayer();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            S.searchTerm = this.value;
+            updateList();
+        });
+
+        // Initial render
+        rebuildLayer();
+        document.getElementById('loading').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

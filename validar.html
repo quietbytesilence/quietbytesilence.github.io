@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar Certificado - QuietByte Schola Arcanum</title>
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <img src="assets/logo.png" alt="QuietByte Schola Arcanum" class="logo">
+    </header>
+
+    <nav class="nav-bar">
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="cursos.html">Cursos</a></li>
+            <li><a href="validar.html">Validar Certificado</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+        </ul>
+    </nav>
+
+    <main class="content content--narrow">
+        <h1 class="page-title">Validar Certificado</h1>
+        <p class="page-subtitle">Verifique a autenticidade do seu certificado</p>
+
+        <div class="ornament">&#10087;</div>
+
+        <div class="card">
+            <div class="form-group">
+                <label for="certificate-code">Código do Certificado</label>
+                <input type="text" id="certificate-code" placeholder="Ex: 05d92cde1d3f168f6b33a3434c47a804">
+            </div>
+            <button class="btn btn-primary" onclick="validateCertificate()">Validar Certificado</button>
+        </div>
+
+        <div id="result-container" class="result-container">
+            <h2 id="result-title" class="result-title"></h2>
+            <div id="certificate-info" class="certificate-info"></div>
+        </div>
+
+        <div class="instructions">
+            <h3>Como encontrar seu código de certificado</h3>
+            <ul>
+                <li>O código está localizado no canto inferior direito do seu certificado</li>
+                <li>Formato: hash hexadecimal de 32 caracteres</li>
+                <li>Certifique-se de digitar todos os caracteres corretamente</li>
+                <li>Entre em contato conosco se não conseguir encontrar seu código</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>Quiet Byte Schola Arcanum &copy; <span id="ano">2024</span> &mdash; Todos os direitos reservados</p>
+    </footer>
+
+    <script src="certificados.js"></script>
+    <script>
+        document.getElementById('ano').textContent = new Date().getFullYear();
+
+        function validateCertificate() {
+            const code = document.getElementById('certificate-code').value.trim();
+            const resultContainer = document.getElementById('result-container');
+            const resultTitle = document.getElementById('result-title');
+            const certificateInfo = document.getElementById('certificate-info');
+
+            resultContainer.className = 'result-container';
+            certificateInfo.innerHTML = '';
+
+            if (!code) {
+                showResult('Por favor, insira um código de certificado', false);
+                return;
+            }
+
+            if (window.certificados && window.certificados[code]) {
+                const cert = window.certificados[code];
+                resultContainer.style.display = 'block';
+                resultContainer.classList.add('valid-certificate');
+                resultTitle.textContent = 'Certificado Válido';
+
+                certificateInfo.innerHTML = `
+                    <div class="info-row">
+                        <div class="info-label">Código:</div>
+                        <div class="info-value"><code>${code}</code></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Aluno:</div>
+                        <div class="info-value">${cert.nome}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Curso:</div>
+                        <div class="info-value">${cert.curso}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Data de Conclusão:</div>
+                        <div class="info-value">${cert.data}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Carga Horária:</div>
+                        <div class="info-value">${cert.carga} horas</div>
+                    </div>
+                `;
+            } else {
+                showResult('Certificado Inválido', false);
+            }
+        }
+
+        function showResult(message, isValid) {
+            const resultContainer = document.getElementById('result-container');
+            const resultTitle = document.getElementById('result-title');
+            resultContainer.style.display = 'block';
+            resultTitle.textContent = message;
+
+            if (isValid) {
+                resultContainer.classList.add('valid-certificate');
+            } else {
+                resultContainer.classList.add('invalid-certificate');
+                document.getElementById('certificate-info').innerHTML =
+                    '<p>O código inserido não corresponde a nenhum certificado válido em nosso sistema. Verifique o código e tente novamente.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
