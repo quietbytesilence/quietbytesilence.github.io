@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Disciplinas</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #14161c;
+    --bg-soft: #1b1e26;
+    --bg-raise: #232732;
+    --line: #2f3442;
+    --text: #d9dbe1;
+    --text-dim: #9aa0ae;
+    --text-bold: #f2f3f7;
+    --lavanda: #c9b8ff;
+    --azul: #a9d6f5;
+    --menta: #b4e7cf;
+    --pessego: #ffd9b8;
+    --rosa: #f4b8d1;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    font-size: clamp(16px, 0.92rem + 0.3vw, 19px);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0 auto;
+    max-width: 50rem;
+    padding:
+      max(clamp(1.5rem, 6vw, 4rem), env(safe-area-inset-top))
+      max(clamp(1rem, 5vw, 2.5rem), env(safe-area-inset-right))
+      max(clamp(2rem, 6vw, 4rem), env(safe-area-inset-bottom))
+      max(clamp(1rem, 5vw, 2.5rem), env(safe-area-inset-left));
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  header { margin-bottom: 2rem; }
+
+  h1 {
+    margin: 0 0 0.35rem;
+    font-family: "Charter", "Georgia", "Iowan Old Style", "Palatino Linotype", serif;
+    font-size: clamp(2.2rem, 1.5rem + 3.5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--lavanda);
+  }
+
+  .sub { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+
+  /* ---------- Busca ---------- */
+  .busca { position: relative; margin-bottom: 0.9rem; }
+
+  .busca input {
+    width: 100%;
+    padding: 0.85em 2.6em 0.85em 1.1em;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text-bold);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .busca input::placeholder { color: var(--text-dim); }
+  .busca input:focus { outline: 2px solid var(--azul); outline-offset: 2px; border-color: transparent; }
+  .busca input::-webkit-search-cancel-button { display: none; }
+
+  .limpar {
+    position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%);
+    width: 2.2rem; height: 2.2rem;
+    display: none; place-items: center;
+    background: none; border: 0; border-radius: 8px;
+    color: var(--text-dim); font-size: 1rem; cursor: pointer;
+  }
+  .limpar:hover { background: var(--bg-raise); color: var(--text-bold); }
+  .limpar.visivel { display: grid; }
+
+  .contagem {
+    margin: 0 0 1rem;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    min-height: 1.3em;
+  }
+
+  /* ---------- Lista ---------- */
+  .lista { list-style: none; margin: 0; padding: 0; }
+
+  .disc { margin: 0 0 0.6rem; }
+  .disc[hidden] { display: none; }
+
+  .disc a {
+    display: block;
+    padding: 0.95rem 1.1rem 0.95rem 1.2rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--cor, var(--lavanda));
+    border-radius: 4px 12px 12px 4px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .disc a:hover { background: var(--bg-raise); border-color: var(--cor, var(--lavanda)); }
+  .disc a:focus-visible { outline: 2px solid var(--azul); outline-offset: 3px; }
+
+  .disc:nth-child(5n+1) { --cor: var(--lavanda); }
+  .disc:nth-child(5n+2) { --cor: var(--azul); }
+  .disc:nth-child(5n+3) { --cor: var(--menta); }
+  .disc:nth-child(5n+4) { --cor: var(--pessego); }
+  .disc:nth-child(5n+5) { --cor: var(--rosa); }
+
+  .nome {
+    display: block;
+    font-family: "Charter", "Georgia", "Iowan Old Style", "Palatino Linotype", serif;
+    font-size: 1.2rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--text-bold);
+  }
+  .desc {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+  }
+
+  /* ---------- Nada encontrado ---------- */
+  .vazio {
+    display: none;
+    padding: 1.4rem 1.2rem;
+    background: var(--bg-soft);
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    color: var(--text-dim);
+  }
+  .vazio.visivel { display: block; }
+  .vazio strong { color: var(--text-bold); font-weight: 600; }
+
+  @media (max-width: 480px) {
+    .disc a { padding: 0.8rem 0.9rem 0.8rem 1rem; }
+    .nome { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Disciplinas</h1>
+  <p class="sub">Apostilas e materiais de estudo</p>
+</header>
+
+<div class="busca">
+  <input id="busca" type="search" placeholder="Filtrar por nome…  (atalho: /)" aria-label="Filtrar disciplinas" autocomplete="off">
+  <button class="limpar" id="limpar" type="button" aria-label="Limpar filtro">✕</button>
+</div>
+<p class="contagem" id="contagem" aria-live="polite"></p>
+
+<!-- =====================================================================
+     LISTA DE DISCIPLINAS
+     Para adicionar uma nova página: copie o MODELO abaixo, cole logo antes
+     do </ul>, e troque:
+       1) href="..."        -> nome do arquivo .html (ou caminho/link)
+       2) <span class="nome"> -> nome que aparece na lista
+       3) <span class="desc"> -> descrição curta (opcional: pode apagar a linha)
+     A lista se ordena em ordem alfabética sozinha; não precisa se preocupar
+     com a posição.
+
+     MODELO (copie de <li> até </li>):
+
+     <li class="disc">
+       <a href="NOME-DO-ARQUIVO.html">
+         <span class="nome">Nome da disciplina</span>
+         <span class="desc">Descrição curta (opcional)</span>
+       </a>
+     </li>
+     ===================================================================== -->
+<ul class="lista" id="lista">
+
+  <li class="disc">
+    <a href="Deficiência Intelectual e AEE.html">
+      <span class="nome">Deficiência Intelectual e AEE</span>
+    </a>
+  </li>
+
+  <!-- COLE AS NOVAS DISCIPLINAS AQUI -->
+
+</ul>
+
+<div class="vazio" id="vazio">
+  <strong>Nenhuma disciplina encontrada.</strong><br>
+  Confira a grafia ou apague o filtro para ver a lista completa.
+</div>
+
+<script>
+(function () {
+  var input = document.getElementById('busca');
+  var limpar = document.getElementById('limpar');
+  var lista = document.getElementById('lista');
+  var contagem = document.getElementById('contagem');
+  var vazio = document.getElementById('vazio');
+
+  function norm(s) {
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  /* Ordem alfabética (pt-BR), ignorando acentos */
+  var itens = Array.prototype.slice.call(lista.querySelectorAll('.disc'));
+  var coll = new Intl.Collator('pt-BR', { sensitivity: 'base' });
+  itens.sort(function (a, b) {
+    return coll.compare(a.querySelector('.nome').textContent, b.querySelector('.nome').textContent);
+  });
+  itens.forEach(function (li) {
+    li._txt = norm(li.textContent.replace(/\s+/g, ' '));
+    lista.appendChild(li);
+  });
+
+  function filtrar() {
+    var q = norm(input.value.trim());
+    var palavras = q ? q.split(/\s+/) : [];
+    var n = 0;
+
+    itens.forEach(function (li) {
+      var ok = palavras.every(function (p) { return li._txt.indexOf(p) !== -1; });
+      li.hidden = !ok;
+      if (ok) n++;
+    });
+
+    limpar.classList.toggle('visivel', input.value.length > 0);
+    vazio.classList.toggle('visivel', n === 0 && itens.length > 0);
+
+    var total = itens.length;
+    if (!total) {
+      contagem.textContent = 'Nenhuma disciplina cadastrada ainda.';
+    } else if (q) {
+      contagem.textContent = n + ' de ' + total + (total === 1 ? ' disciplina' : ' disciplinas');
+    } else {
+      contagem.textContent = total + (total === 1 ? ' disciplina' : ' disciplinas');
+    }
+  }
+
+  input.addEventListener('input', filtrar);
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      var primeiro = itens.filter(function (li) { return !li.hidden; })[0];
+      if (primeiro) primeiro.querySelector('a').click();
+    } else if (e.key === 'Escape') {
+      input.value = ''; filtrar();
+    }
+  });
+
+  limpar.addEventListener('click', function () {
+    input.value = ''; filtrar(); input.focus();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== input && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault(); input.focus();
+    }
+  });
+
+  filtrar();
+})();
+</script>
+</body>
+</html>
