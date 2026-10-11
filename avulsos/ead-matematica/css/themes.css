@@ -1,0 +1,16 @@
+:root,body[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0c1120;--surface:#121a2a;--panel:#172235;--card:#182338;--card-hover:#202e45;
+  --text:#eaf0fb;--muted:#94a5bd;--faint:#73849d;--border:#2b3950;
+  --accent:#a29aff;--accent-dark:#786bed;--accent-bg:rgba(150,137,255,.12);
+  --green:#6fe0ba;--green-bg:rgba(65,205,153,.13);--yellow:#f1cd7c;--red:#fb838e;
+  --shadow:0 20px 65px rgba(1,5,16,.3);--topbar:rgba(12,17,32,.92);
+}
+body[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f5f7fb;--surface:#fff;--panel:#f1f4fa;--card:#fff;--card-hover:#f7f8ff;
+  --text:#19243a;--muted:#5b6d84;--faint:#7b89a0;--border:#e0e6ef;
+  --accent:#6452cd;--accent-dark:#5745b6;--accent-bg:rgba(100,82,205,.08);
+  --green:#168c65;--green-bg:rgba(22,140,101,.09);--yellow:#937228;--red:#c04459;
+  --shadow:0 18px 55px rgba(31,48,81,.08);--topbar:rgba(255,255,255,.94);
+}
